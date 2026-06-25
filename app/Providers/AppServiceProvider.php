@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\URL; // Memuat facade URL untuk mengatur skema protokol
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,6 +20,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Vite::prefetch(concurrency: 3);
+        /**
+         * Memaksa Laravel agar selalu menggunakan skema HTTPS pada semua URL, 
+         * Aset (Vite/Inertia), dan Route Form/Axios jika berada di environment production.
+         */
+        if (config('app.env') === 'production' || env('FORCE_HTTPS') === true) {
+            URL::forceScheme('https');
+        }
     }
 }
