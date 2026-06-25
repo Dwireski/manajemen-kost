@@ -46,12 +46,18 @@ Sistem informasi manajemen kost berbasis web yang modern, responsif, dan mudah d
 ### Public Website
 
 ![Public Landing Page](screenshots/public-landing.png)
+_Halaman pencarian kost dengan foto menarik_
+
 ![Kost Detail](screenshots/kost-detail.png)
+_Detail informasi kost dengan fasilitas lengkap_
 
 ### Admin Panel
 
 ![Dashboard](screenshots/dashboard.png)
+_Dashboard dengan statistik real-time_
+
 ![Manajemen Kost](screenshots/kost-management.png)
+_Halaman manajemen kost yang mudah digunakan_
 
 ## 🚀 Cara Instalasi
 
