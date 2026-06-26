@@ -9,9 +9,11 @@ export default function Create() {
         owner_name: "",
         owner_phone: "",
         photo: null,
+        photos: [], // ✅ Array untuk galeri foto (multi-upload)
     });
 
     const [photoPreview, setPhotoPreview] = useState(null);
+    const [galleryPreviews, setGalleryPreviews] = useState([]); // ✅ Preview galeri
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -29,6 +31,36 @@ export default function Create() {
         }
     };
 
+    // ✅ Handler baru: Multi-upload galeri foto
+    const handleGalleryChange = (e) => {
+        const files = Array.from(e.target.files);
+        if (files.length === 0) return;
+
+        // Hitung sisa slot (max 10 foto)
+        const remainingSlots = 10 - data.photos.length;
+        const filesToAdd = files.slice(0, remainingSlots);
+
+        // Tambah file ke form data
+        const updatedPhotos = [...data.photos, ...filesToAdd];
+        setData("photos", updatedPhotos);
+
+        // Buat preview URL untuk setiap file baru
+        const newPreviews = filesToAdd.map((file) => URL.createObjectURL(file));
+        setGalleryPreviews([...galleryPreviews, ...newPreviews]);
+
+        // Reset input file agar bisa pilih file yang sama lagi
+        e.target.value = "";
+    };
+
+    // ✅ Handler baru: Hapus 1 foto dari galeri
+    const removeGalleryPhoto = (index) => {
+        const updatedPhotos = data.photos.filter((_, i) => i !== index);
+        const updatedPreviews = galleryPreviews.filter((_, i) => i !== index);
+
+        setData("photos", updatedPhotos);
+        setGalleryPreviews(updatedPreviews);
+    };
+
     return (
         <AuthenticatedLayout
             header={
@@ -40,7 +72,6 @@ export default function Create() {
                         href={route("kosts.index")}
                         className="text-xs sm:text-sm font-medium text-blue-600 hover:text-blue-800 transition flex items-center gap-1"
                     >
-                        {/* Line Icon: Arrow Left */}
                         <svg
                             className="w-3.5 h-3.5"
                             fill="none"
@@ -83,7 +114,6 @@ export default function Create() {
                                 {/* Input Nama */}
                                 <div className="space-y-1">
                                     <label className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-gray-600 uppercase tracking-wider">
-                                        {/* Line Icon: Office Building */}
                                         <svg
                                             className="w-4 h-4 text-gray-400"
                                             fill="none"
@@ -119,7 +149,6 @@ export default function Create() {
                                 {/* Input Alamat */}
                                 <div className="space-y-1">
                                     <label className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-gray-600 uppercase tracking-wider">
-                                        {/* Line Icon: Location Pin */}
                                         <svg
                                             className="w-4 h-4 text-gray-400"
                                             fill="none"
@@ -162,7 +191,6 @@ export default function Create() {
                                     {/* Nama Pemilik */}
                                     <div className="space-y-1">
                                         <label className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-gray-600 uppercase tracking-wider">
-                                            {/* Line Icon: User */}
                                             <svg
                                                 className="w-4 h-4 text-gray-400"
                                                 fill="none"
@@ -201,7 +229,6 @@ export default function Create() {
                                     {/* Telepon Pemilik */}
                                     <div className="space-y-1">
                                         <label className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-gray-600 uppercase tracking-wider">
-                                            {/* Line Icon: Phone */}
                                             <svg
                                                 className="w-4 h-4 text-gray-400"
                                                 fill="none"
@@ -238,10 +265,11 @@ export default function Create() {
                                     </div>
                                 </div>
 
-                                {/* Bagian Unggah Foto */}
+                                {/* ========================================= */}
+                                {/* BAGIAN UNGGAH FOTO UTAMA (COVER) */}
+                                {/* ========================================= */}
                                 <div className="space-y-1 border-t border-gray-100 pt-5">
                                     <label className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-gray-600 uppercase tracking-wider mb-2">
-                                        {/* Line Icon: Photo */}
                                         <svg
                                             className="w-4 h-4 text-gray-400"
                                             fill="none"
@@ -255,19 +283,18 @@ export default function Create() {
                                                 d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                                             />
                                         </svg>
-                                        Media Dokumentasi Visual
+                                        Foto Utama (Cover)
                                     </label>
 
-                                    {/* Preview Foto Baru Langsung Muncul jika dipilih */}
                                     {photoPreview && (
                                         <div className="max-w-md my-3 space-y-1">
                                             <p className="text-xs font-semibold text-emerald-600">
-                                                Pratinjau Berkas Foto:
+                                                Pratinjau Foto Cover:
                                             </p>
                                             <div className="rounded-xl overflow-hidden border border-emerald-200 shadow-sm bg-emerald-50/10">
                                                 <img
                                                     src={photoPreview}
-                                                    alt="Preview Berkas"
+                                                    alt="Preview Cover"
                                                     className="w-full h-44 object-cover"
                                                 />
                                             </div>
@@ -288,7 +315,143 @@ export default function Create() {
                                     </p>
                                     {errors.photo && (
                                         <p className="text-rose-500 text-xs font-medium mt-1">
-                                            ⚠️ {errors.photo}
+                                            ️ {errors.photo}
+                                        </p>
+                                    )}
+                                </div>
+
+                                {/* ========================================= */}
+                                {/* ✅ BAGIAN BARU: GALERI FOTO (MULTI-UPLOAD) */}
+                                {/* ========================================= */}
+                                <div className="space-y-3 border-t border-gray-100 pt-5">
+                                    <div className="flex items-center justify-between">
+                                        <label className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-gray-600 uppercase tracking-wider">
+                                            <svg
+                                                className="w-4 h-4 text-gray-400"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                strokeWidth="2"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                                />
+                                            </svg>
+                                            Galeri Foto Tambahan
+                                        </label>
+                                        <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded-md">
+                                            {data.photos.length} / 10 foto
+                                        </span>
+                                    </div>
+
+                                    {/* Area Upload Galeri */}
+                                    <div className="border-2 border-dashed border-gray-300 rounded-xl p-4 sm:p-6 bg-gray-50/50 hover:border-blue-400 hover:bg-blue-50/30 transition">
+                                        <div className="text-center">
+                                            <svg
+                                                className="w-10 h-10 mx-auto text-gray-400 mb-2"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                strokeWidth="1.5"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+                                                />
+                                            </svg>
+                                            <p className="text-xs sm:text-sm text-gray-600 font-medium mb-1">
+                                                Klik untuk pilih foto tambahan
+                                            </p>
+                                            <p className="text-[11px] text-gray-400">
+                                                Bisa pilih banyak file sekaligus
+                                                (max 10 foto, masing-masing max
+                                                2MB)
+                                            </p>
+                                            <input
+                                                type="file"
+                                                multiple
+                                                onChange={handleGalleryChange}
+                                                accept="image/*"
+                                                disabled={
+                                                    data.photos.length >= 10
+                                                }
+                                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
+                                                style={{ position: "relative" }}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Grid Preview Galeri */}
+                                    {galleryPreviews.length > 0 && (
+                                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-3">
+                                            {galleryPreviews.map(
+                                                (preview, index) => (
+                                                    <div
+                                                        key={index}
+                                                        className="relative group rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-gray-50"
+                                                    >
+                                                        <img
+                                                            src={preview}
+                                                            alt={`Galeri ${index + 1}`}
+                                                            className="w-full h-28 sm:h-32 object-cover"
+                                                        />
+                                                        {/* Overlay nomor urut */}
+                                                        <div className="absolute top-1.5 left-1.5 bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
+                                                            #{index + 1}
+                                                        </div>
+                                                        {/* Tombol hapus */}
+                                                        <button
+                                                            type="button"
+                                                            onClick={() =>
+                                                                removeGalleryPhoto(
+                                                                    index,
+                                                                )
+                                                            }
+                                                            className="absolute top-1.5 right-1.5 bg-rose-500 hover:bg-rose-600 text-white w-6 h-6 rounded-full flex items-center justify-center shadow-md transition opacity-0 group-hover:opacity-100"
+                                                            title="Hapus foto ini"
+                                                        >
+                                                            <svg
+                                                                className="w-3.5 h-3.5"
+                                                                fill="none"
+                                                                stroke="currentColor"
+                                                                strokeWidth="2.5"
+                                                                viewBox="0 0 24 24"
+                                                            >
+                                                                <path
+                                                                    strokeLinecap="round"
+                                                                    strokeLinejoin="round"
+                                                                    d="M6 18L18 6M6 6l12 12"
+                                                                />
+                                                            </svg>
+                                                        </button>
+                                                        {/* Nama file (truncate) */}
+                                                        <div className="px-2 py-1.5 bg-white border-t border-gray-100">
+                                                            <p className="text-[10px] text-gray-500 truncate">
+                                                                {data.photos[
+                                                                    index
+                                                                ]?.name ||
+                                                                    `Foto ${index + 1}`}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                ),
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {/* Info Text */}
+                                    <p className="text-[11px] text-gray-400 leading-relaxed">
+                                        * Foto-foto tambahan akan ditampilkan
+                                        sebagai galeri di halaman detail kost.
+                                        Anda bisa memilih banyak file sekaligus
+                                        dari folder yang sama.
+                                    </p>
+                                    {errors.photos && (
+                                        <p className="text-rose-500 text-xs font-medium mt-1">
+                                            ⚠️ {errors.photos}
                                         </p>
                                     )}
                                 </div>

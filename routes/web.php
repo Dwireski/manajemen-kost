@@ -68,6 +68,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     
     // Routes untuk Manajemen Kost
     Route::resource('kosts', KostController::class);
+    
+    // ✅ ROUTE BARU: Kelola foto galeri kost
+    Route::delete('/kost-photos/{photo}', [KostController::class, 'deletePhoto'])
+        ->name('kosts.photos.delete');
+    Route::post('/kosts/{kost}/reorder-photos', [KostController::class, 'reorderPhotos'])
+        ->name('kosts.photos.reorder');
+    
     Route::resource('rooms', RoomController::class);
     Route::resource('tenants', TenantController::class);
     

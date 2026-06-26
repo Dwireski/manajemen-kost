@@ -21,4 +21,10 @@ class Kost extends Model
     {
         return $this->hasMany(Room::class);
     }
+
+    // ✅ Relasi baru: Galeri foto kost
+    public function photos()
+    {
+        return $this->hasMany(KostPhoto::class)->orderBy('sort_order', 'asc');
+    }
 }
