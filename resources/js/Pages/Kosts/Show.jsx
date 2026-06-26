@@ -48,6 +48,17 @@ export default function Show({ kost }) {
                                 </div>
                             </div>
 
+                            {/* Tampilan Foto Kost Ditambahkan Di Sini */}
+                            {kost.photo && (
+                                <div className="mb-6">
+                                    <img
+                                        src={kost.photo}
+                                        alt={kost.name}
+                                        className="w-full h-64 object-cover rounded-lg border border-gray-200"
+                                    />
+                                </div>
+                            )}
+
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <p className="text-sm text-gray-500">

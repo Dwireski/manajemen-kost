@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
 
@@ -8,12 +8,28 @@ export default function Edit({ kost }) {
         address: kost.address || "",
         owner_name: kost.owner_name || "",
         owner_phone: kost.owner_phone || "",
+        photo: null, // Ditambahkan untuk upload foto
         _method: "PUT",
     });
+
+    // State untuk preview foto baru yang dipilih
+    const [photoPreview, setPhotoPreview] = useState(null);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         post(route("kosts.update", kost.id));
+    };
+
+    // Handler untuk preview foto sebelum upload
+    const handlePhotoChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setData("photo", file);
+            setPhotoPreview(URL.createObjectURL(file));
+        } else {
+            setData("photo", null);
+            setPhotoPreview(null);
+        }
     };
 
     if (!kost || !kost.id) {
@@ -59,7 +75,12 @@ export default function Edit({ kost }) {
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
-                            <form onSubmit={handleSubmit} className="space-y-6">
+                            {/* Tambahkan encType untuk mendukung upload file */}
+                            <form
+                                onSubmit={handleSubmit}
+                                className="space-y-6"
+                                encType="multipart/form-data"
+                            >
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700">
                                         Nama Kost
@@ -142,6 +163,58 @@ export default function Edit({ kost }) {
                                     {errors.owner_phone && (
                                         <p className="text-red-500 text-sm mt-1">
                                             {errors.owner_phone}
+                                        </p>
+                                    )}
+                                </div>
+
+                                {/* Input Upload Foto Ditambahkan Di Sini */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                        Foto Kost
+                                    </label>
+
+                                    {/* Preview Foto Lama (jika ada) */}
+                                    {kost.photo && !photoPreview && (
+                                        <div className="mt-2 mb-3">
+                                            <p className="text-xs text-gray-500 mb-1">
+                                                Foto saat ini:
+                                            </p>
+                                            <img
+                                                src={kost.photo}
+                                                alt="Foto Kost"
+                                                className="w-full h-48 object-cover rounded-md border border-gray-300"
+                                            />
+                                        </div>
+                                    )}
+
+                                    {/* Preview Foto Baru (jika dipilih) */}
+                                    {photoPreview && (
+                                        <div className="mt-2 mb-3">
+                                            <p className="text-xs text-gray-500 mb-1">
+                                                Preview foto baru:
+                                            </p>
+                                            <img
+                                                src={photoPreview}
+                                                alt="Preview Foto"
+                                                className="w-full h-48 object-cover rounded-md border border-gray-300"
+                                            />
+                                        </div>
+                                    )}
+
+                                    <input
+                                        type="file"
+                                        onChange={handlePhotoChange}
+                                        className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                                        accept="image/*"
+                                    />
+                                    <p className="text-xs text-gray-500 mt-1">
+                                        Upload foto baru untuk mengganti foto
+                                        lama (Max 2MB). Kosongkan jika tidak
+                                        ingin mengubah.
+                                    </p>
+                                    {errors.photo && (
+                                        <p className="text-red-500 text-sm mt-1">
+                                            {errors.photo}
                                         </p>
                                     )}
                                 </div>

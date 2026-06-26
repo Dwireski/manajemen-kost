@@ -123,6 +123,9 @@ export default function Index({ kosts, filters }) {
                                 <thead className="bg-gray-50">
                                     <tr>
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Foto
+                                        </th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Nama Kost
                                         </th>
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -150,10 +153,20 @@ export default function Index({ kosts, filters }) {
                                                 className="hover:bg-gray-50 transition"
                                             >
                                                 <td className="px-6 py-4 whitespace-nowrap">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600">
+                                                    {kost.photo ? (
+                                                        <img
+                                                            src={kost.photo}
+                                                            alt={kost.name}
+                                                            className="w-12 h-12 object-cover rounded-lg border border-gray-200"
+                                                        />
+                                                    ) : (
+                                                        <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400">
                                                             🏠
                                                         </div>
+                                                    )}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <div className="flex items-center gap-3">
                                                         <div className="font-medium text-gray-900">
                                                             {kost.name || "-"}
                                                         </div>
@@ -213,7 +226,7 @@ export default function Index({ kosts, filters }) {
                                     ) : (
                                         <tr>
                                             <td
-                                                colSpan="6"
+                                                colSpan="7"
                                                 className="px-6 py-12 text-center"
                                             >
                                                 <div className="text-4xl mb-2"></div>

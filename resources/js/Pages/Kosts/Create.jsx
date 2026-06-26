@@ -8,6 +8,7 @@ export default function Create() {
         address: "",
         owner_name: "",
         owner_phone: "",
+        photo: null, // Ditambahkan untuk upload foto
     });
 
     const handleSubmit = (e) => {
@@ -29,7 +30,12 @@ export default function Create() {
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
-                            <form onSubmit={handleSubmit} className="space-y-6">
+                            {/* Tambahkan encType untuk mendukung upload file */}
+                            <form
+                                onSubmit={handleSubmit}
+                                className="space-y-6"
+                                encType="multipart/form-data"
+                            >
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700">
                                         Nama Kost
@@ -112,6 +118,26 @@ export default function Create() {
                                     {errors.owner_phone && (
                                         <p className="text-red-500 text-sm mt-1">
                                             {errors.owner_phone}
+                                        </p>
+                                    )}
+                                </div>
+
+                                {/* Input Upload Foto Ditambahkan Di Sini */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                        Foto Kost
+                                    </label>
+                                    <input
+                                        type="file"
+                                        onChange={(e) =>
+                                            setData("photo", e.target.files[0])
+                                        }
+                                        className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                                        accept="image/*"
+                                    />
+                                    {errors.photo && (
+                                        <p className="text-red-500 text-sm mt-1">
+                                            {errors.photo}
                                         </p>
                                     )}
                                 </div>

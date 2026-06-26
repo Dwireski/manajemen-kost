@@ -41,7 +41,21 @@ class KostController extends Controller
             'address' => 'required|string',
             'owner_name' => 'required|string|max:255',
             'owner_phone' => 'required|string|max:20',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        // Handle foto upload
+        if ($request->hasFile('photo')) {
+            // Buat folder jika belum ada
+            if (!file_exists(public_path('storage/kosts'))) {
+                mkdir(public_path('storage/kosts'), 0755, true);
+            }
+            
+            $photo = $request->file('photo');
+            $photoName = time() . '_' . $photo->getClientOriginalName();
+            $photo->move(public_path('storage/kosts'), $photoName);
+            $validated['photo'] = 'storage/kosts/' . $photoName;
+        }
 
         Kost::create($validated);
 
@@ -67,6 +81,7 @@ class KostController extends Controller
                 'address' => $kost->address,
                 'owner_name' => $kost->owner_name,
                 'owner_phone' => $kost->owner_phone,
+                'photo' => $kost->photo,
             ]
         ]);
     }
@@ -78,7 +93,26 @@ class KostController extends Controller
             'address' => 'required|string',
             'owner_name' => 'required|string|max:255',
             'owner_phone' => 'required|string|max:20',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        // Handle foto upload
+        if ($request->hasFile('photo')) {
+            // Hapus foto lama jika ada
+            if ($kost->photo && file_exists(public_path($kost->photo))) {
+                unlink(public_path($kost->photo));
+            }
+            
+            // Buat folder jika belum ada
+            if (!file_exists(public_path('storage/kosts'))) {
+                mkdir(public_path('storage/kosts'), 0755, true);
+            }
+            
+            $photo = $request->file('photo');
+            $photoName = time() . '_' . $photo->getClientOriginalName();
+            $photo->move(public_path('storage/kosts'), $photoName);
+            $validated['photo'] = 'storage/kosts/' . $photoName;
+        }
 
         $kost->update($validated);
 
@@ -88,6 +122,11 @@ class KostController extends Controller
 
     public function destroy(Kost $kost)
     {
+        // Hapus foto jika ada
+        if ($kost->photo && file_exists(public_path($kost->photo))) {
+            unlink(public_path($kost->photo));
+        }
+
         $kost->delete();
 
         return redirect()->route('kosts.index')
