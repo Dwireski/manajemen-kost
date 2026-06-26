@@ -19,28 +19,78 @@ export default function Edit({ tenant, rooms }) {
     return (
         <AuthenticatedLayout
             header={
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    Edit Penyewa
-                </h2>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                    <h2 className="font-semibold text-lg sm:text-xl text-gray-800 leading-tight">
+                        Edit Profil Penyewa
+                    </h2>
+                    <Link
+                        href={route("tenants.index")}
+                        className="text-xs sm:text-sm font-medium text-blue-600 hover:text-blue-800 transition flex items-center gap-1"
+                    >
+                        {/* Line Icon: Arrow Left */}
+                        <svg
+                            className="w-3.5 h-3.5"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                            />
+                        </svg>
+                        Kembali ke Daftar
+                    </Link>
+                </div>
             }
         >
             <Head title="Edit Penyewa" />
 
-            <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">
-                            <form onSubmit={handleSubmit} className="space-y-6">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700">
-                                        Pilih Kamar
+            <div className="py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
+                <div className="max-w-3xl mx-auto">
+                    <div className="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100">
+                        <div className="p-5 sm:p-8 text-gray-900">
+                            <div className="border-b border-gray-100 pb-4 mb-6">
+                                <h3 className="text-lg font-bold text-gray-900">
+                                    Informasi Manajemen Penyewa
+                                </h3>
+                                <p className="text-xs text-gray-500">
+                                    Perbarui biodata kontak serta penempatan
+                                    unit kamar hunian
+                                </p>
+                            </div>
+
+                            <form
+                                onSubmit={handleSubmit}
+                                className="space-y-5 sm:space-y-6"
+                            >
+                                {/* Pilihan Kamar */}
+                                <div className="space-y-1">
+                                    <label className="block text-xs sm:text-sm font-bold text-gray-600 uppercase tracking-wider flex items-center gap-1.5">
+                                        {/* Line Icon: Home / Door */}
+                                        <svg
+                                            className="w-3.5 h-3.5 text-gray-400"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                                            />
+                                        </svg>
+                                        Alokasi Kamar Hunian
                                     </label>
                                     <select
                                         value={data.room_id}
                                         onChange={(e) =>
                                             setData("room_id", e.target.value)
                                         }
-                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                        className="mt-1 block w-full rounded-xl border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500/20 p-3 text-sm sm:text-base transition bg-white"
                                         required
                                     >
                                         <option value="">
@@ -52,7 +102,7 @@ export default function Edit({ tenant, rooms }) {
                                                 value={room.id}
                                             >
                                                 {room.kost?.name} - Kamar{" "}
-                                                {room.room_number} (Rp{" "}
+                                                {room.room_number} (
                                                 {parseInt(
                                                     room.price,
                                                 ).toLocaleString("id-ID")}
@@ -61,110 +111,181 @@ export default function Edit({ tenant, rooms }) {
                                         ))}
                                     </select>
                                     {errors.room_id && (
-                                        <p className="text-red-500 text-sm mt-1">
-                                            {errors.room_id}
+                                        <p className="text-rose-500 text-xs font-medium mt-1">
+                                            ⚠️ {errors.room_id}
                                         </p>
                                     )}
                                 </div>
 
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700">
-                                        Nama Penyewa
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value={data.name}
-                                        onChange={(e) =>
-                                            setData("name", e.target.value)
-                                        }
-                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                        required
-                                    />
-                                    {errors.name && (
-                                        <p className="text-red-500 text-sm mt-1">
-                                            {errors.name}
-                                        </p>
-                                    )}
+                                {/* Grid Dua Kolom untuk Nama & Telepon */}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                    {/* Nama Penyewa */}
+                                    <div className="space-y-1">
+                                        <label className="block text-xs sm:text-sm font-bold text-gray-600 uppercase tracking-wider flex items-center gap-1.5">
+                                            {/* Line Icon: User */}
+                                            <svg
+                                                className="w-3.5 h-3.5 text-gray-400"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                strokeWidth="2"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                                                />
+                                            </svg>
+                                            Nama Lengkap Penyewa
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={data.name}
+                                            onChange={(e) =>
+                                                setData("name", e.target.value)
+                                            }
+                                            placeholder="Masukkan nama lengkap"
+                                            className="mt-1 block w-full rounded-xl border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500/20 p-3 text-sm sm:text-base transition"
+                                            required
+                                        />
+                                        {errors.name && (
+                                            <p className="text-rose-500 text-xs font-medium mt-1">
+                                                ⚠️ {errors.name}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    {/* Telepon */}
+                                    <div className="space-y-1">
+                                        <label className="block text-xs sm:text-sm font-bold text-gray-600 uppercase tracking-wider flex items-center gap-1.5">
+                                            {/* Line Icon: Phone */}
+                                            <svg
+                                                className="w-3.5 h-3.5 text-gray-400"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                strokeWidth="2"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                                                />
+                                            </svg>
+                                            Nomor Telepon
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={data.phone}
+                                            onChange={(e) =>
+                                                setData("phone", e.target.value)
+                                            }
+                                            placeholder="Contoh: 0812XXXXXXXX"
+                                            className="mt-1 block w-full rounded-xl border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500/20 p-3 text-sm sm:text-base transition"
+                                            required
+                                        />
+                                        {errors.phone && (
+                                            <p className="text-rose-500 text-xs font-medium mt-1">
+                                                ⚠️ {errors.phone}
+                                            </p>
+                                        )}
+                                    </div>
                                 </div>
 
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700">
-                                        Telepon
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value={data.phone}
-                                        onChange={(e) =>
-                                            setData("phone", e.target.value)
-                                        }
-                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                        required
-                                    />
-                                    {errors.phone && (
-                                        <p className="text-red-500 text-sm mt-1">
-                                            {errors.phone}
-                                        </p>
-                                    )}
+                                {/* Grid Dua Kolom untuk Tanggal */}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                    {/* Tanggal Masuk */}
+                                    <div className="space-y-1">
+                                        <label className="block text-xs sm:text-sm font-bold text-gray-600 uppercase tracking-wider flex items-center gap-1.5">
+                                            {/* Line Icon: Calendar Check */}
+                                            <svg
+                                                className="w-3.5 h-3.5 text-gray-400"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                strokeWidth="2"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                                />
+                                            </svg>
+                                            Tanggal Masuk
+                                        </label>
+                                        <input
+                                            type="date"
+                                            value={data.move_in_date}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "move_in_date",
+                                                    e.target.value,
+                                                )
+                                            }
+                                            className="mt-1 block w-full rounded-xl border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500/20 p-3 text-sm sm:text-base transition bg-white"
+                                            required
+                                        />
+                                        {errors.move_in_date && (
+                                            <p className="text-rose-500 text-xs font-medium mt-1">
+                                                ⚠️ {errors.move_in_date}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    {/* Tanggal Keluar */}
+                                    <div className="space-y-1">
+                                        <label className="block text-xs sm:text-sm font-bold text-gray-600 uppercase tracking-wider flex items-center gap-1.5">
+                                            {/* Line Icon: Calendar X */}
+                                            <svg
+                                                className="w-3.5 h-3.5 text-gray-400"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                strokeWidth="2"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                                />
+                                            </svg>
+                                            Tanggal Keluar (Opsional)
+                                        </label>
+                                        <input
+                                            type="date"
+                                            value={data.move_out_date}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "move_out_date",
+                                                    e.target.value,
+                                                )
+                                            }
+                                            className="mt-1 block w-full rounded-xl border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500/20 p-3 text-sm sm:text-base transition bg-white"
+                                        />
+                                        {errors.move_out_date && (
+                                            <p className="text-rose-500 text-xs font-medium mt-1">
+                                                ⚠️ {errors.move_out_date}
+                                            </p>
+                                        )}
+                                    </div>
                                 </div>
 
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700">
-                                        Tanggal Masuk
-                                    </label>
-                                    <input
-                                        type="date"
-                                        value={data.move_in_date}
-                                        onChange={(e) =>
-                                            setData(
-                                                "move_in_date",
-                                                e.target.value,
-                                            )
-                                        }
-                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                        required
-                                    />
-                                    {errors.move_in_date && (
-                                        <p className="text-red-500 text-sm mt-1">
-                                            {errors.move_in_date}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700">
-                                        Tanggal Keluar (Opsional)
-                                    </label>
-                                    <input
-                                        type="date"
-                                        value={data.move_out_date}
-                                        onChange={(e) =>
-                                            setData(
-                                                "move_out_date",
-                                                e.target.value,
-                                            )
-                                        }
-                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                    />
-                                    {errors.move_out_date && (
-                                        <p className="text-red-500 text-sm mt-1">
-                                            {errors.move_out_date}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div className="flex justify-end space-x-4">
+                                {/* Tombol Aksi Batal / Update */}
+                                <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-4 border-t border-gray-100">
                                     <Link
                                         href={route("tenants.index")}
-                                        className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+                                        className="w-full sm:w-auto text-center bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2.5 px-5 rounded-xl transition text-sm sm:text-base"
                                     >
                                         Batal
                                     </Link>
                                     <button
                                         type="submit"
                                         disabled={processing}
-                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
+                                        className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-6 rounded-xl shadow-sm hover:shadow transition disabled:opacity-50 text-sm sm:text-base"
                                     >
-                                        {processing ? "Menyimpan..." : "Update"}
+                                        {processing
+                                            ? "Menyimpan..."
+                                            : "Update Profil"}
                                     </button>
                                 </div>
                             </form>

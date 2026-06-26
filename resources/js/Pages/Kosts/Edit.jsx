@@ -40,17 +40,19 @@ export default function Edit({ kost }) {
                 }
             >
                 <Head title="Edit Kost" />
-                <div className="py-4 sm:py-12">
-                    <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                        <div className="bg-white p-4 sm:p-6 rounded-lg">
-                            <p className="text-red-500 text-sm sm:text-base">
-                                Data kost tidak ditemukan.
+                <div className="py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
+                    <div className="max-w-xl mx-auto">
+                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center space-y-4">
+                            <span className="text-4xl block">⚠️</span>
+                            <p className="text-gray-600 font-medium text-sm sm:text-base">
+                                Data properti kost tidak ditemukan atau tidak
+                                valid.
                             </p>
                             <Link
                                 href={route("kosts.index")}
-                                className="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded text-sm sm:text-base"
+                                className="inline-flex justify-center w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2.5 px-5 rounded-xl transition text-sm"
                             >
-                                Kembali
+                                Kembali ke Daftar
                             </Link>
                         </div>
                     </div>
@@ -62,25 +64,44 @@ export default function Edit({ kost }) {
     return (
         <AuthenticatedLayout
             header={
-                <h2 className="font-semibold text-lg sm:text-xl text-gray-800 leading-tight">
-                    Edit Kost
-                </h2>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                    <h2 className="font-semibold text-lg sm:text-xl text-gray-800 leading-tight">
+                        Edit Properti Kost
+                    </h2>
+                    <Link
+                        href={route("kosts.index")}
+                        className="text-xs sm:text-sm font-medium text-blue-600 hover:text-blue-800 transition"
+                    >
+                        ← Kembali ke Manajemen
+                    </Link>
+                </div>
             }
         >
-            <Head title="Edit Kost" />
+            <Head title={`Edit Properti: ${kost.name}`} />
 
-            <div className="py-4 sm:py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-4 sm:p-6 text-gray-900">
+            <div className="py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
+                <div className="max-w-3xl mx-auto">
+                    <div className="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100">
+                        <div className="p-5 sm:p-8 text-gray-900">
+                            <div className="border-b border-gray-100 pb-4 mb-6">
+                                <h3 className="text-lg font-bold text-gray-900">
+                                    Informasi Properti
+                                </h3>
+                                <p className="text-xs text-gray-500">
+                                    Perbarui data detail kelola properti
+                                    akomodasi Anda
+                                </p>
+                            </div>
+
                             <form
                                 onSubmit={handleSubmit}
-                                className="space-y-4 sm:space-y-6"
+                                className="space-y-5 sm:space-y-6"
                                 encType="multipart/form-data"
                             >
-                                <div>
-                                    <label className="block text-xs sm:text-sm font-medium text-gray-700">
-                                        Nama Kost
+                                {/* Input Nama */}
+                                <div className="space-y-1">
+                                    <label className="block text-xs sm:text-sm font-bold text-gray-600 uppercase tracking-wider">
+                                        Nama Properti Kost
                                     </label>
                                     <input
                                         type="text"
@@ -88,146 +109,169 @@ export default function Edit({ kost }) {
                                         onChange={(e) =>
                                             setData("name", e.target.value)
                                         }
-                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2.5 sm:p-3 text-sm sm:text-base"
+                                        placeholder="Masukkan nama properti"
+                                        className="mt-1 block w-full rounded-xl border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500/20 p-3 text-sm sm:text-base transition"
                                         required
                                     />
                                     {errors.name && (
-                                        <p className="text-red-500 text-xs sm:text-sm mt-1">
-                                            {errors.name}
+                                        <p className="text-rose-500 text-xs font-medium mt-1">
+                                            ⚠️ {errors.name}
                                         </p>
                                     )}
                                 </div>
 
-                                <div>
-                                    <label className="block text-xs sm:text-sm font-medium text-gray-700">
-                                        Alamat
+                                {/* Input Alamat */}
+                                <div className="space-y-1">
+                                    <label className="block text-xs sm:text-sm font-bold text-gray-600 uppercase tracking-wider">
+                                        Alamat Lengkap
                                     </label>
                                     <textarea
                                         value={data.address}
                                         onChange={(e) =>
                                             setData("address", e.target.value)
                                         }
+                                        placeholder="Masukkan lokasi atau alamat operasional"
                                         rows="3"
-                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2.5 sm:p-3 text-sm sm:text-base"
+                                        className="mt-1 block w-full rounded-xl border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500/20 p-3 text-sm sm:text-base transition resize-none"
                                         required
                                     />
                                     {errors.address && (
-                                        <p className="text-red-500 text-xs sm:text-sm mt-1">
-                                            {errors.address}
+                                        <p className="text-rose-500 text-xs font-medium mt-1">
+                                            ⚠️ {errors.address}
                                         </p>
                                     )}
                                 </div>
 
-                                <div>
-                                    <label className="block text-xs sm:text-sm font-medium text-gray-700">
-                                        Nama Pemilik
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value={data.owner_name}
-                                        onChange={(e) =>
-                                            setData(
-                                                "owner_name",
-                                                e.target.value,
-                                            )
-                                        }
-                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2.5 sm:p-3 text-sm sm:text-base"
-                                        required
-                                    />
-                                    {errors.owner_name && (
-                                        <p className="text-red-500 text-xs sm:text-sm mt-1">
-                                            {errors.owner_name}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div>
-                                    <label className="block text-xs sm:text-sm font-medium text-gray-700">
-                                        Telepon Pemilik
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value={data.owner_phone}
-                                        onChange={(e) =>
-                                            setData(
-                                                "owner_phone",
-                                                e.target.value,
-                                            )
-                                        }
-                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2.5 sm:p-3 text-sm sm:text-base"
-                                        required
-                                    />
-                                    {errors.owner_phone && (
-                                        <p className="text-red-500 text-xs sm:text-sm mt-1">
-                                            {errors.owner_phone}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div>
-                                    <label className="block text-xs sm:text-sm font-medium text-gray-700">
-                                        Foto Kost
-                                    </label>
-
-                                    {/* Preview Foto Lama (jika ada) */}
-                                    {kost.photo && !photoPreview && (
-                                        <div className="mt-2 mb-3">
-                                            <p className="text-xs text-gray-500 mb-1">
-                                                Foto saat ini:
+                                {/* Grid Dua Kolom untuk Owner */}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                    {/* Nama Pemilik */}
+                                    <div className="space-y-1">
+                                        <label className="block text-xs sm:text-sm font-bold text-gray-600 uppercase tracking-wider">
+                                            Nama Pemilik
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={data.owner_name}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "owner_name",
+                                                    e.target.value,
+                                                )
+                                            }
+                                            placeholder="Nama lengkap pengelola"
+                                            className="mt-1 block w-full rounded-xl border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500/20 p-3 text-sm sm:text-base transition"
+                                            required
+                                        />
+                                        {errors.owner_name && (
+                                            <p className="text-rose-500 text-xs font-medium mt-1">
+                                                ⚠️ {errors.owner_name}
                                             </p>
-                                            <img
-                                                src={`/${kost.photo}`}
-                                                alt="Foto Kost"
-                                                className="w-full h-40 sm:h-48 object-cover rounded-md border border-gray-300"
-                                            />
-                                        </div>
-                                    )}
+                                        )}
+                                    </div>
 
-                                    {/* Preview Foto Baru (jika dipilih) */}
-                                    {photoPreview && (
-                                        <div className="mt-2 mb-3">
-                                            <p className="text-xs text-gray-500 mb-1">
-                                                Preview foto baru:
+                                    {/* Telepon Pemilik */}
+                                    <div className="space-y-1">
+                                        <label className="block text-xs sm:text-sm font-bold text-gray-600 uppercase tracking-wider">
+                                            Telepon Pemilik
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={data.owner_phone}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "owner_phone",
+                                                    e.target.value,
+                                                )
+                                            }
+                                            placeholder="Contoh: 081234567xxx"
+                                            className="mt-1 block w-full rounded-xl border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500/20 p-3 text-sm sm:text-base transition"
+                                            required
+                                        />
+                                        {errors.owner_phone && (
+                                            <p className="text-rose-500 text-xs font-medium mt-1">
+                                                ⚠️ {errors.owner_phone}
                                             </p>
-                                            <img
-                                                src={photoPreview}
-                                                alt="Preview Foto"
-                                                className="w-full h-40 sm:h-48 object-cover rounded-md border border-gray-300"
-                                            />
-                                        </div>
-                                    )}
+                                        )}
+                                    </div>
+                                </div>
 
+                                {/* Bagian Unggah Foto */}
+                                <div className="space-y-1 border-t border-gray-100 pt-5">
+                                    <label className="block text-xs sm:text-sm font-bold text-gray-600 uppercase tracking-wider mb-2">
+                                        Berkas Media Foto Kost
+                                    </label>
+
+                                    {/* Grid Preview Foto Berdampingan/Responsif */}
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-3">
+                                        {/* Preview Foto Lama (jika ada) */}
+                                        {kost.photo && !photoPreview && (
+                                            <div className="space-y-1">
+                                                <p className="text-xs font-semibold text-gray-400">
+                                                    Foto Saat Ini:
+                                                </p>
+                                                <div className="rounded-xl overflow-hidden border border-gray-100 shadow-inner bg-gray-50">
+                                                    <img
+                                                        src={`/${kost.photo}`}
+                                                        alt="Foto Kost"
+                                                        className="w-full h-40 object-cover"
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Preview Foto Baru (jika dipilih) */}
+                                        {photoPreview && (
+                                            <div className="space-y-1">
+                                                <p className="text-xs font-semibold text-emerald-600">
+                                                    Preview Foto Baru:
+                                                </p>
+                                                <div className="rounded-xl overflow-hidden border border-emerald-200 shadow-sm bg-emerald-50/20">
+                                                    <img
+                                                        src={photoPreview}
+                                                        alt="Preview Foto"
+                                                        className="w-full h-40 object-cover"
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* Input File Custom / Clean Design */}
                                     <input
                                         type="file"
                                         onChange={handlePhotoChange}
-                                        className="mt-1 block w-full text-xs sm:text-sm text-gray-500 file:mr-3 sm:file:mr-4 file:py-2 file:px-3 sm:file:px-4 file:rounded-md file:border-0 file:text-xs sm:file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                                        className="mt-1 block w-full text-xs sm:text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 file:cursor-pointer cursor-pointer transition"
                                         accept="image/*"
                                     />
-                                    <p className="text-xs text-gray-500 mt-1">
-                                        Upload foto baru untuk mengganti foto
-                                        lama (Max 2MB). Kosongkan jika tidak
-                                        ingin mengubah.
+                                    <p className="text-[11px] text-gray-400 leading-relaxed mt-1.5">
+                                        * Unggah foto berformat gambar baru
+                                        untuk memperbarui dokumentasi aset
+                                        visual properti (Maks. 2MB). Biarkan
+                                        kosong jika tidak ingin diubah.
                                     </p>
                                     {errors.photo && (
-                                        <p className="text-red-500 text-xs sm:text-sm mt-1">
-                                            {errors.photo}
+                                        <p className="text-rose-500 text-xs font-medium mt-1">
+                                            ⚠️ {errors.photo}
                                         </p>
                                     )}
                                 </div>
 
-                                <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 sm:gap-4">
+                                {/* Tombol Aksi Batal / Simpan */}
+                                <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-4 border-t border-gray-100">
                                     <Link
                                         href={route("kosts.index")}
-                                        className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2.5 sm:py-2 px-4 rounded text-sm sm:text-base text-center"
+                                        className="w-full sm:w-auto text-center bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2.5 px-5 rounded-xl transition text-sm sm:text-base"
                                     >
                                         Batal
                                     </Link>
                                     <button
                                         type="submit"
                                         disabled={processing}
-                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2.5 sm:py-2 px-4 rounded disabled:opacity-50 text-sm sm:text-base"
+                                        className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-6 rounded-xl shadow-sm hover:shadow transition disabled:opacity-50 text-sm sm:text-base"
                                     >
-                                        {processing ? "Menyimpan..." : "Update"}
+                                        {processing
+                                            ? "Menyimpan..."
+                                            : "Simpan Perubahan"}
                                     </button>
                                 </div>
                             </form>

@@ -36,8 +36,8 @@ export default function Dashboard({ stats, recentPayments, expiringTenants }) {
         >
             <Head title="Dashboard" />
 
-            <div className="py-4 sm:py-8">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div className="py-4 sm:py-8 px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto">
                     {/* Welcome Card */}
                     <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl shadow-sm p-4 sm:p-6 mb-6 sm:mb-8 text-white">
                         <div className="flex items-center justify-between gap-4">
@@ -181,7 +181,7 @@ export default function Dashboard({ stats, recentPayments, expiringTenants }) {
                             <h4 className="text-xs sm:text-sm font-medium text-gray-500 mb-1">
                                 Total Pendapatan
                             </h4>
-                            <p className="text-xl sm:text-2xl font-bold text-gray-900">
+                            <p className="text-lg sm:text-2xl font-bold text-gray-900 truncate">
                                 {formatCurrency(stats.total_revenue)}
                             </p>
                             <div className="mt-2 sm:mt-3 text-xs text-yellow-600 font-medium">
@@ -215,7 +215,7 @@ export default function Dashboard({ stats, recentPayments, expiringTenants }) {
                                         {recentPayments.map((payment) => (
                                             <div
                                                 key={payment.id}
-                                                className="flex items-center justify-between p-3 sm:p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
+                                                className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 sm:p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition gap-2"
                                             >
                                                 <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
                                                     <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-semibold text-xs sm:text-sm flex-shrink-0">
@@ -245,14 +245,14 @@ export default function Dashboard({ stats, recentPayments, expiringTenants }) {
                                                         </p>
                                                     </div>
                                                 </div>
-                                                <div className="text-right flex-shrink-0 ml-2">
+                                                <div className="text-left sm:text-right flex sm:flex-col justify-between items-center sm:items-end flex-shrink-0 border-t border-gray-200 sm:border-0 pt-2 sm:pt-0">
                                                     <p className="font-semibold text-gray-900 text-xs sm:text-sm">
                                                         {formatCurrency(
                                                             payment.amount,
                                                         )}
                                                     </p>
                                                     <span
-                                                        className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full mt-1 ${
+                                                        className={`inline-flex px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-semibold rounded-full sm:mt-1 ${
                                                             payment.status ===
                                                             "paid"
                                                                 ? "bg-green-100 text-green-700"
@@ -311,7 +311,7 @@ export default function Dashboard({ stats, recentPayments, expiringTenants }) {
                                         {expiringTenants.map((tenant) => (
                                             <div
                                                 key={tenant.id}
-                                                className="flex items-center justify-between p-3 sm:p-4 bg-yellow-50 rounded-lg border border-yellow-200"
+                                                className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 sm:p-4 bg-yellow-50 rounded-lg border border-yellow-200 gap-2"
                                             >
                                                 <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
                                                     <div className="w-8 h-8 sm:w-10 sm:h-10 bg-yellow-100 rounded-full flex items-center justify-center text-yellow-600 font-semibold text-xs sm:text-sm flex-shrink-0">
@@ -336,8 +336,8 @@ export default function Dashboard({ stats, recentPayments, expiringTenants }) {
                                                         </p>
                                                     </div>
                                                 </div>
-                                                <div className="text-right flex-shrink-0 ml-2">
-                                                    <p className="text-xs font-medium text-yellow-700">
+                                                <div className="text-left sm:text-right flex sm:flex-col justify-between items-center sm:items-end flex-shrink-0 border-t border-yellow-200 sm:border-0 pt-2 sm:pt-0">
+                                                    <p className="text-[10px] sm:text-xs font-medium text-yellow-700">
                                                         Keluar
                                                     </p>
                                                     <p className="text-xs sm:text-sm font-semibold text-gray-900">
