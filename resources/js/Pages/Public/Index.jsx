@@ -169,7 +169,7 @@ export default function Index({ kosts, filters }) {
                                     <div className="relative h-48 overflow-hidden bg-gray-100">
                                         {kost.photo ? (
                                             <img
-                                                src={kost.photo}
+                                                src={`/${kost.photo}`}
                                                 alt={kost.name}
                                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                                 onError={(e) => {
