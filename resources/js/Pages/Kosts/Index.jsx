@@ -34,16 +34,16 @@ export default function Index({ kosts, filters }) {
     return (
         <AuthenticatedLayout
             header={
-                <div className="flex items-center justify-between">
-                    <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <h2 className="font-semibold text-lg sm:text-xl text-gray-800 leading-tight">
                         Manajemen Kost
                     </h2>
                     <Link
                         href={route("kosts.create")}
-                        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-sm transition flex items-center gap-2"
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-3 sm:px-4 rounded-lg shadow-sm transition flex items-center justify-center gap-2 text-sm sm:text-base"
                     >
                         <svg
-                            className="w-5 h-5"
+                            className="w-4 h-4 sm:w-5 sm:h-5"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -55,18 +55,22 @@ export default function Index({ kosts, filters }) {
                                 d="M12 4v16m8-8H4"
                             />
                         </svg>
-                        Tambah Kost
+                        <span className="hidden sm:inline">Tambah Kost</span>
+                        <span className="sm:hidden">Tambah</span>
                     </Link>
                 </div>
             }
         >
             <Head title="Daftar Kost" />
 
-            <div className="py-8">
+            <div className="py-4 sm:py-8">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     {/* Search Card */}
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-                        <form onSubmit={handleSearch} className="flex gap-3">
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6 mb-4 sm:mb-6">
+                        <form
+                            onSubmit={handleSearch}
+                            className="flex flex-col sm:flex-row gap-2 sm:gap-3"
+                        >
                             <div className="flex-1 relative">
                                 <svg
                                     className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
@@ -86,34 +90,36 @@ export default function Index({ kosts, filters }) {
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
                                     placeholder="Cari berdasarkan nama, pemilik, atau alamat..."
-                                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                                    className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition text-sm sm:text-base"
                                 />
                             </div>
-                            <button
-                                type="submit"
-                                className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition shadow-sm"
-                            >
-                                Cari
-                            </button>
-                            {search && (
+                            <div className="flex gap-2 sm:gap-3">
                                 <button
-                                    type="button"
-                                    onClick={handleReset}
-                                    className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-3 px-6 rounded-lg transition"
+                                    type="submit"
+                                    className="flex-1 sm:flex-none bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg transition shadow-sm text-sm sm:text-base"
                                 >
-                                    Reset
+                                    Cari
                                 </button>
-                            )}
+                                {search && (
+                                    <button
+                                        type="button"
+                                        onClick={handleReset}
+                                        className="flex-1 sm:flex-none bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg transition text-sm sm:text-base"
+                                    >
+                                        Reset
+                                    </button>
+                                )}
+                            </div>
                         </form>
                     </div>
 
                     {/* Table Card */}
                     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                        <div className="px-6 py-4 border-b border-gray-100">
-                            <h3 className="text-lg font-semibold text-gray-900">
+                        <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-100">
+                            <h3 className="text-base sm:text-lg font-semibold text-gray-900">
                                 Daftar Kost
                             </h3>
-                            <p className="text-sm text-gray-500">
+                            <p className="text-xs sm:text-sm text-gray-500">
                                 Total: {kosts?.length || 0} kost
                             </p>
                         </div>
@@ -122,25 +128,25 @@ export default function Index({ kosts, filters }) {
                             <table className="min-w-full divide-y divide-gray-200">
                                 <thead className="bg-gray-50">
                                     <tr>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Foto
                                         </th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Nama Kost
                                         </th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Alamat
                                         </th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Pemilik
                                         </th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Telepon
                                         </th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Kamar
                                         </th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Aksi
                                         </th>
                                     </tr>
@@ -152,51 +158,49 @@ export default function Index({ kosts, filters }) {
                                                 key={kost.id}
                                                 className="hover:bg-gray-50 transition"
                                             >
-                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                                                     {kost.photo ? (
                                                         <img
-                                                            src={kost.photo}
+                                                            src={`/${kost.photo}`}
                                                             alt={kost.name}
-                                                            className="w-12 h-12 object-cover rounded-lg border border-gray-200"
+                                                            className="w-10 h-10 sm:w-12 sm:h-12 object-cover rounded-lg border border-gray-200"
                                                         />
                                                     ) : (
-                                                        <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400">
-                                                            🏠
-                                                        </div>
+                                                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400"></div>
                                                     )}
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="font-medium text-gray-900">
+                                                <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+                                                    <div className="flex items-center gap-2 sm:gap-3">
+                                                        <div className="font-medium text-gray-900 text-xs sm:text-sm">
                                                             {kost.name || "-"}
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">
+                                                <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-500 max-w-xs truncate">
                                                     {kost.address || "-"}
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
                                                     {kost.owner_name || "-"}
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">
                                                     {kost.owner_phone || "-"}
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                                                <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+                                                    <span className="inline-flex items-center px-2 sm:px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
                                                         {kost.rooms
                                                             ? kost.rooms.length
                                                             : 0}{" "}
                                                         kamar
                                                     </span>
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                                    <div className="flex gap-2">
+                                                <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium">
+                                                    <div className="flex gap-1 sm:gap-2">
                                                         <Link
                                                             href={route(
                                                                 "kosts.show",
                                                                 kost.id,
                                                             )}
-                                                            className="text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-md transition"
+                                                            className="text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-2 sm:px-3 py-1 rounded-md transition text-xs"
                                                         >
                                                             Lihat
                                                         </Link>
@@ -205,7 +209,7 @@ export default function Index({ kosts, filters }) {
                                                                 "kosts.edit",
                                                                 kost.id,
                                                             )}
-                                                            className="text-yellow-600 hover:text-yellow-800 bg-yellow-50 hover:bg-yellow-100 px-3 py-1 rounded-md transition"
+                                                            className="text-yellow-600 hover:text-yellow-800 bg-yellow-50 hover:bg-yellow-100 px-2 sm:px-3 py-1 rounded-md transition text-xs"
                                                         >
                                                             Edit
                                                         </Link>
@@ -215,7 +219,7 @@ export default function Index({ kosts, filters }) {
                                                                     kost.id,
                                                                 )
                                                             }
-                                                            className="text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100 px-3 py-1 rounded-md transition"
+                                                            className="text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100 px-2 sm:px-3 py-1 rounded-md transition text-xs"
                                                         >
                                                             Hapus
                                                         </button>
@@ -227,10 +231,10 @@ export default function Index({ kosts, filters }) {
                                         <tr>
                                             <td
                                                 colSpan="7"
-                                                className="px-6 py-12 text-center"
+                                                className="px-6 py-8 sm:py-12 text-center"
                                             >
-                                                <div className="text-4xl mb-2"></div>
-                                                <p className="text-gray-500">
+                                                <div className="text-3xl sm:text-4xl mb-2"></div>
+                                                <p className="text-xs sm:text-sm text-gray-500">
                                                     {search
                                                         ? "Tidak ada kost yang sesuai pencarian."
                                                         : "Belum ada data kost."}
