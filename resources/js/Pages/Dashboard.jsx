@@ -19,11 +19,11 @@ export default function Dashboard({ stats, recentPayments, expiringTenants }) {
     return (
         <AuthenticatedLayout
             header={
-                <div className="flex items-center justify-between">
-                    <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                    <h2 className="font-semibold text-lg sm:text-xl text-gray-800 leading-tight">
                         Dashboard
                     </h2>
-                    <div className="text-sm text-gray-500">
+                    <div className="text-xs sm:text-sm text-gray-500">
                         {new Date().toLocaleDateString("id-ID", {
                             weekday: "long",
                             year: "numeric",
@@ -36,31 +36,33 @@ export default function Dashboard({ stats, recentPayments, expiringTenants }) {
         >
             <Head title="Dashboard" />
 
-            <div className="py-8">
+            <div className="py-4 sm:py-8">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     {/* Welcome Card */}
-                    <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl shadow-sm p-6 mb-8 text-white">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <h3 className="text-2xl font-bold mb-1">
+                    <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl shadow-sm p-4 sm:p-6 mb-6 sm:mb-8 text-white">
+                        <div className="flex items-center justify-between gap-4">
+                            <div className="flex-1 min-w-0">
+                                <h3 className="text-lg sm:text-2xl font-bold mb-1">
                                     Selamat Datang Kembali! 👋
                                 </h3>
-                                <p className="text-blue-100">
+                                <p className="text-blue-100 text-sm sm:text-base">
                                     Berikut ringkasan bisnis kost Anda hari ini
                                 </p>
                             </div>
-                            <div className="text-6xl opacity-20">🏠</div>
+                            <div className="text-4xl sm:text-6xl opacity-20 flex-shrink-0">
+                                🏠
+                            </div>
                         </div>
                     </div>
 
                     {/* Statistik Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
                         {/* Total Kost */}
-                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition">
-                            <div className="flex items-center justify-between mb-4">
-                                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6 hover:shadow-md transition">
+                            <div className="flex items-center justify-between mb-3 sm:mb-4">
+                                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                                     <svg
-                                        className="w-6 h-6 text-blue-600"
+                                        className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -73,27 +75,27 @@ export default function Dashboard({ stats, recentPayments, expiringTenants }) {
                                         />
                                     </svg>
                                 </div>
-                                <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                <span className="text-xs font-medium text-gray-400 uppercase tracking-wider hidden sm:inline">
                                     Total
                                 </span>
                             </div>
-                            <h4 className="text-sm font-medium text-gray-500 mb-1">
+                            <h4 className="text-xs sm:text-sm font-medium text-gray-500 mb-1">
                                 Total Kost
                             </h4>
-                            <p className="text-3xl font-bold text-gray-900">
+                            <p className="text-2xl sm:text-3xl font-bold text-gray-900">
                                 {stats.total_kosts}
                             </p>
-                            <div className="mt-3 text-xs text-green-600 font-medium">
+                            <div className="mt-2 sm:mt-3 text-xs text-green-600 font-medium">
                                 📊 Aktif
                             </div>
                         </div>
 
                         {/* Total Kamar */}
-                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition">
-                            <div className="flex items-center justify-between mb-4">
-                                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6 hover:shadow-md transition">
+                            <div className="flex items-center justify-between mb-3 sm:mb-4">
+                                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 rounded-lg flex items-center justify-center">
                                     <svg
-                                        className="w-6 h-6 text-purple-600"
+                                        className="w-5 h-5 sm:w-6 sm:h-6 text-purple-600"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -106,27 +108,27 @@ export default function Dashboard({ stats, recentPayments, expiringTenants }) {
                                         />
                                     </svg>
                                 </div>
-                                <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                <span className="text-xs font-medium text-gray-400 uppercase tracking-wider hidden sm:inline">
                                     Unit
                                 </span>
                             </div>
-                            <h4 className="text-sm font-medium text-gray-500 mb-1">
+                            <h4 className="text-xs sm:text-sm font-medium text-gray-500 mb-1">
                                 Total Kamar
                             </h4>
-                            <p className="text-3xl font-bold text-gray-900">
+                            <p className="text-2xl sm:text-3xl font-bold text-gray-900">
                                 {stats.total_rooms}
                             </p>
-                            <div className="mt-3 text-xs text-purple-600 font-medium">
+                            <div className="mt-2 sm:mt-3 text-xs text-purple-600 font-medium">
                                 ️ Semua unit
                             </div>
                         </div>
 
                         {/* Kamar Tersedia */}
-                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition">
-                            <div className="flex items-center justify-between mb-4">
-                                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6 hover:shadow-md transition">
+                            <div className="flex items-center justify-between mb-3 sm:mb-4">
+                                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-lg flex items-center justify-center">
                                     <svg
-                                        className="w-6 h-6 text-green-600"
+                                        className="w-5 h-5 sm:w-6 sm:h-6 text-green-600"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -139,27 +141,27 @@ export default function Dashboard({ stats, recentPayments, expiringTenants }) {
                                         />
                                     </svg>
                                 </div>
-                                <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                <span className="text-xs font-medium text-gray-400 uppercase tracking-wider hidden sm:inline">
                                     Available
                                 </span>
                             </div>
-                            <h4 className="text-sm font-medium text-gray-500 mb-1">
+                            <h4 className="text-xs sm:text-sm font-medium text-gray-500 mb-1">
                                 Kamar Tersedia
                             </h4>
-                            <p className="text-3xl font-bold text-green-600">
+                            <p className="text-2xl sm:text-3xl font-bold text-green-600">
                                 {stats.available_rooms}
                             </p>
-                            <div className="mt-3 text-xs text-gray-500 font-medium">
+                            <div className="mt-2 sm:mt-3 text-xs text-gray-500 font-medium">
                                 ✅ Siap disewa
                             </div>
                         </div>
 
                         {/* Total Pendapatan */}
-                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition">
-                            <div className="flex items-center justify-between mb-4">
-                                <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6 hover:shadow-md transition">
+                            <div className="flex items-center justify-between mb-3 sm:mb-4">
+                                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
                                     <svg
-                                        className="w-6 h-6 text-yellow-600"
+                                        className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-600"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -172,63 +174,63 @@ export default function Dashboard({ stats, recentPayments, expiringTenants }) {
                                         />
                                     </svg>
                                 </div>
-                                <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                <span className="text-xs font-medium text-gray-400 uppercase tracking-wider hidden sm:inline">
                                     Revenue
                                 </span>
                             </div>
-                            <h4 className="text-sm font-medium text-gray-500 mb-1">
+                            <h4 className="text-xs sm:text-sm font-medium text-gray-500 mb-1">
                                 Total Pendapatan
                             </h4>
-                            <p className="text-2xl font-bold text-gray-900">
+                            <p className="text-xl sm:text-2xl font-bold text-gray-900">
                                 {formatCurrency(stats.total_revenue)}
                             </p>
-                            <div className="mt-3 text-xs text-yellow-600 font-medium">
+                            <div className="mt-2 sm:mt-3 text-xs text-yellow-600 font-medium">
                                 💰 Dari pembayaran lunas
                             </div>
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
                         {/* Pembayaran Terbaru */}
                         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                            <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+                            <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-100 flex justify-between items-center">
                                 <div>
-                                    <h3 className="text-lg font-semibold text-gray-900">
+                                    <h3 className="text-base sm:text-lg font-semibold text-gray-900">
                                         Pembayaran Terbaru
                                     </h3>
-                                    <p className="text-sm text-gray-500">
+                                    <p className="text-xs sm:text-sm text-gray-500">
                                         Transaksi terakhir
                                     </p>
                                 </div>
                                 <Link
                                     href={route("payments.index")}
-                                    className="text-blue-500 hover:text-blue-600 text-sm font-medium"
+                                    className="text-blue-500 hover:text-blue-600 text-xs sm:text-sm font-medium"
                                 >
                                     Lihat Semua →
                                 </Link>
                             </div>
-                            <div className="p-6">
+                            <div className="p-4 sm:p-6">
                                 {recentPayments.length > 0 ? (
-                                    <div className="space-y-3">
+                                    <div className="space-y-2 sm:space-y-3">
                                         {recentPayments.map((payment) => (
                                             <div
                                                 key={payment.id}
-                                                className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
+                                                className="flex items-center justify-between p-3 sm:p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
                                             >
-                                                <div className="flex items-center gap-3">
-                                                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-semibold text-sm">
+                                                <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+                                                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-semibold text-xs sm:text-sm flex-shrink-0">
                                                         {payment.tenant?.name?.charAt(
                                                             0,
                                                         ) || "?"}
                                                     </div>
-                                                    <div>
-                                                        <p className="font-medium text-gray-900 text-sm">
+                                                    <div className="min-w-0">
+                                                        <p className="font-medium text-gray-900 text-xs sm:text-sm truncate">
                                                             {
                                                                 payment.tenant
                                                                     ?.name
                                                             }
                                                         </p>
-                                                        <p className="text-xs text-gray-500">
+                                                        <p className="text-xs text-gray-500 truncate">
                                                             {
                                                                 payment.tenant
                                                                     ?.room?.kost
@@ -243,8 +245,8 @@ export default function Dashboard({ stats, recentPayments, expiringTenants }) {
                                                         </p>
                                                     </div>
                                                 </div>
-                                                <div className="text-right">
-                                                    <p className="font-semibold text-gray-900 text-sm">
+                                                <div className="text-right flex-shrink-0 ml-2">
+                                                    <p className="font-semibold text-gray-900 text-xs sm:text-sm">
                                                         {formatCurrency(
                                                             payment.amount,
                                                         )}
@@ -273,9 +275,11 @@ export default function Dashboard({ stats, recentPayments, expiringTenants }) {
                                         ))}
                                     </div>
                                 ) : (
-                                    <div className="text-center py-8">
-                                        <div className="text-4xl mb-2">💳</div>
-                                        <p className="text-gray-500 text-sm">
+                                    <div className="text-center py-6 sm:py-8">
+                                        <div className="text-3xl sm:text-4xl mb-2">
+                                            💳
+                                        </div>
+                                        <p className="text-gray-500 text-xs sm:text-sm">
                                             Belum ada pembayaran
                                         </p>
                                     </div>
@@ -285,41 +289,41 @@ export default function Dashboard({ stats, recentPayments, expiringTenants }) {
 
                         {/* Kamar Akan Kosong */}
                         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                            <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+                            <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-100 flex justify-between items-center">
                                 <div>
-                                    <h3 className="text-lg font-semibold text-gray-900">
+                                    <h3 className="text-base sm:text-lg font-semibold text-gray-900">
                                         Kamar Akan Kosong
                                     </h3>
-                                    <p className="text-sm text-gray-500">
+                                    <p className="text-xs sm:text-sm text-gray-500">
                                         Dalam 30 hari ke depan
                                     </p>
                                 </div>
                                 <Link
                                     href={route("tenants.index")}
-                                    className="text-blue-500 hover:text-blue-600 text-sm font-medium"
+                                    className="text-blue-500 hover:text-blue-600 text-xs sm:text-sm font-medium"
                                 >
                                     Lihat Semua →
                                 </Link>
                             </div>
-                            <div className="p-6">
+                            <div className="p-4 sm:p-6">
                                 {expiringTenants.length > 0 ? (
-                                    <div className="space-y-3">
+                                    <div className="space-y-2 sm:space-y-3">
                                         {expiringTenants.map((tenant) => (
                                             <div
                                                 key={tenant.id}
-                                                className="flex items-center justify-between p-4 bg-yellow-50 rounded-lg border border-yellow-200"
+                                                className="flex items-center justify-between p-3 sm:p-4 bg-yellow-50 rounded-lg border border-yellow-200"
                                             >
-                                                <div className="flex items-center gap-3">
-                                                    <div className="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center text-yellow-600 font-semibold text-sm">
+                                                <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+                                                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-yellow-100 rounded-full flex items-center justify-center text-yellow-600 font-semibold text-xs sm:text-sm flex-shrink-0">
                                                         {tenant.name?.charAt(
                                                             0,
                                                         ) || "?"}
                                                     </div>
-                                                    <div>
-                                                        <p className="font-medium text-gray-900 text-sm">
+                                                    <div className="min-w-0">
+                                                        <p className="font-medium text-gray-900 text-xs sm:text-sm truncate">
                                                             {tenant.name}
                                                         </p>
-                                                        <p className="text-xs text-gray-500">
+                                                        <p className="text-xs text-gray-500 truncate">
                                                             {
                                                                 tenant.room
                                                                     ?.kost?.name
@@ -332,11 +336,11 @@ export default function Dashboard({ stats, recentPayments, expiringTenants }) {
                                                         </p>
                                                     </div>
                                                 </div>
-                                                <div className="text-right">
+                                                <div className="text-right flex-shrink-0 ml-2">
                                                     <p className="text-xs font-medium text-yellow-700">
                                                         Keluar
                                                     </p>
-                                                    <p className="text-sm font-semibold text-gray-900">
+                                                    <p className="text-xs sm:text-sm font-semibold text-gray-900">
                                                         {formatDate(
                                                             tenant.move_out_date,
                                                         )}
@@ -346,9 +350,11 @@ export default function Dashboard({ stats, recentPayments, expiringTenants }) {
                                         ))}
                                     </div>
                                 ) : (
-                                    <div className="text-center py-8">
-                                        <div className="text-4xl mb-2">🎉</div>
-                                        <p className="text-gray-500 text-sm">
+                                    <div className="text-center py-6 sm:py-8">
+                                        <div className="text-3xl sm:text-4xl mb-2">
+                                            🎉
+                                        </div>
+                                        <p className="text-gray-500 text-xs sm:text-sm">
                                             Tidak ada kamar yang akan kosong
                                         </p>
                                     </div>
@@ -358,12 +364,12 @@ export default function Dashboard({ stats, recentPayments, expiringTenants }) {
                     </div>
 
                     {/* Info Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div className="bg-white rounded-xl shadow-sm border border-red-100 p-6 hover:shadow-md transition">
-                            <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+                        <div className="bg-white rounded-xl shadow-sm border border-red-100 p-4 sm:p-6 hover:shadow-md transition">
+                            <div className="flex items-center gap-3 sm:gap-4">
+                                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
                                     <svg
-                                        className="w-6 h-6 text-red-600"
+                                        className="w-5 h-5 sm:w-6 sm:h-6 text-red-600"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -376,11 +382,11 @@ export default function Dashboard({ stats, recentPayments, expiringTenants }) {
                                         />
                                     </svg>
                                 </div>
-                                <div>
-                                    <p className="text-sm font-medium text-gray-500">
+                                <div className="min-w-0">
+                                    <p className="text-xs sm:text-sm font-medium text-gray-500">
                                         Pembayaran Pending
                                     </p>
-                                    <p className="text-3xl font-bold text-red-600">
+                                    <p className="text-2xl sm:text-3xl font-bold text-red-600">
                                         {stats.pending_payments}
                                     </p>
                                     <p className="text-xs text-gray-400 mt-1">
@@ -390,11 +396,11 @@ export default function Dashboard({ stats, recentPayments, expiringTenants }) {
                             </div>
                         </div>
 
-                        <div className="bg-white rounded-xl shadow-sm border border-orange-100 p-6 hover:shadow-md transition">
-                            <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <div className="bg-white rounded-xl shadow-sm border border-orange-100 p-4 sm:p-6 hover:shadow-md transition">
+                            <div className="flex items-center gap-3 sm:gap-4">
+                                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
                                     <svg
-                                        className="w-6 h-6 text-orange-600"
+                                        className="w-5 h-5 sm:w-6 sm:h-6 text-orange-600"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -407,11 +413,11 @@ export default function Dashboard({ stats, recentPayments, expiringTenants }) {
                                         />
                                     </svg>
                                 </div>
-                                <div>
-                                    <p className="text-sm font-medium text-gray-500">
+                                <div className="min-w-0">
+                                    <p className="text-xs sm:text-sm font-medium text-gray-500">
                                         Pembayaran Terlambat
                                     </p>
-                                    <p className="text-3xl font-bold text-orange-600">
+                                    <p className="text-2xl sm:text-3xl font-bold text-orange-600">
                                         {stats.overdue_payments}
                                     </p>
                                     <p className="text-xs text-gray-400 mt-1">
@@ -421,11 +427,11 @@ export default function Dashboard({ stats, recentPayments, expiringTenants }) {
                             </div>
                         </div>
 
-                        <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-6 hover:shadow-md transition">
-                            <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-4 sm:p-6 hover:shadow-md transition">
+                            <div className="flex items-center gap-3 sm:gap-4">
+                                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
                                     <svg
-                                        className="w-6 h-6 text-blue-600"
+                                        className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -438,11 +444,11 @@ export default function Dashboard({ stats, recentPayments, expiringTenants }) {
                                         />
                                     </svg>
                                 </div>
-                                <div>
-                                    <p className="text-sm font-medium text-gray-500">
+                                <div className="min-w-0">
+                                    <p className="text-xs sm:text-sm font-medium text-gray-500">
                                         Total Penyewa Aktif
                                     </p>
-                                    <p className="text-3xl font-bold text-blue-600">
+                                    <p className="text-2xl sm:text-3xl font-bold text-blue-600">
                                         {stats.total_tenants}
                                     </p>
                                     <p className="text-xs text-gray-400 mt-1">
