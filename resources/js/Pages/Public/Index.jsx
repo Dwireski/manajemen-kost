@@ -49,11 +49,19 @@ export default function Index({ kosts, filters }) {
                     </div>
                 </nav>
 
-                {/* Hero Section */}
-                <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white py-12 sm:py-16 md:py-20">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                {/* Hero Section dengan Background Foto */}
+                <div
+                    className="relative py-12 sm:py-16 md:py-20 bg-cover bg-center bg-no-repeat"
+                    style={{
+                        backgroundImage: `url('https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1920&q=80')`,
+                    }}
+                >
+                    {/* Overlay gelap untuk readability text */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-900/90 to-blue-800/80"></div>
+
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                         <div className="text-center mb-6 sm:mb-8">
-                            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 px-2">
+                            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 px-2 text-white">
                                 Temukan Kost Impianmu
                             </h2>
                             <p className="text-base sm:text-xl text-blue-100 px-2">
