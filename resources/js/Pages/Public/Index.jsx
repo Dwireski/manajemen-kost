@@ -27,20 +27,20 @@ export default function Index({ kosts, filters }) {
                                 <div className="w-9 h-9 bg-blue-500 rounded-lg flex items-center justify-center text-white text-lg">
                                     🏠
                                 </div>
-                                <span className="font-bold text-gray-800 text-lg">
+                                <span className="font-bold text-gray-800 text-base sm:text-lg">
                                     Manajemen Kost
                                 </span>
                             </Link>
-                            <div className="flex gap-3">
+                            <div className="flex gap-2 sm:gap-3">
                                 <a
                                     href={route("login")}
-                                    className="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-lg transition"
+                                    className="text-gray-600 hover:text-gray-900 px-3 sm:px-4 py-2 rounded-lg transition text-sm sm:text-base"
                                 >
                                     Login
                                 </a>
                                 <a
                                     href={route("register")}
-                                    className="bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-600 transition shadow-sm"
+                                    className="bg-blue-500 text-white px-4 sm:px-6 py-2 rounded-lg font-semibold hover:bg-blue-600 transition shadow-sm text-sm sm:text-base"
                                 >
                                     Daftar
                                 </a>
@@ -50,13 +50,13 @@ export default function Index({ kosts, filters }) {
                 </nav>
 
                 {/* Hero Section */}
-                <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white py-20">
+                <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white py-12 sm:py-16 md:py-20">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="text-center mb-8">
-                            <h2 className="text-5xl font-bold mb-4">
+                        <div className="text-center mb-6 sm:mb-8">
+                            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 px-2">
                                 Temukan Kost Impianmu
                             </h2>
-                            <p className="text-xl text-blue-100">
+                            <p className="text-base sm:text-xl text-blue-100 px-2">
                                 {kosts.length} kost tersedia untuk kamu pilih
                             </p>
                         </div>
@@ -66,10 +66,10 @@ export default function Index({ kosts, filters }) {
                             onSubmit={handleSearch}
                             className="max-w-2xl mx-auto"
                         >
-                            <div className="bg-white rounded-full shadow-lg border border-gray-200 p-2 flex items-center gap-2">
-                                <div className="flex items-center gap-3 px-6 flex-1">
+                            <div className="bg-white rounded-full shadow-lg border border-gray-200 p-1.5 sm:p-2 flex items-center gap-1 sm:gap-2">
+                                <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-6 flex-1 min-w-0">
                                     <svg
-                                        className="w-5 h-5 text-gray-400 flex-shrink-0"
+                                        className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -88,24 +88,12 @@ export default function Index({ kosts, filters }) {
                                             setSearch(e.target.value)
                                         }
                                         placeholder="Search..."
-                                        className="flex-1 py-3 text-gray-700 focus:outline-none text-base"
+                                        className="flex-1 py-2 sm:py-3 text-sm sm:text-base text-gray-700 focus:outline-none min-w-0"
                                     />
                                 </div>
                                 <button
-                                    type="button"
-                                    className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-gray-600 transition rounded-full hover:bg-gray-100"
-                                >
-                                    <svg
-                                        className="w-5 h-5"
-                                        fill="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
-                                    </svg>
-                                </button>
-                                <button
                                     type="submit"
-                                    className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-8 rounded-full transition shadow-sm"
+                                    className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 sm:py-3 px-4 sm:px-8 rounded-full transition shadow-sm text-sm sm:text-base flex-shrink-0"
                                 >
                                     Cari
                                 </button>
@@ -116,59 +104,61 @@ export default function Index({ kosts, filters }) {
 
                 {/* Stats Section */}
                 <div className="bg-white border-b border-gray-200">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8">
                             <div className="text-center">
-                                <div className="text-4xl font-bold text-blue-600 mb-2">
+                                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-1 sm:mb-2">
                                     {kosts.length}
                                 </div>
-                                <div className="text-gray-600">
+                                <div className="text-xs sm:text-base text-gray-600">
                                     Kost Tersedia
                                 </div>
                             </div>
                             <div className="text-center">
-                                <div className="text-4xl font-bold text-blue-600 mb-2">
+                                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-1 sm:mb-2">
                                     {kosts.reduce(
                                         (acc, k) =>
                                             acc + k.available_rooms_count,
                                         0,
                                     )}
                                 </div>
-                                <div className="text-gray-600">
+                                <div className="text-xs sm:text-base text-gray-600">
                                     Kamar Kosong
                                 </div>
                             </div>
                             <div className="text-center">
-                                <div className="text-4xl font-bold text-blue-600 mb-2">
+                                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-1 sm:mb-2">
                                     100%
                                 </div>
-                                <div className="text-gray-600">
+                                <div className="text-xs sm:text-base text-gray-600">
                                     Terverifikasi
                                 </div>
                             </div>
                             <div className="text-center">
-                                <div className="text-4xl font-bold text-blue-600 mb-2">
+                                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-1 sm:mb-2">
                                     24/7
                                 </div>
-                                <div className="text-gray-600">Support</div>
+                                <div className="text-xs sm:text-base text-gray-600">
+                                    Support
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {/* Kost Cards */}
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                    <div className="mb-8">
-                        <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+                    <div className="mb-6 sm:mb-8">
+                        <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
                             Kost Tersedia
                         </h3>
-                        <p className="text-gray-600">
+                        <p className="text-sm sm:text-base text-gray-600">
                             Pilihan kost terbaik untuk kamu
                         </p>
                     </div>
 
                     {kosts.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                             {kosts.map((kost) => (
                                 <Link
                                     key={kost.id}
@@ -213,14 +203,14 @@ export default function Index({ kosts, filters }) {
                                         </div>
                                     </div>
 
-                                    <div className="p-6">
+                                    <div className="p-4 sm:p-6">
                                         {/* Title */}
-                                        <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-1 group-hover:text-blue-600 transition">
+                                        <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 line-clamp-1 group-hover:text-blue-600 transition">
                                             {kost.name}
                                         </h3>
 
                                         {/* Address */}
-                                        <p className="text-gray-600 text-sm mb-4 line-clamp-2 flex items-start gap-1">
+                                        <p className="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2 flex items-start gap-1">
                                             <svg
                                                 className="w-4 h-4 mt-0.5 flex-shrink-0 text-gray-400"
                                                 fill="none"
@@ -246,10 +236,10 @@ export default function Index({ kosts, filters }) {
                                         </p>
 
                                         {/* Owner Info */}
-                                        <div className="space-y-1.5 mb-4 pb-4 border-b border-gray-100">
-                                            <div className="flex items-center text-sm text-gray-600">
+                                        <div className="space-y-1.5 mb-3 sm:mb-4 pb-3 sm:pb-4 border-b border-gray-100">
+                                            <div className="flex items-center text-xs sm:text-sm text-gray-600">
                                                 <svg
-                                                    className="w-4 h-4 mr-2 text-gray-400"
+                                                    className="w-4 h-4 mr-2 text-gray-400 flex-shrink-0"
                                                     fill="none"
                                                     stroke="currentColor"
                                                     viewBox="0 0 24 24"
@@ -265,9 +255,9 @@ export default function Index({ kosts, filters }) {
                                                     {kost.owner_name}
                                                 </span>
                                             </div>
-                                            <div className="flex items-center text-sm text-gray-600">
+                                            <div className="flex items-center text-xs sm:text-sm text-gray-600">
                                                 <svg
-                                                    className="w-4 h-4 mr-2 text-gray-400"
+                                                    className="w-4 h-4 mr-2 text-gray-400 flex-shrink-0"
                                                     fill="none"
                                                     stroke="currentColor"
                                                     viewBox="0 0 24 24"
@@ -279,16 +269,18 @@ export default function Index({ kosts, filters }) {
                                                         d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
                                                     />
                                                 </svg>
-                                                <span>{kost.owner_phone}</span>
+                                                <span className="truncate">
+                                                    {kost.owner_phone}
+                                                </span>
                                             </div>
                                         </div>
 
                                         {/* Price Section */}
-                                        <div className="mb-4">
+                                        <div className="mb-3 sm:mb-4">
                                             <p className="text-xs text-gray-500 mb-1">
                                                 Mulai dari
                                             </p>
-                                            <p className="text-xl font-bold text-blue-600">
+                                            <p className="text-lg sm:text-xl font-bold text-blue-600">
                                                 {kost.min_price ? (
                                                     <>
                                                         Rp{" "}
@@ -297,12 +289,12 @@ export default function Index({ kosts, filters }) {
                                                         ).toLocaleString(
                                                             "id-ID",
                                                         )}
-                                                        <span className="text-sm text-gray-500 font-normal">
+                                                        <span className="text-xs sm:text-sm text-gray-500 font-normal">
                                                             /bulan
                                                         </span>
                                                     </>
                                                 ) : (
-                                                    <span className="text-lg text-gray-600">
+                                                    <span className="text-base sm:text-lg text-gray-600">
                                                         Hubungi Kami
                                                     </span>
                                                 )}
@@ -310,7 +302,7 @@ export default function Index({ kosts, filters }) {
                                         </div>
 
                                         {/* Button */}
-                                        <div className="bg-blue-50 text-blue-700 text-center py-2.5 rounded-lg font-semibold group-hover:bg-blue-600 group-hover:text-white transition">
+                                        <div className="bg-blue-50 text-blue-700 text-center py-2 sm:py-2.5 rounded-lg font-semibold text-sm sm:text-base group-hover:bg-blue-600 group-hover:text-white transition">
                                             Lihat Detail →
                                         </div>
                                     </div>
@@ -318,12 +310,12 @@ export default function Index({ kosts, filters }) {
                             ))}
                         </div>
                     ) : (
-                        <div className="text-center py-20 bg-white rounded-xl shadow-sm border border-gray-100">
-                            <div className="text-6xl mb-4">🏠</div>
-                            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                        <div className="text-center py-12 sm:py-20 bg-white rounded-xl shadow-sm border border-gray-100">
+                            <div className="text-5xl sm:text-6xl mb-4">🏠</div>
+                            <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
                                 Belum Ada Kost Tersedia
                             </h3>
-                            <p className="text-gray-600">
+                            <p className="text-sm sm:text-base text-gray-600 px-4">
                                 Maaf, saat ini belum ada kost yang tersedia.
                             </p>
                         </div>
@@ -331,53 +323,53 @@ export default function Index({ kosts, filters }) {
                 </div>
 
                 {/* Why Choose Us Section */}
-                <div className="bg-white border-t border-gray-200 py-16">
+                <div className="bg-white border-t border-gray-200 py-12 sm:py-16">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="text-center mb-12">
-                            <h3 className="text-3xl font-bold text-gray-900 mb-4">
+                        <div className="text-center mb-8 sm:mb-12">
+                            <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4 px-2">
                                 Kenapa Pilih Kami?
                             </h3>
-                            <p className="text-gray-600 text-lg">
+                            <p className="text-base sm:text-lg text-gray-600 px-2">
                                 Kami memberikan pengalaman terbaik untuk mencari
                                 kost
                             </p>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
                             <div className="text-center">
-                                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
+                                <div className="w-14 h-14 sm:w-16 sm:h-16 bg-blue-100 rounded-full flex items-center justify-center text-2xl sm:text-3xl mx-auto mb-3 sm:mb-4">
                                     ✓
                                 </div>
-                                <h4 className="text-xl font-bold text-gray-900 mb-2">
+                                <h4 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
                                     Terverifikasi
                                 </h4>
-                                <p className="text-gray-600">
+                                <p className="text-sm sm:text-base text-gray-600 px-2">
                                     Semua kost telah diverifikasi dan dipastikan
                                     kualitasnya
                                 </p>
                             </div>
 
                             <div className="text-center">
-                                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
+                                <div className="w-14 h-14 sm:w-16 sm:h-16 bg-blue-100 rounded-full flex items-center justify-center text-2xl sm:text-3xl mx-auto mb-3 sm:mb-4">
                                     💰
                                 </div>
-                                <h4 className="text-xl font-bold text-gray-900 mb-2">
+                                <h4 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
                                     Harga Transparan
                                 </h4>
-                                <p className="text-gray-600">
+                                <p className="text-sm sm:text-base text-gray-600 px-2">
                                     Tidak ada biaya tersembunyi, harga yang
                                     tertera adalah harga final
                                 </p>
                             </div>
 
                             <div className="text-center">
-                                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
+                                <div className="w-14 h-14 sm:w-16 sm:h-16 bg-blue-100 rounded-full flex items-center justify-center text-2xl sm:text-3xl mx-auto mb-3 sm:mb-4">
                                     🤝
                                 </div>
-                                <h4 className="text-xl font-bold text-gray-900 mb-2">
+                                <h4 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
                                     Support 24/7
                                 </h4>
-                                <p className="text-gray-600">
+                                <p className="text-sm sm:text-base text-gray-600 px-2">
                                     Tim kami siap membantu kamu kapan saja
                                 </p>
                             </div>
@@ -386,52 +378,52 @@ export default function Index({ kosts, filters }) {
                 </div>
 
                 {/* How It Works Section */}
-                <div className="bg-gray-50 py-16">
+                <div className="bg-gray-50 py-12 sm:py-16">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="text-center mb-12">
-                            <h3 className="text-3xl font-bold text-gray-900 mb-4">
+                        <div className="text-center mb-8 sm:mb-12">
+                            <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4 px-2">
                                 Cara Kerja
                             </h3>
-                            <p className="text-gray-600 text-lg">
+                            <p className="text-base sm:text-lg text-gray-600 px-2">
                                 Tiga langkah mudah untuk menemukan kost impianmu
                             </p>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
-                                <div className="text-5xl font-bold text-blue-500 mb-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+                            <div className="bg-white rounded-xl p-6 sm:p-8 shadow-sm border border-gray-100">
+                                <div className="text-4xl sm:text-5xl font-bold text-blue-500 mb-3 sm:mb-4">
                                     01
                                 </div>
-                                <h4 className="text-xl font-bold text-gray-900 mb-2">
+                                <h4 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
                                     Cari Kost
                                 </h4>
-                                <p className="text-gray-600">
+                                <p className="text-sm sm:text-base text-gray-600">
                                     Gunakan fitur pencarian untuk menemukan kost
                                     sesuai kebutuhanmu
                                 </p>
                             </div>
 
-                            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
-                                <div className="text-5xl font-bold text-blue-500 mb-4">
+                            <div className="bg-white rounded-xl p-6 sm:p-8 shadow-sm border border-gray-100">
+                                <div className="text-4xl sm:text-5xl font-bold text-blue-500 mb-3 sm:mb-4">
                                     02
                                 </div>
-                                <h4 className="text-xl font-bold text-gray-900 mb-2">
+                                <h4 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
                                     Hubungi Pemilik
                                 </h4>
-                                <p className="text-gray-600">
+                                <p className="text-sm sm:text-base text-gray-600">
                                     Langsung hubungi pemilik kost melalui
                                     WhatsApp atau telepon
                                 </p>
                             </div>
 
-                            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
-                                <div className="text-5xl font-bold text-blue-500 mb-4">
+                            <div className="bg-white rounded-xl p-6 sm:p-8 shadow-sm border border-gray-100">
+                                <div className="text-4xl sm:text-5xl font-bold text-blue-500 mb-3 sm:mb-4">
                                     03
                                 </div>
-                                <h4 className="text-xl font-bold text-gray-900 mb-2">
+                                <h4 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
                                     Sewa Kost
                                 </h4>
-                                <p className="text-gray-600">
+                                <p className="text-sm sm:text-base text-gray-600">
                                     Lakukan survei dan sewa kost impianmu dengan
                                     mudah
                                 </p>
@@ -441,18 +433,18 @@ export default function Index({ kosts, filters }) {
                 </div>
 
                 {/* CTA Section */}
-                <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white py-16">
+                <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white py-12 sm:py-16">
                     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                        <h3 className="text-3xl font-bold mb-4">
+                        <h3 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4 px-2">
                             Punya Kost dan Ingin Menyewakan?
                         </h3>
-                        <p className="text-xl text-blue-100 mb-8">
+                        <p className="text-base sm:text-xl text-blue-100 mb-6 sm:mb-8 px-2">
                             Daftarkan kost kamu sekarang dan jangkau lebih
                             banyak calon penyewa
                         </p>
                         <a
                             href={route("register")}
-                            className="inline-block bg-white text-blue-600 font-bold py-4 px-10 rounded-lg hover:bg-blue-50 transition shadow-lg"
+                            className="inline-block bg-white text-blue-600 font-bold py-3 sm:py-4 px-6 sm:px-10 rounded-lg hover:bg-blue-50 transition shadow-lg text-sm sm:text-base"
                         >
                             Daftar Sekarang →
                         </a>
@@ -460,7 +452,7 @@ export default function Index({ kosts, filters }) {
                 </div>
 
                 {/* Footer */}
-                <footer className="bg-white border-t border-gray-200 py-12">
+                <footer className="bg-white border-t border-gray-200 py-8 sm:py-12">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                             <div>
@@ -563,8 +555,8 @@ export default function Index({ kosts, filters }) {
                             </div>
                         </div>
 
-                        <div className="border-t border-gray-200 mt-10 pt-8 text-center">
-                            <p className="text-gray-500 text-sm">
+                        <div className="border-t border-gray-200 mt-8 sm:mt-10 pt-6 sm:pt-8 text-center">
+                            <p className="text-gray-500 text-xs sm:text-sm">
                                 © 2026 Manajemen Kost. All rights reserved.
                             </p>
                         </div>
