@@ -31,6 +31,22 @@ export default function Index({ kosts, filters }) {
         }
     };
 
+    // ✅ Helper function untuk handle URL foto (eksternal vs lokal)
+    const getPhotoUrl = (photoPath) => {
+        if (!photoPath) return null;
+
+        // Jika URL eksternal (http/https), return langsung
+        if (
+            photoPath.startsWith("http://") ||
+            photoPath.startsWith("https://")
+        ) {
+            return photoPath;
+        }
+
+        // Jika path lokal, tambahkan / di depan
+        return `/${photoPath}`;
+    };
+
     return (
         <AuthenticatedLayout
             header={
@@ -42,7 +58,6 @@ export default function Index({ kosts, filters }) {
                         href={route("kosts.create")}
                         className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-4 rounded-xl shadow-sm transition flex items-center justify-center gap-2 text-sm sm:text-base w-full sm:w-auto"
                     >
-                        {/* Line Icon: Plus */}
                         <svg
                             className="w-4 h-4 sm:w-5 sm:h-5"
                             fill="none"
@@ -72,7 +87,6 @@ export default function Index({ kosts, filters }) {
                             className="flex flex-col md:flex-row gap-2 sm:gap-3"
                         >
                             <div className="flex-1 relative">
-                                {/* Line Icon: Search */}
                                 <svg
                                     className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
                                     fill="none"
@@ -164,32 +178,49 @@ export default function Index({ kosts, filters }) {
                                                     <td className="px-5 py-4 whitespace-nowrap">
                                                         {kost.photo ? (
                                                             <img
-                                                                src={`/${kost.photo}`}
+                                                                src={getPhotoUrl(
+                                                                    kost.photo,
+                                                                )}
                                                                 alt={kost.name}
                                                                 className="w-11 h-11 object-cover rounded-xl border border-gray-100 shadow-sm"
+                                                                onError={(
+                                                                    e,
+                                                                ) => {
+                                                                    // Fallback jika gambar gagal load
+                                                                    e.target.style.display =
+                                                                        "none";
+                                                                    e.target.nextSibling.style.display =
+                                                                        "flex";
+                                                                }}
                                                             />
-                                                        ) : (
-                                                            /* Line Icon: Placeholder Image Outline */
-                                                            <div className="w-11 h-11 bg-gray-50 border border-dashed border-gray-200 rounded-xl flex items-center justify-center text-gray-400">
-                                                                <svg
-                                                                    className="w-5 h-5"
-                                                                    fill="none"
-                                                                    stroke="currentColor"
-                                                                    strokeWidth="2"
-                                                                    viewBox="0 0 24 24"
-                                                                >
-                                                                    <path
-                                                                        strokeLinecap="round"
-                                                                        strokeLinejoin="round"
-                                                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                                                    />
-                                                                </svg>
-                                                            </div>
-                                                        )}
+                                                        ) : null}
+                                                        {/* Placeholder jika tidak ada foto atau error */}
+                                                        <div
+                                                            className="w-11 h-11 bg-gray-50 border border-dashed border-gray-200 rounded-xl flex items-center justify-center text-gray-400"
+                                                            style={{
+                                                                display:
+                                                                    kost.photo
+                                                                        ? "none"
+                                                                        : "flex",
+                                                            }}
+                                                        >
+                                                            <svg
+                                                                className="w-5 h-5"
+                                                                fill="none"
+                                                                stroke="currentColor"
+                                                                strokeWidth="2"
+                                                                viewBox="0 0 24 24"
+                                                            >
+                                                                <path
+                                                                    strokeLinecap="round"
+                                                                    strokeLinejoin="round"
+                                                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                                                />
+                                                            </svg>
+                                                        </div>
                                                     </td>
                                                     <td className="px-5 py-4 whitespace-nowrap font-bold text-gray-900 text-xs sm:text-sm">
                                                         <div className="flex items-center gap-2">
-                                                            {/* Line Icon: Office Building */}
                                                             <svg
                                                                 className="w-4 h-4 text-gray-400"
                                                                 fill="none"
@@ -203,7 +234,7 @@ export default function Index({ kosts, filters }) {
                                                                     d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
                                                                 />
                                                             </svg>
-                                                            <span>
+                                                            <span className="max-w-[200px] truncate">
                                                                 {kost.name ||
                                                                     "-"}
                                                             </span>
@@ -211,7 +242,6 @@ export default function Index({ kosts, filters }) {
                                                     </td>
                                                     <td className="px-5 py-4 text-xs sm:text-sm text-gray-500 max-w-xs truncate font-medium">
                                                         <div className="flex items-center gap-2">
-                                                            {/* Line Icon: Location Map Pin */}
                                                             <svg
                                                                 className="w-4 h-4 text-gray-400 flex-shrink-0"
                                                                 fill="none"
@@ -238,7 +268,6 @@ export default function Index({ kosts, filters }) {
                                                     </td>
                                                     <td className="px-5 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-800 font-semibold">
                                                         <div className="flex items-center gap-2">
-                                                            {/* Line Icon: User */}
                                                             <svg
                                                                 className="w-4 h-4 text-gray-400"
                                                                 fill="none"
@@ -260,7 +289,6 @@ export default function Index({ kosts, filters }) {
                                                     </td>
                                                     <td className="px-5 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500 font-medium">
                                                         <div className="flex items-center gap-2">
-                                                            {/* Line Icon: Phone */}
                                                             <svg
                                                                 className="w-4 h-4 text-gray-400"
                                                                 fill="none"
@@ -282,7 +310,6 @@ export default function Index({ kosts, filters }) {
                                                     </td>
                                                     <td className="px-5 py-4 whitespace-nowrap">
                                                         <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-purple-50 text-purple-700 border border-purple-100 gap-1">
-                                                            {/* Line Icon: Hashes/Number */}
                                                             <svg
                                                                 className="w-3 h-3 text-purple-500"
                                                                 fill="none"

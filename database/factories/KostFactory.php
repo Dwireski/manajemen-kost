@@ -3,11 +3,14 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Faker\Factory as FakerFactory;
 
 class KostFactory extends Factory
 {
     public function definition(): array
     {
+        $faker = FakerFactory::create();
+        
         $kostNames = [
             'Kost Putra', 'Kost Putri', 'Kost Campur', 'Griya Kost', 'Rumah Kost',
             'Kost Eksklusif', 'Kost Premium', 'Kost Nyaman', 'Kost Strategis', 'Kost Modern'
@@ -30,7 +33,6 @@ class KostFactory extends Factory
             'New Lilianatown', 'East Java', 'West Java', 'Central Java'
         ];
 
-        // Foto random dari Unsplash
         $photoIds = [
             'photo-1522708323590-d24dbb6b0267',
             'photo-1560448204-e02f11c3d0e2',
@@ -50,17 +52,16 @@ class KostFactory extends Factory
         ];
 
         return [
-            // HAPUS unique() - biarkan ada kemungkinan nama sama (wajar di dunia nyata)
-            'name' => fake()->randomElement($kostNames) . ' ' . 
-                    fake()->randomElement($cities) . ' ' . 
-                    fake()->randomNumber(3, true),
-            'address' => fake()->randomElement($locations) . ' No.' . 
-                        fake()->randomNumber(2, true) . ', ' . 
-                        fake()->randomElement($areas) . ', Kec. ' . 
-                        fake()->randomElement($areas) . ', Kabupaten Malang, Jawa Timur',
-            'owner_name' => fake()->name(),
-            'owner_phone' => '08' . fake()->randomNumber(9, true),
-            'photo' => 'https://images.unsplash.com/' . fake()->randomElement($photoIds) . '?w=800&q=80',
+            'name' => $faker->randomElement($kostNames) . ' ' . 
+                    $faker->randomElement($cities) . ' ' . 
+                    $faker->randomNumber(3, true),
+            'address' => $faker->randomElement($locations) . ' No.' . 
+                        $faker->randomNumber(2, true) . ', ' . 
+                        $faker->randomElement($areas) . ', Kec. ' . 
+                        $faker->randomElement($areas) . ', Kabupaten Malang, Jawa Timur',
+            'owner_name' => $faker->name(),
+            'owner_phone' => '08' . $faker->randomNumber(9, true),
+            'photo' => 'https://images.unsplash.com/' . $faker->randomElement($photoIds) . '?w=800&q=80',
             'created_at' => now(),
             'updated_at' => now(),
         ];

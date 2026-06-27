@@ -86,14 +86,29 @@ class KostController extends Controller
     }
 
     public function show(Kost $kost)
-    {
-        // ✅ Load relasi photos juga
-        $kost->load(['rooms', 'rooms.tenants', 'photos']);
-        
-        return Inertia::render('Kosts/Show', [
-            'kost' => $kost
-        ]);
-    }
+{
+    $kost->load(['rooms', 'photos']); // ✅ Harus ada 'photos'
+    
+    return Inertia::render('Public/Show', [
+        'kost' => [
+            'id' => $kost->id,
+            'name' => $kost->name,
+            'address' => $kost->address,
+            'owner_name' => $kost->owner_name,
+            'owner_phone' => $kost->owner_phone,
+            'photo' => $kost->photo,
+            'photos' => $kost->photos->map(function($photo) {
+                return [
+                    'id' => $photo->id,
+                    'file_path' => $photo->file_path,
+                    'url' => $photo->file_path,
+                    'sort_order' => $photo->sort_order,
+                ];
+            })->sortBy('sort_order')->values(),
+            'available_rooms' => $kost->rooms()->where('status', 'available')->get(),
+        ],
+    ]);
+}
 
     public function edit(Kost $kost)
     {

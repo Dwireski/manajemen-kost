@@ -14,6 +14,22 @@ export default function Index({ kosts, filters }) {
         return `Rp ${parseInt(amount).toLocaleString("id-ID")}`;
     };
 
+    // ✅ Helper function untuk handle URL foto (eksternal vs lokal)
+    const getPhotoUrl = (photoPath) => {
+        if (!photoPath) return null;
+
+        // Jika URL eksternal (http/https), return langsung
+        if (
+            photoPath.startsWith("http://") ||
+            photoPath.startsWith("https://")
+        ) {
+            return photoPath;
+        }
+
+        // Jika path lokal, tambahkan / di depan
+        return `/${photoPath}`;
+    };
+
     return (
         <>
             <Head title="Cari Kost - Manajemen Kost" />
@@ -177,7 +193,7 @@ export default function Index({ kosts, filters }) {
                                     <div className="relative h-48 overflow-hidden bg-gray-100">
                                         {kost.photo ? (
                                             <img
-                                                src={`/${kost.photo}`}
+                                                src={getPhotoUrl(kost.photo)}
                                                 alt={kost.name}
                                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                                 onError={(e) => {

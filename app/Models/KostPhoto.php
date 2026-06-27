@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 
 class KostPhoto extends Model
 {
@@ -25,11 +24,12 @@ class KostPhoto extends Model
         return $this->file_path ? '/' . $this->file_path : null;
     }
 
-    // Method untuk hapus file foto dari storage
+    // ✅ PERBAIKAN: Method untuk hapus file foto dari storage
+    // Pakai public_path() + unlink() agar konsisten dengan KostController
     public function deleteFile()
     {
-        if ($this->file_path && Storage::disk('public')->exists($this->file_path)) {
-            Storage::disk('public')->delete($this->file_path);
+        if ($this->file_path && file_exists(public_path($this->file_path))) {
+            unlink(public_path($this->file_path));
         }
     }
 }

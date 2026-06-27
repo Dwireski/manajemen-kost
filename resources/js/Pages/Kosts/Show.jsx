@@ -1,8 +1,145 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, router } from "@inertiajs/react";
 
 export default function Show({ kost }) {
+    // ✅ State untuk carousel galeri
+    const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+
+    // ✅ State untuk swipe tracking
+    const touchStartX = useRef(0);
+    const touchEndX = useRef(0);
+    const [isDragging, setIsDragging] = useState(false);
+    const [dragOffset, setDragOffset] = useState(0);
+
+    // ✅ Gabungkan foto utama + galeri
+    const allPhotos = React.useMemo(() => {
+        const photos = [];
+        if (kost.photo) {
+            photos.push({ url: kost.photo, isCover: true, label: "Cover" });
+        }
+        if (kost.photos && kost.photos.length > 0) {
+            kost.photos.forEach((photo, idx) => {
+                photos.push({
+                    url: photo.file_path || photo.url,
+                    isCover: false,
+                    label: `Galeri ${idx + 1}`,
+                });
+            });
+        }
+        return photos;
+    }, [kost]);
+
+    // ✅ Helper: handle URL foto (eksternal vs lokal) - PERBAIKAN
+    const getPhotoUrl = (photoPath) => {
+        if (!photoPath) return null;
+        if (
+            photoPath.startsWith("http://") ||
+            photoPath.startsWith("https://")
+        ) {
+            return photoPath;
+        }
+
+        // Hapus prefix 'kosts/' jika ada (fix duplikat path)
+        let cleanPath = photoPath;
+        if (cleanPath.startsWith("kosts/")) {
+            cleanPath = cleanPath.substring(6);
+        }
+
+        cleanPath = cleanPath.replace(/^\/+/, "");
+        return `/${cleanPath}`;
+    };
+
+    // ✅ Navigasi carousel
+    const nextPhoto = () => {
+        if (allPhotos.length > 0) {
+            setCurrentPhotoIndex((prev) => (prev + 1) % allPhotos.length);
+        }
+    };
+
+    const prevPhoto = () => {
+        if (allPhotos.length > 0) {
+            setCurrentPhotoIndex(
+                (prev) => (prev - 1 + allPhotos.length) % allPhotos.length,
+            );
+        }
+    };
+
+    const goToPhoto = (index) => {
+        setCurrentPhotoIndex(index);
+    };
+
+    // ✅ SWIPE HANDLERS - Touch Events (Mobile)
+    const handleTouchStart = (e) => {
+        touchStartX.current = e.touches[0].clientX;
+        touchEndX.current = e.touches[0].clientX;
+        setIsDragging(true);
+    };
+
+    const handleTouchMove = (e) => {
+        if (!isDragging) return;
+        touchEndX.current = e.touches[0].clientX;
+        const offset = touchEndX.current - touchStartX.current;
+        setDragOffset(offset);
+    };
+
+    const handleTouchEnd = () => {
+        if (!isDragging) return;
+        setIsDragging(false);
+
+        const swipeDistance = touchEndX.current - touchStartX.current;
+        const minSwipeDistance = 50;
+
+        if (Math.abs(swipeDistance) > minSwipeDistance) {
+            if (swipeDistance > 0) {
+                prevPhoto();
+            } else {
+                nextPhoto();
+            }
+        }
+
+        setDragOffset(0);
+    };
+
+    // ✅ SWIPE HANDLERS - Mouse Events (Desktop Drag)
+    const handleMouseDown = (e) => {
+        touchStartX.current = e.clientX;
+        touchEndX.current = e.clientX;
+        setIsDragging(true);
+        e.preventDefault();
+    };
+
+    const handleMouseMove = (e) => {
+        if (!isDragging) return;
+        touchEndX.current = e.clientX;
+        const offset = touchEndX.current - touchStartX.current;
+        setDragOffset(offset);
+    };
+
+    const handleMouseUp = () => {
+        if (!isDragging) return;
+        setIsDragging(false);
+
+        const swipeDistance = touchEndX.current - touchStartX.current;
+        const minSwipeDistance = 50;
+
+        if (Math.abs(swipeDistance) > minSwipeDistance) {
+            if (swipeDistance > 0) {
+                prevPhoto();
+            } else {
+                nextPhoto();
+            }
+        }
+
+        setDragOffset(0);
+    };
+
+    const handleMouseLeave = () => {
+        if (isDragging) {
+            handleMouseUp();
+        }
+    };
+
     const handleDelete = () => {
         if (
             confirm(
@@ -24,7 +161,6 @@ export default function Show({ kost }) {
                         href={route("kosts.index")}
                         className="text-sm font-medium text-blue-600 hover:text-blue-800 transition flex items-center gap-1.5"
                     >
-                        {/* Line Icon: Arrow Back */}
                         <svg
                             className="w-4 h-4"
                             fill="none"
@@ -65,7 +201,6 @@ export default function Show({ kost }) {
                                         href={route("kosts.edit", kost.id)}
                                         className="flex-1 sm:flex-none bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2.5 px-4 rounded-xl shadow-sm hover:shadow transition text-center text-sm flex items-center justify-center gap-1.5"
                                     >
-                                        {/* Line Icon: Pencil/Edit */}
                                         <svg
                                             className="w-4 h-4"
                                             fill="none"
@@ -85,7 +220,6 @@ export default function Show({ kost }) {
                                         onClick={handleDelete}
                                         className="flex-1 sm:flex-none bg-rose-50 hover:bg-rose-100 text-rose-600 font-semibold py-2.5 px-4 rounded-xl border border-rose-200 transition text-center text-sm flex items-center justify-center gap-1.5"
                                     >
-                                        {/* Line Icon: Trash */}
                                         <svg
                                             className="w-4 h-4"
                                             fill="none"
@@ -104,19 +238,178 @@ export default function Show({ kost }) {
                                 </div>
                             </div>
 
-                            {/* Tampilan Foto Properti */}
-                            {kost.photo ? (
-                                <div className="mb-6 sm:mb-8 relative group overflow-hidden rounded-2xl shadow-inner bg-gray-50">
-                                    <img
-                                        src={`/${kost.photo}`}
-                                        alt={kost.name}
-                                        className="w-full h-56 sm:h-80 md:h-[400px] object-cover transition duration-500 group-hover:scale-[1.01]"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+                            {/* ========================================= */}
+                            {/* ✅ CAROUSEL GALERI FOTO + SWIPE SUPPORT */}
+                            {/* ========================================= */}
+                            {allPhotos.length > 0 ? (
+                                <div className="mb-6 sm:mb-8 space-y-3">
+                                    {/* Main Carousel - DENGAN SWIPE */}
+                                    <div className="relative group overflow-hidden rounded-2xl shadow-inner bg-gray-50">
+                                        <div
+                                            className="relative h-56 sm:h-80 md:h-[400px] select-none cursor-grab active:cursor-grabbing"
+                                            onTouchStart={handleTouchStart}
+                                            onTouchMove={handleTouchMove}
+                                            onTouchEnd={handleTouchEnd}
+                                            onMouseDown={handleMouseDown}
+                                            onMouseMove={handleMouseMove}
+                                            onMouseUp={handleMouseUp}
+                                            onMouseLeave={handleMouseLeave}
+                                        >
+                                            {allPhotos.map((photo, index) => (
+                                                <div
+                                                    key={index}
+                                                    className={`absolute inset-0 transition-opacity duration-500 ${
+                                                        index ===
+                                                        currentPhotoIndex
+                                                            ? "opacity-100"
+                                                            : "opacity-0 pointer-events-none"
+                                                    }`}
+                                                    style={{
+                                                        transform:
+                                                            index ===
+                                                                currentPhotoIndex &&
+                                                            isDragging
+                                                                ? `translateX(${dragOffset}px)`
+                                                                : "translateX(0)",
+                                                        transition: isDragging
+                                                            ? "none"
+                                                            : "opacity 500ms, transform 300ms",
+                                                    }}
+                                                >
+                                                    <img
+                                                        src={getPhotoUrl(
+                                                            photo.url,
+                                                        )}
+                                                        alt={`${kost.name} - ${photo.label}`}
+                                                        className="w-full h-full object-cover transition duration-500 group-hover:scale-[1.01] pointer-events-none"
+                                                        draggable={false}
+                                                        onError={(e) => {
+                                                            e.target.style.display =
+                                                                "none";
+                                                        }}
+                                                    />
+                                                </div>
+                                            ))}
+
+                                            {/* Overlay gradient */}
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent pointer-events-none" />
+
+                                            {/* Navigation Buttons */}
+                                            {allPhotos.length > 1 && (
+                                                <>
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            prevPhoto();
+                                                        }}
+                                                        className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-110 z-10"
+                                                        aria-label="Previous photo"
+                                                    >
+                                                        <svg
+                                                            className="w-5 h-5 sm:w-6 sm:h-6 text-gray-800"
+                                                            fill="none"
+                                                            stroke="currentColor"
+                                                            viewBox="0 0 24 24"
+                                                        >
+                                                            <path
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
+                                                                strokeWidth="2"
+                                                                d="M15 19l-7-7 7-7"
+                                                            />
+                                                        </svg>
+                                                    </button>
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            nextPhoto();
+                                                        }}
+                                                        className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-110 z-10"
+                                                        aria-label="Next photo"
+                                                    >
+                                                        <svg
+                                                            className="w-5 h-5 sm:w-6 sm:h-6 text-gray-800"
+                                                            fill="none"
+                                                            stroke="currentColor"
+                                                            viewBox="0 0 24 24"
+                                                        >
+                                                            <path
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
+                                                                strokeWidth="2"
+                                                                d="M9 5l7 7-7 7"
+                                                            />
+                                                        </svg>
+                                                    </button>
+                                                </>
+                                            )}
+
+                                            {/* Photo Counter & Label */}
+                                            {allPhotos.length > 1 && (
+                                                <div className="absolute top-4 right-4 flex items-center gap-2 pointer-events-none">
+                                                    <span className="bg-black/60 backdrop-blur-sm text-white px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold">
+                                                        {currentPhotoIndex + 1}{" "}
+                                                        / {allPhotos.length}
+                                                    </span>
+                                                    <span className="bg-blue-600 text-white px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold">
+                                                        {
+                                                            allPhotos[
+                                                                currentPhotoIndex
+                                                            ]?.label
+                                                        }
+                                                    </span>
+                                                </div>
+                                            )}
+
+                                            {/* Swipe Hint (hanya muncul di mobile) */}
+                                            {allPhotos.length > 1 && (
+                                                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/40 backdrop-blur-sm text-white px-3 py-1 rounded-full text-[10px] sm:hidden pointer-events-none animate-pulse">
+                                                    ← Geser untuk ganti foto →
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Thumbnail Gallery */}
+                                    {allPhotos.length > 1 && (
+                                        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                                            {allPhotos.map((photo, index) => (
+                                                <button
+                                                    key={index}
+                                                    onClick={() =>
+                                                        goToPhoto(index)
+                                                    }
+                                                    className={`flex-shrink-0 relative w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden border-2 transition-all ${
+                                                        index ===
+                                                        currentPhotoIndex
+                                                            ? "border-blue-500 ring-2 ring-blue-200 scale-105"
+                                                            : "border-gray-200 hover:border-gray-300 opacity-70 hover:opacity-100"
+                                                    }`}
+                                                >
+                                                    <img
+                                                        src={getPhotoUrl(
+                                                            photo.url,
+                                                        )}
+                                                        alt={`Thumbnail ${index + 1}`}
+                                                        className="w-full h-full object-cover"
+                                                        draggable={false}
+                                                        onError={(e) => {
+                                                            e.target.style.display =
+                                                                "none";
+                                                        }}
+                                                    />
+                                                    {photo.isCover && (
+                                                        <div className="absolute bottom-0 left-0 right-0 bg-blue-600/90 text-white text-[9px] sm:text-[10px] font-bold py-0.5 text-center">
+                                                            COVER
+                                                        </div>
+                                                    )}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                             ) : (
                                 <div className="mb-6 sm:mb-8 rounded-2xl bg-gray-50 border border-dashed border-gray-200 p-8 text-center text-gray-400">
-                                    {/* Line Icon: Image Placeholder */}
                                     <svg
                                         className="w-8 h-8 mx-auto mb-2 text-gray-300"
                                         fill="none"
@@ -140,7 +433,6 @@ export default function Show({ kost }) {
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 bg-gray-50/70 p-4 sm:p-6 rounded-2xl border border-gray-100">
                                 <div className="space-y-1 md:col-span-3 border-b border-gray-200/60 pb-3 mb-1">
                                     <p className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
-                                        {/* Line Icon: Location */}
                                         <svg
                                             className="w-3.5 h-3.5"
                                             fill="none"
@@ -167,7 +459,6 @@ export default function Show({ kost }) {
                                 </div>
                                 <div className="space-y-1">
                                     <p className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
-                                        {/* Line Icon: User */}
                                         <svg
                                             className="w-3.5 h-3.5"
                                             fill="none"
@@ -189,7 +480,6 @@ export default function Show({ kost }) {
                                 </div>
                                 <div className="space-y-1">
                                     <p className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
-                                        {/* Line Icon: Phone */}
                                         <svg
                                             className="w-3.5 h-3.5"
                                             fill="none"
@@ -211,7 +501,6 @@ export default function Show({ kost }) {
                                 </div>
                                 <div className="space-y-1">
                                     <p className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
-                                        {/* Line Icon: Template / Grid */}
                                         <svg
                                             className="w-3.5 h-3.5"
                                             fill="none"
@@ -253,7 +542,6 @@ export default function Show({ kost }) {
                                     href={route("rooms.create")}
                                     className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-4 rounded-xl shadow-sm text-xs sm:text-sm text-center transition flex items-center justify-center gap-1.5 w-full sm:w-auto"
                                 >
-                                    {/* Line Icon: Plus */}
                                     <svg
                                         className="w-4 h-4"
                                         fill="none"
@@ -299,7 +587,6 @@ export default function Show({ kost }) {
                                                     >
                                                         <td className="px-5 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
                                                             <div className="flex items-center gap-2">
-                                                                {/* Line Icon: Home / Door Area */}
                                                                 <svg
                                                                     className="w-4 h-4 text-gray-400"
                                                                     fill="none"
@@ -354,7 +641,6 @@ export default function Show({ kost }) {
                                                             {room.tenants?.[0]
                                                                 ?.name ? (
                                                                 <div className="flex items-center gap-2 font-medium text-gray-800">
-                                                                    {/* Line Icon: User */}
                                                                     <svg
                                                                         className="w-4 h-4 text-gray-400"
                                                                         fill="none"
@@ -390,7 +676,6 @@ export default function Show({ kost }) {
                                 </div>
                             ) : (
                                 <div className="rounded-xl border border-dashed border-gray-200 p-8 text-center text-gray-400">
-                                    {/* Line Icon: Bed/Room outline placeholder */}
                                     <svg
                                         className="w-8 h-8 mx-auto mb-1 text-gray-300"
                                         fill="none"

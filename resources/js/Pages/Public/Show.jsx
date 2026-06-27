@@ -1,10 +1,148 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import { Head, Link } from "@inertiajs/react";
 
 export default function Show({ kost }) {
+    // ✅ State untuk carousel
+    const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+
+    // ✅ State untuk swipe tracking
+    const touchStartX = useRef(0);
+    const touchEndX = useRef(0);
+    const [isDragging, setIsDragging] = useState(false);
+    const [dragOffset, setDragOffset] = useState(0);
+
+    // ✅ Gabungkan foto utama + galeri
+    const allPhotos = React.useMemo(() => {
+        const photos = [];
+        if (kost.photo) {
+            photos.push({ url: kost.photo, isCover: true });
+        }
+        if (kost.photos && kost.photos.length > 0) {
+            kost.photos.forEach((photo) => {
+                photos.push({
+                    url: photo.file_path || photo.url,
+                    isCover: false,
+                });
+            });
+        }
+        return photos;
+    }, [kost]);
+
     const formatCurrency = (amount) => {
         if (!amount) return "Hubungi Kami";
         return `Rp ${parseInt(amount).toLocaleString("id-ID")}`;
+    };
+
+    // ✅ Helper: handle URL foto (eksternal vs lokal)
+    const getPhotoUrl = (photoPath) => {
+        if (!photoPath) return null;
+        if (
+            photoPath.startsWith("http://") ||
+            photoPath.startsWith("https://")
+        ) {
+            return photoPath;
+        }
+
+        let cleanPath = photoPath;
+        if (cleanPath.startsWith("kosts/")) {
+            cleanPath = cleanPath.substring(6);
+        }
+
+        cleanPath = cleanPath.replace(/^\/+/, "");
+        return `/${cleanPath}`;
+    };
+
+    // ✅ Navigasi carousel
+    const nextPhoto = () => {
+        if (allPhotos.length > 0) {
+            setCurrentPhotoIndex((prev) => (prev + 1) % allPhotos.length);
+        }
+    };
+
+    const prevPhoto = () => {
+        if (allPhotos.length > 0) {
+            setCurrentPhotoIndex(
+                (prev) => (prev - 1 + allPhotos.length) % allPhotos.length,
+            );
+        }
+    };
+
+    const goToPhoto = (index) => {
+        setCurrentPhotoIndex(index);
+    };
+
+    // ✅ SWIPE HANDLERS - Touch Events (Mobile)
+    const handleTouchStart = (e) => {
+        touchStartX.current = e.touches[0].clientX;
+        touchEndX.current = e.touches[0].clientX;
+        setIsDragging(true);
+    };
+
+    const handleTouchMove = (e) => {
+        if (!isDragging) return;
+        touchEndX.current = e.touches[0].clientX;
+        const offset = touchEndX.current - touchStartX.current;
+        setDragOffset(offset);
+    };
+
+    const handleTouchEnd = () => {
+        if (!isDragging) return;
+        setIsDragging(false);
+
+        const swipeDistance = touchEndX.current - touchStartX.current;
+        const minSwipeDistance = 50; // Threshold minimal 50px
+
+        if (Math.abs(swipeDistance) > minSwipeDistance) {
+            if (swipeDistance > 0) {
+                // Swipe kanan → foto sebelumnya
+                prevPhoto();
+            } else {
+                // Swipe kiri → foto berikutnya
+                nextPhoto();
+            }
+        }
+
+        // Reset drag offset
+        setDragOffset(0);
+    };
+
+    // ✅ SWIPE HANDLERS - Mouse Events (Desktop Drag)
+    const handleMouseDown = (e) => {
+        touchStartX.current = e.clientX;
+        touchEndX.current = e.clientX;
+        setIsDragging(true);
+        e.preventDefault();
+    };
+
+    const handleMouseMove = (e) => {
+        if (!isDragging) return;
+        touchEndX.current = e.clientX;
+        const offset = touchEndX.current - touchStartX.current;
+        setDragOffset(offset);
+    };
+
+    const handleMouseUp = () => {
+        if (!isDragging) return;
+        setIsDragging(false);
+
+        const swipeDistance = touchEndX.current - touchStartX.current;
+        const minSwipeDistance = 50;
+
+        if (Math.abs(swipeDistance) > minSwipeDistance) {
+            if (swipeDistance > 0) {
+                prevPhoto();
+            } else {
+                nextPhoto();
+            }
+        }
+
+        setDragOffset(0);
+    };
+
+    const handleMouseLeave = () => {
+        if (isDragging) {
+            handleMouseUp();
+        }
     };
 
     return (
@@ -24,9 +162,9 @@ export default function Show({ kost }) {
                                     Manajemen Kost
                                 </span>
                             </Link>
-                            <Link
-                                href={route("public.index")}
-                                className="flex items-center gap-1 sm:gap-2 text-blue-500 hover:text-blue-600 font-medium transition text-sm sm:text-base"
+                            <button
+                                onClick={() => window.history.back()}
+                                className="flex items-center gap-1 sm:gap-2 text-blue-500 hover:text-blue-600 font-medium transition text-sm sm:text-base cursor-pointer"
                             >
                                 <svg
                                     className="w-4 h-4 sm:w-5 sm:h-5"
@@ -45,82 +183,248 @@ export default function Show({ kost }) {
                                     Kembali
                                 </span>
                                 <span className="sm:hidden">Back</span>
-                            </Link>
+                            </button>
                         </div>
                     </div>
                 </nav>
 
-                {/* Hero Section dengan Foto */}
-                <div className="relative h-64 sm:h-80 md:h-96 overflow-hidden">
-                    {kost.photo ? (
-                        <img
-                            src={`/${kost.photo}`}
-                            alt={kost.name}
-                            className="w-full h-full object-cover"
-                            onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.parentElement.classList.add(
-                                    "bg-gradient-to-r",
-                                    "from-blue-500",
-                                    "to-blue-600",
-                                );
-                                e.target.style.display = "none";
-                            }}
-                        />
-                    ) : (
-                        <div className="w-full h-full bg-gradient-to-r from-blue-500 to-blue-600"></div>
-                    )}
-
-                    {/* Overlay gelap untuk readability text */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
-
-                    {/* Content di atas foto */}
-                    <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8 text-white">
-                        <div className="max-w-7xl mx-auto">
-                            <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2 sm:mb-3 md:mb-4">
-                                <span className="bg-white/20 backdrop-blur-sm px-3 sm:px-4 py-1 rounded-full text-xs sm:text-sm font-medium">
-                                    Kost Putra
-                                </span>
-                                {kost.available_rooms.length > 0 && (
-                                    <span className="bg-green-500 px-3 sm:px-4 py-1 rounded-full text-xs sm:text-sm font-medium">
-                                        Tersedia
-                                    </span>
-                                )}
-                            </div>
-                            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-3 drop-shadow-lg">
-                                {kost.name}
-                            </h1>
-                            <p className="text-sm sm:text-base md:text-xl flex items-center gap-2 drop-shadow-lg">
-                                <svg
-                                    className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
+                {/* ========================================= */}
+                {/* ✅ CAROUSEL FOTO GALERI + SWIPE SUPPORT */}
+                {/* ========================================= */}
+                {allPhotos.length > 0 ? (
+                    <div className="relative">
+                        {/* Main Carousel - DENGAN SWIPE */}
+                        <div
+                            className="relative h-64 sm:h-80 md:h-96 lg:h-[500px] overflow-hidden bg-gray-900 select-none cursor-grab active:cursor-grabbing"
+                            onTouchStart={handleTouchStart}
+                            onTouchMove={handleTouchMove}
+                            onTouchEnd={handleTouchEnd}
+                            onMouseDown={handleMouseDown}
+                            onMouseMove={handleMouseMove}
+                            onMouseUp={handleMouseUp}
+                            onMouseLeave={handleMouseLeave}
+                        >
+                            {allPhotos.map((photo, index) => (
+                                <div
+                                    key={index}
+                                    className={`absolute inset-0 transition-opacity duration-500 ${
+                                        index === currentPhotoIndex
+                                            ? "opacity-100"
+                                            : "opacity-0"
+                                    }`}
+                                    style={{
+                                        transform:
+                                            index === currentPhotoIndex &&
+                                            isDragging
+                                                ? `translateX(${dragOffset}px)`
+                                                : "translateX(0)",
+                                        transition: isDragging
+                                            ? "none"
+                                            : "opacity 500ms, transform 300ms",
+                                    }}
                                 >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                                    <img
+                                        src={getPhotoUrl(photo.url)}
+                                        alt={`${kost.name} - Foto ${index + 1}`}
+                                        className="w-full h-full object-cover pointer-events-none"
+                                        draggable={false}
+                                        onError={(e) => {
+                                            e.target.style.display = "none";
+                                        }}
                                     />
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                                    />
-                                </svg>
-                                <span className="line-clamp-2">
-                                    {kost.address}
-                                </span>
-                            </p>
+                                </div>
+                            ))}
+
+                            {/* Overlay gradient */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none"></div>
+
+                            {/* Navigation Buttons */}
+                            {allPhotos.length > 1 && (
+                                <>
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            prevPhoto();
+                                        }}
+                                        className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-110 z-10"
+                                        aria-label="Previous photo"
+                                    >
+                                        <svg
+                                            className="w-5 h-5 sm:w-6 sm:h-6 text-gray-800"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth="2"
+                                                d="M15 19l-7-7 7-7"
+                                            />
+                                        </svg>
+                                    </button>
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            nextPhoto();
+                                        }}
+                                        className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-110 z-10"
+                                        aria-label="Next photo"
+                                    >
+                                        <svg
+                                            className="w-5 h-5 sm:w-6 sm:h-6 text-gray-800"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth="2"
+                                                d="M9 5l7 7-7 7"
+                                            />
+                                        </svg>
+                                    </button>
+                                </>
+                            )}
+
+                            {/* Photo Counter */}
+                            {allPhotos.length > 1 && (
+                                <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm text-white px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold">
+                                    {currentPhotoIndex + 1} / {allPhotos.length}
+                                </div>
+                            )}
+
+                            {/* Swipe Hint (hanya muncul di mobile) */}
+                            {allPhotos.length > 1 && (
+                                <div className="absolute bottom-20 sm:bottom-24 left-1/2 -translate-x-1/2 bg-black/40 backdrop-blur-sm text-white px-3 py-1 rounded-full text-[10px] sm:hidden pointer-events-none animate-pulse">
+                                    ← Geser untuk ganti foto →
+                                </div>
+                            )}
+
+                            {/* Badge */}
+                            <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-auto pointer-events-none">
+                                <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+                                    <span className="bg-white/20 backdrop-blur-sm px-3 sm:px-4 py-1 rounded-full text-xs sm:text-sm font-medium text-white">
+                                        Kost Putra
+                                    </span>
+                                    {kost.available_rooms.length > 0 && (
+                                        <span className="bg-green-500 px-3 sm:px-4 py-1 rounded-full text-xs sm:text-sm font-medium text-white">
+                                            Tersedia
+                                        </span>
+                                    )}
+                                </div>
+                                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white drop-shadow-lg mb-2">
+                                    {kost.name}
+                                </h1>
+                                <p className="text-sm sm:text-base text-white/90 flex items-center gap-2 drop-shadow">
+                                    <svg
+                                        className="w-4 h-4 flex-shrink-0"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                                        />
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                                        />
+                                    </svg>
+                                    <span className="line-clamp-1 sm:line-clamp-2">
+                                        {kost.address}
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Thumbnail Gallery */}
+                        {allPhotos.length > 1 && (
+                            <div className="bg-white border-b border-gray-200 p-3 sm:p-4">
+                                <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                                    {allPhotos.map((photo, index) => (
+                                        <button
+                                            key={index}
+                                            onClick={() => goToPhoto(index)}
+                                            className={`flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden border-2 transition-all ${
+                                                index === currentPhotoIndex
+                                                    ? "border-blue-500 ring-2 ring-blue-200"
+                                                    : "border-gray-200 hover:border-gray-300"
+                                            }`}
+                                        >
+                                            <img
+                                                src={getPhotoUrl(photo.url)}
+                                                alt={`Thumbnail ${index + 1}`}
+                                                className="w-full h-full object-cover"
+                                                draggable={false}
+                                                onError={(e) => {
+                                                    e.target.style.display =
+                                                        "none";
+                                                }}
+                                            />
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                ) : (
+                    /* Fallback jika tidak ada foto */
+                    <div className="relative h-64 sm:h-80 md:h-96 bg-gradient-to-r from-blue-500 to-blue-600">
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                        <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8 text-white">
+                            <div className="max-w-7xl mx-auto">
+                                <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+                                    <span className="bg-white/20 backdrop-blur-sm px-3 sm:px-4 py-1 rounded-full text-xs sm:text-sm font-medium">
+                                        Kost Putra
+                                    </span>
+                                    {kost.available_rooms.length > 0 && (
+                                        <span className="bg-green-500 px-3 sm:px-4 py-1 rounded-full text-xs sm:text-sm font-medium">
+                                            Tersedia
+                                        </span>
+                                    )}
+                                </div>
+                                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-3 drop-shadow-lg">
+                                    {kost.name}
+                                </h1>
+                                <p className="text-sm sm:text-base md:text-xl flex items-center gap-2 drop-shadow-lg">
+                                    <svg
+                                        className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                                        />
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                                        />
+                                    </svg>
+                                    <span className="line-clamp-2">
+                                        {kost.address}
+                                    </span>
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                )}
 
-                {/* Main Content - Stacked Vertikal dengan Gap */}
+                {/* Main Content */}
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12 space-y-4 sm:space-y-6">
-                    {/* 1. Informasi Kost */}
+                    {/* Informasi Kost */}
                     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6 md:p-8">
                         <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
                             Informasi Kost
@@ -182,7 +486,7 @@ export default function Show({ kost }) {
                         </div>
                     </div>
 
-                    {/* 2. Kamar Tersedia */}
+                    {/* Kamar Tersedia */}
                     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6 md:p-8">
                         <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
                             Kamar Tersedia
@@ -247,132 +551,53 @@ export default function Show({ kost }) {
                         )}
                     </div>
 
-                    {/* 3. Fasilitas */}
+                    {/* Fasilitas */}
                     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6 md:p-8">
                         <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
                             Fasilitas
                         </h2>
 
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
-                            <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-gray-50 rounded-lg">
-                                <svg
-                                    className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
+                            {[
+                                "WiFi",
+                                "AC",
+                                "Kasur",
+                                "K. Mandi Dalam",
+                                "Akses 24 Jam",
+                                "Parkir",
+                            ].map((facility) => (
+                                <div
+                                    key={facility}
+                                    className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-gray-50 rounded-lg"
                                 >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M5 13l4 4L19 7"
-                                    />
-                                </svg>
-                                <span className="text-xs sm:text-sm text-gray-700 font-medium">
-                                    WiFi
-                                </span>
-                            </div>
-                            <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-gray-50 rounded-lg">
-                                <svg
-                                    className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M5 13l4 4L19 7"
-                                    />
-                                </svg>
-                                <span className="text-xs sm:text-sm text-gray-700 font-medium">
-                                    AC
-                                </span>
-                            </div>
-                            <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-gray-50 rounded-lg">
-                                <svg
-                                    className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M5 13l4 4L19 7"
-                                    />
-                                </svg>
-                                <span className="text-xs sm:text-sm text-gray-700 font-medium">
-                                    Kasur
-                                </span>
-                            </div>
-                            <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-gray-50 rounded-lg">
-                                <svg
-                                    className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M5 13l4 4L19 7"
-                                    />
-                                </svg>
-                                <span className="text-xs sm:text-sm text-gray-700 font-medium">
-                                    K. Mandi Dalam
-                                </span>
-                            </div>
-                            <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-gray-50 rounded-lg">
-                                <svg
-                                    className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M5 13l4 4L19 7"
-                                    />
-                                </svg>
-                                <span className="text-xs sm:text-sm text-gray-700 font-medium">
-                                    Akses 24 Jam
-                                </span>
-                            </div>
-                            <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-gray-50 rounded-lg">
-                                <svg
-                                    className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M5 13l4 4L19 7"
-                                    />
-                                </svg>
-                                <span className="text-xs sm:text-sm text-gray-700 font-medium">
-                                    Parkir
-                                </span>
-                            </div>
+                                    <svg
+                                        className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M5 13l4 4L19 7"
+                                        />
+                                    </svg>
+                                    <span className="text-xs sm:text-sm text-gray-700 font-medium">
+                                        {facility}
+                                    </span>
+                                </div>
+                            ))}
                         </div>
                     </div>
 
-                    {/* 4. Hubungi Pemilik */}
+                    {/* Hubungi Pemilik */}
                     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6 md:p-8">
                         <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
                             Hubungi Pemilik
                         </h2>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-start">
-                            {/* Info Pemilik */}
                             <div className="space-y-3 sm:space-y-4">
                                 <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-gray-50 rounded-lg">
                                     <div className="w-12 h-12 sm:w-14 sm:h-14 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-xl sm:text-2xl flex-shrink-0">
@@ -407,7 +632,6 @@ export default function Show({ kost }) {
                                 </p>
                             </div>
 
-                            {/* Tombol Kontak */}
                             <div className="space-y-3 sm:space-y-4">
                                 <a
                                     href={`https://wa.me/${kost.owner_phone.replace(/\D/g, "")}?text=Halo, saya tertarik dengan kost ${kost.name}`}

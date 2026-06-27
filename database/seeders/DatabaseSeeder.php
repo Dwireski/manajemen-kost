@@ -12,6 +12,11 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        // ✅ 0. Panggil UserSeeder DULU (paling penting!)
+        $this->call([
+            UserSeeder::class,
+        ]);
+
         // 1. Generate 20 Kost
         Kost::factory()->count(20)->create();
         echo "✅ 20 Kost berhasil dibuat\n";
@@ -65,6 +70,7 @@ class DatabaseSeeder extends Seeder
         echo "✅ {$paymentCount} Payments berhasil dibuat\n";
 
         echo "\n🎉 SELESAI! Data berhasil di-generate:\n";
+        echo "   - " . \App\Models\User::count() . " Users\n";
         echo "   - " . Kost::count() . " Kost\n";
         echo "   - " . Room::count() . " Kamar\n";
         echo "   - " . Tenant::count() . " Penyewa\n";
