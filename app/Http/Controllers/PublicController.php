@@ -65,30 +65,40 @@ class PublicController extends Controller
     }
 
     public function show($id)
-    {
-        $kost = Kost::with(['rooms' => function($q) {
-            $q->where('status', 'available');
-        }])->findOrFail($id);
+{
+    // ✅ TAMBAHKAN 'photos' di with()
+    $kost = Kost::with(['rooms' => function($q) {
+        $q->where('status', 'available');
+    }, 'photos'])->findOrFail($id);
 
-        $availableRooms = $kost->rooms->where('status', 'available');
+    $availableRooms = $kost->rooms->where('status', 'available');
 
-        return Inertia::render('Public/Show', [
-            'kost' => [
-                'id' => $kost->id,
-                'name' => $kost->name,
-                'address' => $kost->address,
-                'owner_name' => $kost->owner_name,
-                'owner_phone' => $kost->owner_phone,
-                'photo' => $kost->photo,
-                'available_rooms' => $availableRooms->map(function($room) {
-                    return [
-                        'id' => $room->id,
-                        'room_number' => $room->room_number,
-                        'price' => $room->price,
-                        'status' => $room->status,
-                    ];
-                }),
-            ],
-        ]);
-    }
+    return Inertia::render('Public/Show', [
+        'kost' => [
+            'id' => $kost->id,
+            'name' => $kost->name,
+            'address' => $kost->address,
+            'owner_name' => $kost->owner_name,
+            'owner_phone' => $kost->owner_phone,
+            'photo' => $kost->photo,
+            // ✅ TAMBAHKAN: Mapping galeri foto
+            'photos' => $kost->photos->map(function($photo) {
+                return [
+                    'id' => $photo->id,
+                    'file_path' => $photo->file_path,
+                    'url' => $photo->file_path,
+                    'sort_order' => $photo->sort_order,
+                ];
+            })->sortBy('sort_order')->values(),
+            'available_rooms' => $availableRooms->map(function($room) {
+                return [
+                    'id' => $room->id,
+                    'room_number' => $room->room_number,
+                    'price' => $room->price,
+                    'status' => $room->status,
+                ];
+            }),
+        ],
+    ]);
+}
 }
