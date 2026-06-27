@@ -1,8 +1,31 @@
 import React from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
+// ✅ Import Recharts
+import {
+    LineChart,
+    Line,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    ResponsiveContainer,
+    PieChart,
+    Pie,
+    Cell,
+    Legend,
+    BarChart,
+    Bar,
+} from "recharts";
 
-export default function Dashboard({ stats, recentPayments, expiringTenants }) {
+export default function Dashboard({
+    stats,
+    recentPayments,
+    expiringTenants,
+    monthlyRevenue,
+    roomStatusData,
+    paymentStatusData,
+}) {
     const formatDate = (dateString) => {
         if (!dateString) return "-";
         return new Date(dateString).toLocaleDateString("id-ID", {
@@ -14,6 +37,23 @@ export default function Dashboard({ stats, recentPayments, expiringTenants }) {
 
     const formatCurrency = (amount) => {
         return `Rp ${parseInt(amount).toLocaleString("id-ID")}`;
+    };
+
+    // Custom Tooltip untuk Chart
+    const CustomTooltip = ({ active, payload, label }) => {
+        if (active && payload && payload.length) {
+            return (
+                <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
+                    <p className="font-semibold text-gray-800 text-sm mb-1">
+                        {label}
+                    </p>
+                    <p className="text-blue-600 font-bold text-sm">
+                        {formatCurrency(payload[0].value)}
+                    </p>
+                </div>
+            );
+        }
+        return null;
     };
 
     return (
@@ -190,6 +230,149 @@ export default function Dashboard({ stats, recentPayments, expiringTenants }) {
                         </div>
                     </div>
 
+                    {/* ========================================= */}
+                    {/* ✅ BAGIAN CHART BARU DITAMBAHKAN DI SINI */}
+                    {/* ========================================= */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
+                        {/* Chart 1: Pendapatan 6 Bulan Terakhir */}
+                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6">
+                            <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-4">
+                                📈 Tren Pendapatan (6 Bulan)
+                            </h3>
+                            <div className="h-64 w-full">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <LineChart
+                                        data={monthlyRevenue}
+                                        margin={{
+                                            top: 5,
+                                            right: 20,
+                                            left: 0,
+                                            bottom: 5,
+                                        }}
+                                    >
+                                        <CartesianGrid
+                                            strokeDasharray="3 3"
+                                            stroke="#f0f0f0"
+                                        />
+                                        <XAxis
+                                            dataKey="month"
+                                            tick={{ fontSize: 12 }}
+                                        />
+                                        <YAxis
+                                            tick={{ fontSize: 12 }}
+                                            tickFormatter={(value) =>
+                                                `${value / 1000}k`
+                                            }
+                                        />
+                                        <Tooltip content={<CustomTooltip />} />
+                                        <Line
+                                            type="monotone"
+                                            dataKey="revenue"
+                                            stroke="#3B82F6"
+                                            strokeWidth={3}
+                                            dot={{ r: 5, fill: "#3B82F6" }}
+                                            activeDot={{ r: 7 }}
+                                        />
+                                    </LineChart>
+                                </ResponsiveContainer>
+                            </div>
+                        </div>
+
+                        {/* Chart 2: Distribusi Kamar & Pembayaran */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {/* Pie Chart Status Kamar */}
+                            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+                                <h4 className="text-sm font-semibold text-gray-900 mb-2 text-center">
+                                    Status Kamar
+                                </h4>
+                                <div className="h-48 w-full">
+                                    <ResponsiveContainer
+                                        width="100%"
+                                        height="100%"
+                                    >
+                                        <PieChart>
+                                            <Pie
+                                                data={roomStatusData}
+                                                cx="50%"
+                                                cy="50%"
+                                                innerRadius={40}
+                                                outerRadius={60}
+                                                paddingAngle={5}
+                                                dataKey="value"
+                                            >
+                                                {roomStatusData.map(
+                                                    (entry, index) => (
+                                                        <Cell
+                                                            key={`cell-${index}`}
+                                                            fill={entry.color}
+                                                        />
+                                                    ),
+                                                )}
+                                            </Pie>
+                                            <Tooltip
+                                                formatter={(value) =>
+                                                    `${value} Kamar`
+                                                }
+                                            />
+                                            <Legend
+                                                wrapperStyle={{
+                                                    fontSize: "10px",
+                                                }}
+                                            />
+                                        </PieChart>
+                                    </ResponsiveContainer>
+                                </div>
+                            </div>
+
+                            {/* Bar Chart Status Pembayaran */}
+                            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+                                <h4 className="text-sm font-semibold text-gray-900 mb-2 text-center">
+                                    Status Pembayaran
+                                </h4>
+                                <div className="h-48 w-full">
+                                    <ResponsiveContainer
+                                        width="100%"
+                                        height="100%"
+                                    >
+                                        <BarChart
+                                            data={paymentStatusData}
+                                            margin={{
+                                                top: 5,
+                                                right: 0,
+                                                left: -20,
+                                                bottom: 5,
+                                            }}
+                                        >
+                                            <CartesianGrid
+                                                strokeDasharray="3 3"
+                                                stroke="#f0f0f0"
+                                            />
+                                            <XAxis
+                                                dataKey="name"
+                                                tick={{ fontSize: 10 }}
+                                            />
+                                            <YAxis tick={{ fontSize: 10 }} />
+                                            <Tooltip />
+                                            <Bar
+                                                dataKey="value"
+                                                radius={[4, 4, 0, 0]}
+                                            >
+                                                {paymentStatusData.map(
+                                                    (entry, index) => (
+                                                        <Cell
+                                                            key={`cell-${index}`}
+                                                            fill={entry.color}
+                                                        />
+                                                    ),
+                                                )}
+                                            </Bar>
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
                         {/* Pembayaran Terbaru */}
                         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -252,15 +435,7 @@ export default function Dashboard({ stats, recentPayments, expiringTenants }) {
                                                         )}
                                                     </p>
                                                     <span
-                                                        className={`inline-flex px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-semibold rounded-full sm:mt-1 ${
-                                                            payment.status ===
-                                                            "paid"
-                                                                ? "bg-green-100 text-green-700"
-                                                                : payment.status ===
-                                                                    "pending"
-                                                                  ? "bg-yellow-100 text-yellow-700"
-                                                                  : "bg-red-100 text-red-700"
-                                                        }`}
+                                                        className={`inline-flex px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-semibold rounded-full sm:mt-1 ${payment.status === "paid" ? "bg-green-100 text-green-700" : payment.status === "pending" ? "bg-yellow-100 text-yellow-700" : "bg-red-100 text-red-700"}`}
                                                     >
                                                         {payment.status ===
                                                         "paid"

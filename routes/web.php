@@ -32,34 +32,7 @@ Route::get('/kost/{id}', [PublicController::class, 'show'])->name('public.show')
 // ==========================================
 Route::middleware(['auth', 'verified'])->group(function () {
     // Dashboard
-    Route::get('/dashboard', function () {
-        $stats = [
-            'total_kosts' => \App\Models\Kost::count(),
-            'total_rooms' => \App\Models\Room::count(),
-            'available_rooms' => \App\Models\Room::where('status', 'available')->count(),
-            'occupied_rooms' => \App\Models\Room::where('status', 'occupied')->count(),
-            'total_tenants' => \App\Models\Tenant::count(),
-            'total_revenue' => \App\Models\Payment::where('status', 'paid')->sum('amount'),
-            'pending_payments' => \App\Models\Payment::where('status', 'pending')->count(),
-            'overdue_payments' => \App\Models\Payment::where('status', 'overdue')->count(),
-        ];
-        
-        $recentPayments = \App\Models\Payment::with(['tenant.room.kost'])
-            ->latest()
-            ->limit(5)
-            ->get();
-        
-        $expiringTenants = \App\Models\Tenant::with(['room.kost'])
-            ->whereNotNull('move_out_date')
-            ->whereBetween('move_out_date', [now(), now()->addDays(30)])
-            ->get();
-        
-        return Inertia::render('Dashboard', [
-            'stats' => $stats,
-            'recentPayments' => $recentPayments,
-            'expiringTenants' => $expiringTenants,
-        ]);
-    })->name('dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 
     // Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
