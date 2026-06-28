@@ -1,7 +1,51 @@
 import React, { useState, useRef } from "react";
 import { Head, Link } from "@inertiajs/react";
+import { ThemeProvider, useTheme } from "@/Context/ThemeContext";
 
-export default function Show({ kost }) {
+// Component untuk Toggle Button
+function ThemeToggle() {
+    const { theme, toggleTheme } = useTheme();
+
+    return (
+        <button
+            onClick={toggleTheme}
+            className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition"
+            aria-label="Toggle theme"
+        >
+            {theme === "light" ? (
+                <svg
+                    className="w-5 h-5 text-gray-600 dark:text-gray-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                    />
+                </svg>
+            ) : (
+                <svg
+                    className="w-5 h-5 text-yellow-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                    />
+                </svg>
+            )}
+        </button>
+    );
+}
+
+function PublicShow({ kost }) {
     // ✅ State untuk carousel
     const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
 
@@ -90,19 +134,16 @@ export default function Show({ kost }) {
         setIsDragging(false);
 
         const swipeDistance = touchEndX.current - touchStartX.current;
-        const minSwipeDistance = 50; // Threshold minimal 50px
+        const minSwipeDistance = 50;
 
         if (Math.abs(swipeDistance) > minSwipeDistance) {
             if (swipeDistance > 0) {
-                // Swipe kanan → foto sebelumnya
                 prevPhoto();
             } else {
-                // Swipe kiri → foto berikutnya
                 nextPhoto();
             }
         }
 
-        // Reset drag offset
         setDragOffset(0);
     };
 
@@ -146,44 +187,45 @@ export default function Show({ kost }) {
     };
 
     return (
-        <>
-            <Head title={kost.name} />
-
-            <div className="min-h-screen bg-gray-50">
+        <ThemeProvider>
+            <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
                 {/* Header */}
-                <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
+                <nav className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="flex justify-between items-center h-16">
                             <Link href="/" className="flex items-center gap-2">
                                 <div className="w-9 h-9 bg-blue-500 rounded-lg flex items-center justify-center text-white text-lg">
                                     🏠
                                 </div>
-                                <span className="font-bold text-gray-800 text-base sm:text-lg">
+                                <span className="font-bold text-gray-800 dark:text-gray-100 text-base sm:text-lg">
                                     Manajemen Kost
                                 </span>
                             </Link>
-                            <button
-                                onClick={() => window.history.back()}
-                                className="flex items-center gap-1 sm:gap-2 text-blue-500 hover:text-blue-600 font-medium transition text-sm sm:text-base cursor-pointer"
-                            >
-                                <svg
-                                    className="w-4 h-4 sm:w-5 sm:h-5"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
+                            <div className="flex items-center gap-2 sm:gap-3">
+                                <ThemeToggle />
+                                <button
+                                    onClick={() => window.history.back()}
+                                    className="flex items-center gap-1 sm:gap-2 text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-300 font-medium transition text-sm sm:text-base cursor-pointer"
                                 >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                                    />
-                                </svg>
-                                <span className="hidden sm:inline">
-                                    Kembali
-                                </span>
-                                <span className="sm:hidden">Back</span>
-                            </button>
+                                    <svg
+                                        className="w-4 h-4 sm:w-5 sm:h-5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                                        />
+                                    </svg>
+                                    <span className="hidden sm:inline">
+                                        Kembali
+                                    </span>
+                                    <span className="sm:hidden">Back</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </nav>
@@ -344,9 +386,9 @@ export default function Show({ kost }) {
                             </div>
                         </div>
 
-                        {/* Thumbnail Gallery */}
+                        {/* Thumbnail Gallery - ✅ DARK MODE */}
                         {allPhotos.length > 1 && (
-                            <div className="bg-white border-b border-gray-200 p-3 sm:p-4">
+                            <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-3 sm:p-4">
                                 <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
                                     {allPhotos.map((photo, index) => (
                                         <button
@@ -354,8 +396,8 @@ export default function Show({ kost }) {
                                             onClick={() => goToPhoto(index)}
                                             className={`flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden border-2 transition-all ${
                                                 index === currentPhotoIndex
-                                                    ? "border-blue-500 ring-2 ring-blue-200"
-                                                    : "border-gray-200 hover:border-gray-300"
+                                                    ? "border-blue-500 dark:border-blue-400 ring-2 ring-blue-200 dark:ring-blue-900"
+                                                    : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
                                             }`}
                                         >
                                             <img
@@ -424,61 +466,61 @@ export default function Show({ kost }) {
 
                 {/* Main Content */}
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12 space-y-4 sm:space-y-6">
-                    {/* Informasi Kost */}
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6 md:p-8">
-                        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
+                    {/* Informasi Kost - ✅ DARK MODE */}
+                    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-none border border-gray-100 dark:border-gray-700 p-4 sm:p-6 md:p-8">
+                        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4 sm:mb-6">
                             Informasi Kost
                         </h2>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                             <div className="flex items-start gap-3">
-                                <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center text-blue-600 flex-shrink-0">
+                                <div className="w-10 h-10 bg-blue-50 dark:bg-blue-900/30 rounded-lg flex items-center justify-center text-blue-600 dark:text-blue-400 flex-shrink-0">
                                     🏠
                                 </div>
                                 <div>
-                                    <p className="text-xs sm:text-sm text-gray-500 mb-1">
+                                    <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-1">
                                         Nama Kost
                                     </p>
-                                    <p className="font-semibold text-gray-900 text-sm sm:text-base">
+                                    <p className="font-semibold text-gray-900 dark:text-gray-100 text-sm sm:text-base">
                                         {kost.name}
                                     </p>
                                 </div>
                             </div>
                             <div className="flex items-start gap-3">
-                                <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center text-blue-600 flex-shrink-0">
+                                <div className="w-10 h-10 bg-blue-50 dark:bg-blue-900/30 rounded-lg flex items-center justify-center text-blue-600 dark:text-blue-400 flex-shrink-0">
                                     📍
                                 </div>
                                 <div>
-                                    <p className="text-xs sm:text-sm text-gray-500 mb-1">
+                                    <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-1">
                                         Alamat
                                     </p>
-                                    <p className="font-semibold text-gray-900 text-sm">
+                                    <p className="font-semibold text-gray-900 dark:text-gray-100 text-sm">
                                         {kost.address}
                                     </p>
                                 </div>
                             </div>
                             <div className="flex items-start gap-3">
-                                <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center text-blue-600 flex-shrink-0">
+                                <div className="w-10 h-10 bg-blue-50 dark:bg-blue-900/30 rounded-lg flex items-center justify-center text-blue-600 dark:text-blue-400 flex-shrink-0">
                                     👤
                                 </div>
                                 <div>
-                                    <p className="text-xs sm:text-sm text-gray-500 mb-1">
+                                    <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-1">
                                         Pemilik
                                     </p>
-                                    <p className="font-semibold text-gray-900 text-sm sm:text-base">
+                                    <p className="font-semibold text-gray-900 dark:text-gray-100 text-sm sm:text-base">
                                         {kost.owner_name}
                                     </p>
                                 </div>
                             </div>
                             <div className="flex items-start gap-3">
-                                <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center text-blue-600 flex-shrink-0">
+                                <div className="w-10 h-10 bg-blue-50 dark:bg-blue-900/30 rounded-lg flex items-center justify-center text-blue-600 dark:text-blue-400 flex-shrink-0">
                                     📱
                                 </div>
                                 <div>
-                                    <p className="text-xs sm:text-sm text-gray-500 mb-1">
+                                    <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-1">
                                         Kontak
                                     </p>
-                                    <p className="font-semibold text-gray-900 text-sm sm:text-base">
+                                    <p className="font-semibold text-gray-900 dark:text-gray-100 text-sm sm:text-base">
                                         {kost.owner_phone}
                                     </p>
                                 </div>
@@ -486,9 +528,9 @@ export default function Show({ kost }) {
                         </div>
                     </div>
 
-                    {/* Kamar Tersedia */}
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6 md:p-8">
-                        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
+                    {/* Kamar Tersedia - ✅ DARK MODE */}
+                    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-none border border-gray-100 dark:border-gray-700 p-4 sm:p-6 md:p-8">
+                        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4 sm:mb-6">
                             Kamar Tersedia
                         </h2>
 
@@ -497,37 +539,37 @@ export default function Show({ kost }) {
                                 {kost.available_rooms.map((room) => (
                                     <div
                                         key={room.id}
-                                        className="border border-gray-200 rounded-lg p-4 sm:p-6 hover:border-blue-300 hover:shadow-md transition"
+                                        className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 sm:p-6 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-md dark:hover:shadow-gray-900/50 transition"
                                     >
                                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                                             <div className="flex-1">
                                                 <div className="flex items-center gap-3 mb-3">
-                                                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-50 rounded-lg flex items-center justify-center text-blue-600 text-lg sm:text-xl flex-shrink-0">
+                                                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-50 dark:bg-blue-900/30 rounded-lg flex items-center justify-center text-blue-600 dark:text-blue-400 text-lg sm:text-xl flex-shrink-0">
                                                         🚪
                                                     </div>
-                                                    <h3 className="text-base sm:text-lg font-bold text-gray-900">
+                                                    <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100">
                                                         Kamar {room.room_number}
                                                     </h3>
                                                 </div>
 
                                                 <div className="flex flex-wrap gap-2">
-                                                    <span className="inline-flex items-center px-2.5 sm:px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                    <span className="inline-flex items-center px-2.5 sm:px-3 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400">
                                                         ✓ Tersedia
                                                     </span>
-                                                    <span className="inline-flex items-center px-2.5 sm:px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                    <span className="inline-flex items-center px-2.5 sm:px-3 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400">
                                                         AC
                                                     </span>
-                                                    <span className="inline-flex items-center px-2.5 sm:px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                    <span className="inline-flex items-center px-2.5 sm:px-3 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400">
                                                         WiFi
                                                     </span>
                                                 </div>
                                             </div>
 
                                             <div className="text-left sm:text-right">
-                                                <p className="text-xs sm:text-sm text-gray-500 mb-1">
+                                                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-1">
                                                     Harga per bulan
                                                 </p>
-                                                <p className="text-2xl sm:text-3xl font-bold text-blue-600">
+                                                <p className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400">
                                                     {formatCurrency(room.price)}
                                                 </p>
                                             </div>
@@ -536,14 +578,14 @@ export default function Show({ kost }) {
                                 ))}
                             </div>
                         ) : (
-                            <div className="text-center py-8 sm:py-12 bg-gray-50 rounded-lg border border-gray-200">
+                            <div className="text-center py-8 sm:py-12 bg-gray-50 dark:bg-gray-900/50 rounded-lg border border-gray-200 dark:border-gray-700">
                                 <div className="text-3xl sm:text-4xl mb-3">
                                     😔
                                 </div>
-                                <p className="text-sm sm:text-base text-gray-600 font-medium">
+                                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 font-medium">
                                     Semua kamar sedang terisi
                                 </p>
-                                <p className="text-xs sm:text-sm text-gray-500 mt-1 px-2">
+                                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-500 mt-1 px-2">
                                     Hubungi pemilik untuk info ketersediaan
                                     berikutnya
                                 </p>
@@ -551,9 +593,9 @@ export default function Show({ kost }) {
                         )}
                     </div>
 
-                    {/* Fasilitas */}
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6 md:p-8">
-                        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
+                    {/* Fasilitas - ✅ DARK MODE */}
+                    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-none border border-gray-100 dark:border-gray-700 p-4 sm:p-6 md:p-8">
+                        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4 sm:mb-6">
                             Fasilitas
                         </h2>
 
@@ -568,10 +610,10 @@ export default function Show({ kost }) {
                             ].map((facility) => (
                                 <div
                                     key={facility}
-                                    className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-gray-50 rounded-lg"
+                                    className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-gray-50 dark:bg-gray-900/50 rounded-lg border border-gray-100 dark:border-gray-700"
                                 >
                                     <svg
-                                        className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0"
+                                        className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 dark:text-green-400 flex-shrink-0"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -583,7 +625,7 @@ export default function Show({ kost }) {
                                             d="M5 13l4 4L19 7"
                                         />
                                     </svg>
-                                    <span className="text-xs sm:text-sm text-gray-700 font-medium">
+                                    <span className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 font-medium">
                                         {facility}
                                     </span>
                                 </div>
@@ -591,43 +633,43 @@ export default function Show({ kost }) {
                         </div>
                     </div>
 
-                    {/* Hubungi Pemilik */}
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6 md:p-8">
-                        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
+                    {/* Hubungi Pemilik - ✅ DARK MODE */}
+                    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-none border border-gray-100 dark:border-gray-700 p-4 sm:p-6 md:p-8">
+                        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4 sm:mb-6">
                             Hubungi Pemilik
                         </h2>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-start">
                             <div className="space-y-3 sm:space-y-4">
-                                <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-gray-50 rounded-lg">
-                                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-xl sm:text-2xl flex-shrink-0">
+                                <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-gray-50 dark:bg-gray-900/50 rounded-lg border border-gray-100 dark:border-gray-700">
+                                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center text-blue-600 dark:text-blue-400 text-xl sm:text-2xl flex-shrink-0">
                                         👤
                                     </div>
                                     <div className="min-w-0">
-                                        <p className="text-xs text-gray-500">
+                                        <p className="text-xs text-gray-500 dark:text-gray-400">
                                             Pemilik Kost
                                         </p>
-                                        <p className="font-semibold text-gray-900 text-base sm:text-lg truncate">
+                                        <p className="font-semibold text-gray-900 dark:text-gray-100 text-base sm:text-lg truncate">
                                             {kost.owner_name}
                                         </p>
                                     </div>
                                 </div>
 
-                                <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-gray-50 rounded-lg">
-                                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-xl sm:text-2xl flex-shrink-0">
+                                <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-gray-50 dark:bg-gray-900/50 rounded-lg border border-gray-100 dark:border-gray-700">
+                                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-green-600 dark:text-green-400 text-xl sm:text-2xl flex-shrink-0">
                                         📱
                                     </div>
                                     <div className="min-w-0">
-                                        <p className="text-xs text-gray-500">
+                                        <p className="text-xs text-gray-500 dark:text-gray-400">
                                             Telepon / WhatsApp
                                         </p>
-                                        <p className="font-semibold text-gray-900 text-base sm:text-lg truncate">
+                                        <p className="font-semibold text-gray-900 dark:text-gray-100 text-base sm:text-lg truncate">
                                             {kost.owner_phone}
                                         </p>
                                     </div>
                                 </div>
 
-                                <p className="text-xs text-gray-500 text-center">
+                                <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
                                     Respon cepat • Verifikasi pemilik • Aman
                                 </p>
                             </div>
@@ -692,8 +734,8 @@ export default function Show({ kost }) {
                     </div>
                 </div>
 
-                {/* Footer */}
-                <footer className="bg-white border-t border-gray-200 py-8 sm:py-10 md:py-12">
+                {/* Footer - ✅ DARK MODE */}
+                <footer className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-8 sm:py-10 md:py-12">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                             <div>
@@ -701,24 +743,24 @@ export default function Show({ kost }) {
                                     <div className="w-9 h-9 bg-blue-500 rounded-lg flex items-center justify-center text-white text-lg">
                                         🏠
                                     </div>
-                                    <span className="font-bold text-gray-800 text-lg">
+                                    <span className="font-bold text-gray-800 dark:text-gray-100 text-lg">
                                         Manajemen Kost
                                     </span>
                                 </div>
-                                <p className="text-gray-600 text-sm leading-relaxed">
+                                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
                                     Platform pencarian kost terpercaya dengan
                                     kost terverifikasi dan harga transparan.
                                 </p>
                             </div>
                             <div>
-                                <h4 className="font-bold text-gray-900 mb-4">
+                                <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-4">
                                     Navigasi
                                 </h4>
                                 <ul className="space-y-3">
                                     <li>
                                         <a
                                             href="/"
-                                            className="text-gray-600 hover:text-blue-600 text-sm transition"
+                                            className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 text-sm transition"
                                         >
                                             Beranda
                                         </a>
@@ -726,7 +768,7 @@ export default function Show({ kost }) {
                                     <li>
                                         <a
                                             href={route("login")}
-                                            className="text-gray-600 hover:text-blue-600 text-sm transition"
+                                            className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 text-sm transition"
                                         >
                                             Login
                                         </a>
@@ -734,7 +776,7 @@ export default function Show({ kost }) {
                                     <li>
                                         <a
                                             href={route("register")}
-                                            className="text-gray-600 hover:text-blue-600 text-sm transition"
+                                            className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 text-sm transition"
                                         >
                                             Daftar
                                         </a>
@@ -742,14 +784,14 @@ export default function Show({ kost }) {
                                 </ul>
                             </div>
                             <div>
-                                <h4 className="font-bold text-gray-900 mb-4">
+                                <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-4">
                                     Informasi
                                 </h4>
                                 <ul className="space-y-3">
                                     <li>
                                         <a
                                             href="#"
-                                            className="text-gray-600 hover:text-blue-600 text-sm transition"
+                                            className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 text-sm transition"
                                         >
                                             Tentang Kami
                                         </a>
@@ -757,7 +799,7 @@ export default function Show({ kost }) {
                                     <li>
                                         <a
                                             href="#"
-                                            className="text-gray-600 hover:text-blue-600 text-sm transition"
+                                            className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 text-sm transition"
                                         >
                                             Syarat & Ketentuan
                                         </a>
@@ -765,7 +807,7 @@ export default function Show({ kost }) {
                                     <li>
                                         <a
                                             href="#"
-                                            className="text-gray-600 hover:text-blue-600 text-sm transition"
+                                            className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 text-sm transition"
                                         >
                                             Kebijakan Privasi
                                         </a>
@@ -773,33 +815,35 @@ export default function Show({ kost }) {
                                 </ul>
                             </div>
                             <div>
-                                <h4 className="font-bold text-gray-900 mb-4">
+                                <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-4">
                                     Kontak
                                 </h4>
                                 <ul className="space-y-3">
-                                    <li className="flex items-center gap-2 text-gray-600 text-sm">
+                                    <li className="flex items-center gap-2 text-gray-600 dark:text-gray-400 text-sm">
                                         <span>📧</span>
                                         <span>cs@manajemenkost.com</span>
                                     </li>
-                                    <li className="flex items-center gap-2 text-gray-600 text-sm">
+                                    <li className="flex items-center gap-2 text-gray-600 dark:text-gray-400 text-sm">
                                         <span>📱</span>
                                         <span>+62 812-3456-7890</span>
                                     </li>
-                                    <li className="flex items-center gap-2 text-gray-600 text-sm">
+                                    <li className="flex items-center gap-2 text-gray-600 dark:text-gray-400 text-sm">
                                         <span>📍</span>
                                         <span>Malang, Jawa Timur</span>
                                     </li>
                                 </ul>
                             </div>
                         </div>
-                        <div className="border-t border-gray-200 mt-8 sm:mt-10 pt-6 sm:pt-8 text-center">
-                            <p className="text-gray-500 text-xs sm:text-sm">
+                        <div className="border-t border-gray-200 dark:border-gray-700 mt-8 sm:mt-10 pt-6 sm:pt-8 text-center">
+                            <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm">
                                 © 2026 Manajemen Kost. All rights reserved.
                             </p>
                         </div>
                     </div>
                 </footer>
             </div>
-        </>
+        </ThemeProvider>
     );
 }
+
+export default PublicShow;

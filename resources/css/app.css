@@ -1,3 +1,38 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Base Dark Mode Styles */
+@layer base {
+    html {
+        @apply transition-colors duration-300;
+    }
+
+    body {
+        @apply bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100;
+    }
+}
+
+/* Custom Scrollbar untuk Dark Mode */
+@layer utilities {
+    .scrollbar-dark::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .scrollbar-dark::-webkit-scrollbar-track {
+        @apply bg-gray-700;
+    }
+
+    .scrollbar-dark::-webkit-scrollbar-thumb {
+        @apply bg-gray-600 rounded-full;
+    }
+
+    .scrollbar-dark::-webkit-scrollbar-thumb:hover {
+        @apply bg-gray-500;
+    }
+}
+
+/* Smooth transitions untuk semua elemen */
+* {
+    @apply transition-colors duration-200;
+}

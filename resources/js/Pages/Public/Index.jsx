@@ -1,7 +1,51 @@
 import React from "react";
 import { Head, Link } from "@inertiajs/react";
+import { ThemeProvider, useTheme } from "@/Context/ThemeContext";
 
-export default function Index({ kosts, filters }) {
+// Component untuk Toggle Button
+function ThemeToggle() {
+    const { theme, toggleTheme } = useTheme();
+
+    return (
+        <button
+            onClick={toggleTheme}
+            className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition"
+            aria-label="Toggle theme"
+        >
+            {theme === "light" ? (
+                <svg
+                    className="w-5 h-5 text-gray-600 dark:text-gray-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                    />
+                </svg>
+            ) : (
+                <svg
+                    className="w-5 h-5 text-yellow-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                    />
+                </svg>
+            )}
+        </button>
+    );
+}
+
+function PublicIndex({ kosts, filters }) {
     const [search, setSearch] = React.useState(filters?.search || "");
 
     const handleSearch = (e) => {
@@ -14,49 +58,45 @@ export default function Index({ kosts, filters }) {
         return `Rp ${parseInt(amount).toLocaleString("id-ID")}`;
     };
 
-    // ✅ Helper function untuk handle URL foto (eksternal vs lokal)
     const getPhotoUrl = (photoPath) => {
         if (!photoPath) return null;
-
-        // Jika URL eksternal (http/https), return langsung
         if (
             photoPath.startsWith("http://") ||
             photoPath.startsWith("https://")
         ) {
             return photoPath;
         }
-
-        // Jika path lokal, tambahkan / di depan
         return `/${photoPath}`;
     };
 
     return (
-        <>
-            <Head title="Cari Kost - Manajemen Kost" />
-
-            <div className="min-h-screen bg-gray-50">
+        <ThemeProvider>
+            <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
                 {/* Header */}
-                <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
+                <nav className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="flex justify-between items-center h-16">
                             <Link href="/" className="flex items-center gap-2">
                                 <div className="w-9 h-9 bg-blue-500 rounded-lg flex items-center justify-center text-white text-lg">
                                     🏠
                                 </div>
-                                <span className="font-bold text-gray-800 text-base sm:text-lg">
+                                <span className="font-bold text-gray-800 dark:text-gray-100 text-base sm:text-lg">
                                     Manajemen Kost
                                 </span>
                             </Link>
-                            <div className="flex gap-2 sm:gap-3">
+                            <div className="flex items-center gap-2 sm:gap-3">
+                                {/* Theme Toggle */}
+                                <ThemeToggle />
+
                                 <a
                                     href={route("login")}
-                                    className="text-gray-600 hover:text-gray-900 px-3 sm:px-4 py-2 rounded-lg transition text-sm sm:text-base"
+                                    className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 px-3 sm:px-4 py-2 rounded-lg transition text-sm sm:text-base"
                                 >
                                     Login
                                 </a>
                                 <a
                                     href={route("register")}
-                                    className="bg-blue-500 text-white px-4 sm:px-6 py-2 rounded-lg font-semibold hover:bg-blue-600 transition shadow-sm text-sm sm:text-base"
+                                    className="bg-blue-500 hover:bg-blue-600 text-white px-4 sm:px-6 py-2 rounded-lg font-semibold transition shadow-sm text-sm sm:text-base"
                                 >
                                     Daftar
                                 </a>
@@ -65,14 +105,13 @@ export default function Index({ kosts, filters }) {
                     </div>
                 </nav>
 
-                {/* Hero Section dengan Background Foto */}
+                {/* Hero Section */}
                 <div
                     className="relative py-12 sm:py-16 md:py-20 bg-cover bg-center bg-no-repeat"
                     style={{
                         backgroundImage: `url('https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1920&q=80')`,
                     }}
                 >
-                    {/* Overlay gelap untuk readability text */}
                     <div className="absolute inset-0 bg-gradient-to-r from-blue-900/90 to-blue-800/80"></div>
 
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -85,15 +124,14 @@ export default function Index({ kosts, filters }) {
                             </p>
                         </div>
 
-                        {/* Search Bar - Modern Design */}
                         <form
                             onSubmit={handleSearch}
                             className="max-w-2xl mx-auto"
                         >
-                            <div className="bg-white rounded-full shadow-lg border border-gray-200 p-1.5 sm:p-2 flex items-center gap-1 sm:gap-2">
+                            <div className="bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-700 p-1.5 sm:p-2 flex items-center gap-1 sm:gap-2">
                                 <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-6 flex-1 min-w-0">
                                     <svg
-                                        className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0"
+                                        className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 dark:text-gray-500 flex-shrink-0"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -112,7 +150,7 @@ export default function Index({ kosts, filters }) {
                                             setSearch(e.target.value)
                                         }
                                         placeholder="Search..."
-                                        className="flex-1 py-2 sm:py-3 text-sm sm:text-base text-gray-700 focus:outline-none min-w-0"
+                                        className="flex-1 py-2 sm:py-3 text-sm sm:text-base text-gray-700 dark:text-gray-200 focus:outline-none min-w-0 bg-transparent"
                                     />
                                 </div>
                                 <button
@@ -127,42 +165,42 @@ export default function Index({ kosts, filters }) {
                 </div>
 
                 {/* Stats Section */}
-                <div className="bg-white border-b border-gray-200">
+                <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8">
                             <div className="text-center">
-                                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-1 sm:mb-2">
+                                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 dark:text-blue-400 mb-1 sm:mb-2">
                                     {kosts.length}
                                 </div>
-                                <div className="text-xs sm:text-base text-gray-600">
+                                <div className="text-xs sm:text-base text-gray-600 dark:text-gray-400">
                                     Kost Tersedia
                                 </div>
                             </div>
                             <div className="text-center">
-                                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-1 sm:mb-2">
+                                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 dark:text-blue-400 mb-1 sm:mb-2">
                                     {kosts.reduce(
                                         (acc, k) =>
                                             acc + k.available_rooms_count,
                                         0,
                                     )}
                                 </div>
-                                <div className="text-xs sm:text-base text-gray-600">
+                                <div className="text-xs sm:text-base text-gray-600 dark:text-gray-400">
                                     Kamar Kosong
                                 </div>
                             </div>
                             <div className="text-center">
-                                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-1 sm:mb-2">
+                                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 dark:text-blue-400 mb-1 sm:mb-2">
                                     100%
                                 </div>
-                                <div className="text-xs sm:text-base text-gray-600">
+                                <div className="text-xs sm:text-base text-gray-600 dark:text-gray-400">
                                     Terverifikasi
                                 </div>
                             </div>
                             <div className="text-center">
-                                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-1 sm:mb-2">
+                                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 dark:text-blue-400 mb-1 sm:mb-2">
                                     24/7
                                 </div>
-                                <div className="text-xs sm:text-base text-gray-600">
+                                <div className="text-xs sm:text-base text-gray-600 dark:text-gray-400">
                                     Support
                                 </div>
                             </div>
@@ -173,10 +211,10 @@ export default function Index({ kosts, filters }) {
                 {/* Kost Cards */}
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
                     <div className="mb-6 sm:mb-8">
-                        <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
+                        <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
                             Kost Tersedia
                         </h3>
-                        <p className="text-sm sm:text-base text-gray-600">
+                        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
                             Pilihan kost terbaik untuk kamu
                         </p>
                     </div>
@@ -187,10 +225,9 @@ export default function Index({ kosts, filters }) {
                                 <Link
                                     key={kost.id}
                                     href={route("public.show", kost.id)}
-                                    className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg hover:border-blue-200 transition group"
+                                    className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/50 border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-lg hover:border-blue-200 dark:hover:border-blue-800 transition group"
                                 >
-                                    {/* Card Header dengan Foto */}
-                                    <div className="relative h-48 overflow-hidden bg-gray-100">
+                                    <div className="relative h-48 overflow-hidden bg-gray-100 dark:bg-gray-700">
                                         {kost.photo ? (
                                             <img
                                                 src={getPhotoUrl(kost.photo)}
@@ -203,17 +240,15 @@ export default function Index({ kosts, filters }) {
                                                 }}
                                             />
                                         ) : (
-                                            <div className="w-full h-full bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center">
+                                            <div className="w-full h-full bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 flex items-center justify-center">
                                                 <div className="text-6xl opacity-40">
                                                     🏠
                                                 </div>
                                             </div>
                                         )}
 
-                                        {/* Overlay gradient untuk readability */}
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
 
-                                        {/* Badge Kamar Tersedia */}
                                         {kost.available_rooms_count > 0 && (
                                             <div className="absolute top-3 right-3 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-sm">
                                                 {kost.available_rooms_count}{" "}
@@ -221,22 +256,19 @@ export default function Index({ kosts, filters }) {
                                             </div>
                                         )}
 
-                                        {/* Badge Lokasi */}
-                                        <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm text-gray-700 px-3 py-1 rounded-full text-xs font-medium shadow-sm">
+                                        <div className="absolute bottom-3 left-3 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-gray-700 dark:text-gray-200 px-3 py-1 rounded-full text-xs font-medium shadow-sm">
                                             📍 Kost
                                         </div>
                                     </div>
 
                                     <div className="p-4 sm:p-6">
-                                        {/* Title */}
-                                        <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 line-clamp-1 group-hover:text-blue-600 transition">
+                                        <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100 mb-2 line-clamp-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">
                                             {kost.name}
                                         </h3>
 
-                                        {/* Address */}
-                                        <p className="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2 flex items-start gap-1">
+                                        <p className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2 flex items-start gap-1">
                                             <svg
-                                                className="w-4 h-4 mt-0.5 flex-shrink-0 text-gray-400"
+                                                className="w-4 h-4 mt-0.5 flex-shrink-0 text-gray-400 dark:text-gray-500"
                                                 fill="none"
                                                 stroke="currentColor"
                                                 viewBox="0 0 24 24"
@@ -259,11 +291,10 @@ export default function Index({ kosts, filters }) {
                                             </span>
                                         </p>
 
-                                        {/* Owner Info */}
-                                        <div className="space-y-1.5 mb-3 sm:mb-4 pb-3 sm:pb-4 border-b border-gray-100">
-                                            <div className="flex items-center text-xs sm:text-sm text-gray-600">
+                                        <div className="space-y-1.5 mb-3 sm:mb-4 pb-3 sm:pb-4 border-b border-gray-100 dark:border-gray-700">
+                                            <div className="flex items-center text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                                                 <svg
-                                                    className="w-4 h-4 mr-2 text-gray-400 flex-shrink-0"
+                                                    className="w-4 h-4 mr-2 text-gray-400 dark:text-gray-500 flex-shrink-0"
                                                     fill="none"
                                                     stroke="currentColor"
                                                     viewBox="0 0 24 24"
@@ -279,9 +310,9 @@ export default function Index({ kosts, filters }) {
                                                     {kost.owner_name}
                                                 </span>
                                             </div>
-                                            <div className="flex items-center text-xs sm:text-sm text-gray-600">
+                                            <div className="flex items-center text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                                                 <svg
-                                                    className="w-4 h-4 mr-2 text-gray-400 flex-shrink-0"
+                                                    className="w-4 h-4 mr-2 text-gray-400 dark:text-gray-500 flex-shrink-0"
                                                     fill="none"
                                                     stroke="currentColor"
                                                     viewBox="0 0 24 24"
@@ -299,12 +330,11 @@ export default function Index({ kosts, filters }) {
                                             </div>
                                         </div>
 
-                                        {/* Price Section */}
                                         <div className="mb-3 sm:mb-4">
-                                            <p className="text-xs text-gray-500 mb-1">
+                                            <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
                                                 Mulai dari
                                             </p>
-                                            <p className="text-lg sm:text-xl font-bold text-blue-600">
+                                            <p className="text-lg sm:text-xl font-bold text-blue-600 dark:text-blue-400">
                                                 {kost.min_price ? (
                                                     <>
                                                         Rp{" "}
@@ -313,20 +343,19 @@ export default function Index({ kosts, filters }) {
                                                         ).toLocaleString(
                                                             "id-ID",
                                                         )}
-                                                        <span className="text-xs sm:text-sm text-gray-500 font-normal">
+                                                        <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-normal">
                                                             /bulan
                                                         </span>
                                                     </>
                                                 ) : (
-                                                    <span className="text-base sm:text-lg text-gray-600">
+                                                    <span className="text-base sm:text-lg text-gray-600 dark:text-gray-400">
                                                         Hubungi Kami
                                                     </span>
                                                 )}
                                             </p>
                                         </div>
 
-                                        {/* Button */}
-                                        <div className="bg-blue-50 text-blue-700 text-center py-2 sm:py-2.5 rounded-lg font-semibold text-sm sm:text-base group-hover:bg-blue-600 group-hover:text-white transition">
+                                        <div className="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 text-center py-2 sm:py-2.5 rounded-lg font-semibold text-sm sm:text-base group-hover:bg-blue-600 dark:group-hover:bg-blue-600 group-hover:text-white dark:group-hover:text-white transition">
                                             Lihat Detail →
                                         </div>
                                     </div>
@@ -334,12 +363,12 @@ export default function Index({ kosts, filters }) {
                             ))}
                         </div>
                     ) : (
-                        <div className="text-center py-12 sm:py-20 bg-white rounded-xl shadow-sm border border-gray-100">
+                        <div className="text-center py-12 sm:py-20 bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/50 border border-gray-100 dark:border-gray-700">
                             <div className="text-5xl sm:text-6xl mb-4">🏠</div>
-                            <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
+                            <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
                                 Belum Ada Kost Tersedia
                             </h3>
-                            <p className="text-sm sm:text-base text-gray-600 px-4">
+                            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 px-4">
                                 Maaf, saat ini belum ada kost yang tersedia.
                             </p>
                         </div>
@@ -347,13 +376,13 @@ export default function Index({ kosts, filters }) {
                 </div>
 
                 {/* Why Choose Us Section */}
-                <div className="bg-white border-t border-gray-200 py-12 sm:py-16">
+                <div className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-12 sm:py-16">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="text-center mb-8 sm:mb-12">
-                            <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4 px-2">
+                            <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-3 sm:mb-4 px-2">
                                 Kenapa Pilih Kami?
                             </h3>
-                            <p className="text-base sm:text-lg text-gray-600 px-2">
+                            <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 px-2">
                                 Kami memberikan pengalaman terbaik untuk mencari
                                 kost
                             </p>
@@ -361,39 +390,39 @@ export default function Index({ kosts, filters }) {
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
                             <div className="text-center">
-                                <div className="w-14 h-14 sm:w-16 sm:h-16 bg-blue-100 rounded-full flex items-center justify-center text-2xl sm:text-3xl mx-auto mb-3 sm:mb-4">
+                                <div className="w-14 h-14 sm:w-16 sm:h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center text-2xl sm:text-3xl mx-auto mb-3 sm:mb-4">
                                     ✓
                                 </div>
-                                <h4 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
+                                <h4 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
                                     Terverifikasi
                                 </h4>
-                                <p className="text-sm sm:text-base text-gray-600 px-2">
+                                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 px-2">
                                     Semua kost telah diverifikasi dan dipastikan
                                     kualitasnya
                                 </p>
                             </div>
 
                             <div className="text-center">
-                                <div className="w-14 h-14 sm:w-16 sm:h-16 bg-blue-100 rounded-full flex items-center justify-center text-2xl sm:text-3xl mx-auto mb-3 sm:mb-4">
+                                <div className="w-14 h-14 sm:w-16 sm:h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center text-2xl sm:text-3xl mx-auto mb-3 sm:mb-4">
                                     💰
                                 </div>
-                                <h4 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
+                                <h4 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
                                     Harga Transparan
                                 </h4>
-                                <p className="text-sm sm:text-base text-gray-600 px-2">
+                                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 px-2">
                                     Tidak ada biaya tersembunyi, harga yang
                                     tertera adalah harga final
                                 </p>
                             </div>
 
                             <div className="text-center">
-                                <div className="w-14 h-14 sm:w-16 sm:h-16 bg-blue-100 rounded-full flex items-center justify-center text-2xl sm:text-3xl mx-auto mb-3 sm:mb-4">
+                                <div className="w-14 h-14 sm:w-16 sm:h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center text-2xl sm:text-3xl mx-auto mb-3 sm:mb-4">
                                     🤝
                                 </div>
-                                <h4 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
+                                <h4 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
                                     Support 24/7
                                 </h4>
-                                <p className="text-sm sm:text-base text-gray-600 px-2">
+                                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 px-2">
                                     Tim kami siap membantu kamu kapan saja
                                 </p>
                             </div>
@@ -402,52 +431,52 @@ export default function Index({ kosts, filters }) {
                 </div>
 
                 {/* How It Works Section */}
-                <div className="bg-gray-50 py-12 sm:py-16">
+                <div className="bg-gray-50 dark:bg-gray-900 py-12 sm:py-16">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="text-center mb-8 sm:mb-12">
-                            <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4 px-2">
+                            <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-3 sm:mb-4 px-2">
                                 Cara Kerja
                             </h3>
-                            <p className="text-base sm:text-lg text-gray-600 px-2">
+                            <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 px-2">
                                 Tiga langkah mudah untuk menemukan kost impianmu
                             </p>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-                            <div className="bg-white rounded-xl p-6 sm:p-8 shadow-sm border border-gray-100">
-                                <div className="text-4xl sm:text-5xl font-bold text-blue-500 mb-3 sm:mb-4">
+                            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-sm dark:shadow-gray-900/50 border border-gray-100 dark:border-gray-700">
+                                <div className="text-4xl sm:text-5xl font-bold text-blue-500 dark:text-blue-400 mb-3 sm:mb-4">
                                     01
                                 </div>
-                                <h4 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
+                                <h4 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
                                     Cari Kost
                                 </h4>
-                                <p className="text-sm sm:text-base text-gray-600">
+                                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
                                     Gunakan fitur pencarian untuk menemukan kost
                                     sesuai kebutuhanmu
                                 </p>
                             </div>
 
-                            <div className="bg-white rounded-xl p-6 sm:p-8 shadow-sm border border-gray-100">
-                                <div className="text-4xl sm:text-5xl font-bold text-blue-500 mb-3 sm:mb-4">
+                            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-sm dark:shadow-gray-900/50 border border-gray-100 dark:border-gray-700">
+                                <div className="text-4xl sm:text-5xl font-bold text-blue-500 dark:text-blue-400 mb-3 sm:mb-4">
                                     02
                                 </div>
-                                <h4 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
+                                <h4 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
                                     Hubungi Pemilik
                                 </h4>
-                                <p className="text-sm sm:text-base text-gray-600">
+                                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
                                     Langsung hubungi pemilik kost melalui
                                     WhatsApp atau telepon
                                 </p>
                             </div>
 
-                            <div className="bg-white rounded-xl p-6 sm:p-8 shadow-sm border border-gray-100">
-                                <div className="text-4xl sm:text-5xl font-bold text-blue-500 mb-3 sm:mb-4">
+                            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 sm:p-8 shadow-sm dark:shadow-gray-900/50 border border-gray-100 dark:border-gray-700">
+                                <div className="text-4xl sm:text-5xl font-bold text-blue-500 dark:text-blue-400 mb-3 sm:mb-4">
                                     03
                                 </div>
-                                <h4 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
+                                <h4 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
                                     Sewa Kost
                                 </h4>
-                                <p className="text-sm sm:text-base text-gray-600">
+                                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
                                     Lakukan survei dan sewa kost impianmu dengan
                                     mudah
                                 </p>
@@ -476,7 +505,7 @@ export default function Index({ kosts, filters }) {
                 </div>
 
                 {/* Footer */}
-                <footer className="bg-white border-t border-gray-200 py-8 sm:py-12">
+                <footer className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-8 sm:py-12">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                             <div>
@@ -484,25 +513,25 @@ export default function Index({ kosts, filters }) {
                                     <div className="w-9 h-9 bg-blue-500 rounded-lg flex items-center justify-center text-white text-lg">
                                         🏠
                                     </div>
-                                    <span className="font-bold text-gray-800 text-lg">
+                                    <span className="font-bold text-gray-800 dark:text-gray-100 text-lg">
                                         Manajemen Kost
                                     </span>
                                 </div>
-                                <p className="text-gray-600 text-sm leading-relaxed">
+                                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
                                     Platform pencarian kost terpercaya dengan
                                     kost terverifikasi dan harga transparan.
                                 </p>
                             </div>
 
                             <div>
-                                <h4 className="font-bold text-gray-900 mb-4">
+                                <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-4">
                                     Navigasi
                                 </h4>
                                 <ul className="space-y-3">
                                     <li>
                                         <a
                                             href="/"
-                                            className="text-gray-600 hover:text-blue-600 text-sm transition"
+                                            className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 text-sm transition"
                                         >
                                             Beranda
                                         </a>
@@ -510,7 +539,7 @@ export default function Index({ kosts, filters }) {
                                     <li>
                                         <a
                                             href={route("login")}
-                                            className="text-gray-600 hover:text-blue-600 text-sm transition"
+                                            className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 text-sm transition"
                                         >
                                             Login
                                         </a>
@@ -518,7 +547,7 @@ export default function Index({ kosts, filters }) {
                                     <li>
                                         <a
                                             href={route("register")}
-                                            className="text-gray-600 hover:text-blue-600 text-sm transition"
+                                            className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 text-sm transition"
                                         >
                                             Daftar
                                         </a>
@@ -527,14 +556,14 @@ export default function Index({ kosts, filters }) {
                             </div>
 
                             <div>
-                                <h4 className="font-bold text-gray-900 mb-4">
+                                <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-4">
                                     Informasi
                                 </h4>
                                 <ul className="space-y-3">
                                     <li>
                                         <a
                                             href="#"
-                                            className="text-gray-600 hover:text-blue-600 text-sm transition"
+                                            className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 text-sm transition"
                                         >
                                             Tentang Kami
                                         </a>
@@ -542,7 +571,7 @@ export default function Index({ kosts, filters }) {
                                     <li>
                                         <a
                                             href="#"
-                                            className="text-gray-600 hover:text-blue-600 text-sm transition"
+                                            className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 text-sm transition"
                                         >
                                             Syarat & Ketentuan
                                         </a>
@@ -550,7 +579,7 @@ export default function Index({ kosts, filters }) {
                                     <li>
                                         <a
                                             href="#"
-                                            className="text-gray-600 hover:text-blue-600 text-sm transition"
+                                            className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 text-sm transition"
                                         >
                                             Kebijakan Privasi
                                         </a>
@@ -559,19 +588,19 @@ export default function Index({ kosts, filters }) {
                             </div>
 
                             <div>
-                                <h4 className="font-bold text-gray-900 mb-4">
+                                <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-4">
                                     Kontak
                                 </h4>
                                 <ul className="space-y-3">
-                                    <li className="flex items-center gap-2 text-gray-600 text-sm">
+                                    <li className="flex items-center gap-2 text-gray-600 dark:text-gray-400 text-sm">
                                         <span>📧</span>
                                         <span>cs@manajemenkost.com</span>
                                     </li>
-                                    <li className="flex items-center gap-2 text-gray-600 text-sm">
+                                    <li className="flex items-center gap-2 text-gray-600 dark:text-gray-400 text-sm">
                                         <span>📱</span>
                                         <span>+62 812-3456-7890</span>
                                     </li>
-                                    <li className="flex items-center gap-2 text-gray-600 text-sm">
+                                    <li className="flex items-center gap-2 text-gray-600 dark:text-gray-400 text-sm">
                                         <span>📍</span>
                                         <span>Malang, Jawa Timur</span>
                                     </li>
@@ -579,14 +608,16 @@ export default function Index({ kosts, filters }) {
                             </div>
                         </div>
 
-                        <div className="border-t border-gray-200 mt-8 sm:mt-10 pt-6 sm:pt-8 text-center">
-                            <p className="text-gray-500 text-xs sm:text-sm">
+                        <div className="border-t border-gray-200 dark:border-gray-700 mt-8 sm:mt-10 pt-6 sm:pt-8 text-center">
+                            <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm">
                                 © 2026 Manajemen Kost. All rights reserved.
                             </p>
                         </div>
                     </div>
                 </footer>
             </div>
-        </>
+        </ThemeProvider>
     );
 }
+
+export default PublicIndex;
