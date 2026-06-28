@@ -3,16 +3,12 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, router } from "@inertiajs/react";
 
 export default function Show({ kost }) {
-    // ✅ State untuk carousel galeri
     const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
-
-    // ✅ State untuk swipe tracking
     const touchStartX = useRef(0);
     const touchEndX = useRef(0);
     const [isDragging, setIsDragging] = useState(false);
     const [dragOffset, setDragOffset] = useState(0);
 
-    // ✅ Gabungkan foto utama + galeri
     const allPhotos = React.useMemo(() => {
         const photos = [];
         if (kost.photo) {
@@ -30,7 +26,6 @@ export default function Show({ kost }) {
         return photos;
     }, [kost]);
 
-    // ✅ Helper: handle URL foto (eksternal vs lokal) - PERBAIKAN
     const getPhotoUrl = (photoPath) => {
         if (!photoPath) return null;
         if (
@@ -39,18 +34,14 @@ export default function Show({ kost }) {
         ) {
             return photoPath;
         }
-
-        // Hapus prefix 'kosts/' jika ada (fix duplikat path)
         let cleanPath = photoPath;
         if (cleanPath.startsWith("kosts/")) {
             cleanPath = cleanPath.substring(6);
         }
-
         cleanPath = cleanPath.replace(/^\/+/, "");
         return `/${cleanPath}`;
     };
 
-    // ✅ Navigasi carousel
     const nextPhoto = () => {
         if (allPhotos.length > 0) {
             setCurrentPhotoIndex((prev) => (prev + 1) % allPhotos.length);
@@ -69,7 +60,6 @@ export default function Show({ kost }) {
         setCurrentPhotoIndex(index);
     };
 
-    // ✅ SWIPE HANDLERS - Touch Events (Mobile)
     const handleTouchStart = (e) => {
         touchStartX.current = e.touches[0].clientX;
         touchEndX.current = e.touches[0].clientX;
@@ -86,22 +76,15 @@ export default function Show({ kost }) {
     const handleTouchEnd = () => {
         if (!isDragging) return;
         setIsDragging(false);
-
         const swipeDistance = touchEndX.current - touchStartX.current;
         const minSwipeDistance = 50;
-
         if (Math.abs(swipeDistance) > minSwipeDistance) {
-            if (swipeDistance > 0) {
-                prevPhoto();
-            } else {
-                nextPhoto();
-            }
+            if (swipeDistance > 0) prevPhoto();
+            else nextPhoto();
         }
-
         setDragOffset(0);
     };
 
-    // ✅ SWIPE HANDLERS - Mouse Events (Desktop Drag)
     const handleMouseDown = (e) => {
         touchStartX.current = e.clientX;
         touchEndX.current = e.clientX;
@@ -119,25 +102,17 @@ export default function Show({ kost }) {
     const handleMouseUp = () => {
         if (!isDragging) return;
         setIsDragging(false);
-
         const swipeDistance = touchEndX.current - touchStartX.current;
         const minSwipeDistance = 50;
-
         if (Math.abs(swipeDistance) > minSwipeDistance) {
-            if (swipeDistance > 0) {
-                prevPhoto();
-            } else {
-                nextPhoto();
-            }
+            if (swipeDistance > 0) prevPhoto();
+            else nextPhoto();
         }
-
         setDragOffset(0);
     };
 
     const handleMouseLeave = () => {
-        if (isDragging) {
-            handleMouseUp();
-        }
+        if (isDragging) handleMouseUp();
     };
 
     const handleDelete = () => {
@@ -154,12 +129,12 @@ export default function Show({ kost }) {
         <AuthenticatedLayout
             header={
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                    <h2 className="font-semibold text-lg sm:text-xl text-gray-800 leading-tight">
+                    <h2 className="font-semibold text-lg sm:text-xl text-gray-800 dark:text-gray-100 leading-tight">
                         Detail Kost
                     </h2>
                     <Link
                         href={route("kosts.index")}
-                        className="text-sm font-medium text-blue-600 hover:text-blue-800 transition flex items-center gap-1.5"
+                        className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition flex items-center gap-1.5"
                     >
                         <svg
                             className="w-4 h-4"
@@ -184,15 +159,15 @@ export default function Show({ kost }) {
             <div className="py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8">
                     {/* Info Utama Kost */}
-                    <div className="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100 transition">
-                        <div className="p-5 sm:p-8 text-gray-900">
+                    <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm dark:shadow-none rounded-2xl border border-gray-100 dark:border-gray-700 transition">
+                        <div className="p-5 sm:p-8 text-gray-900 dark:text-gray-100">
                             {/* Header Nama & Tombol Aksi */}
-                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 border-b border-gray-100 pb-5 mb-6">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 border-b border-gray-100 dark:border-gray-700 pb-5 mb-6">
                                 <div className="space-y-1">
-                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-100">
+                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border border-blue-100 dark:border-blue-900">
                                         Properti Manajemen
                                     </span>
-                                    <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-gray-900">
+                                    <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">
                                         {kost.name}
                                     </h3>
                                 </div>
@@ -218,7 +193,7 @@ export default function Show({ kost }) {
                                     </Link>
                                     <button
                                         onClick={handleDelete}
-                                        className="flex-1 sm:flex-none bg-rose-50 hover:bg-rose-100 text-rose-600 font-semibold py-2.5 px-4 rounded-xl border border-rose-200 transition text-center text-sm flex items-center justify-center gap-1.5"
+                                        className="flex-1 sm:flex-none bg-rose-50 dark:bg-rose-900/30 hover:bg-rose-100 dark:hover:bg-rose-900/50 text-rose-600 dark:text-rose-400 font-semibold py-2.5 px-4 rounded-xl border border-rose-200 dark:border-rose-900 transition text-center text-sm flex items-center justify-center gap-1.5"
                                     >
                                         <svg
                                             className="w-4 h-4"
@@ -238,13 +213,10 @@ export default function Show({ kost }) {
                                 </div>
                             </div>
 
-                            {/* ========================================= */}
                             {/* ✅ CAROUSEL GALERI FOTO + SWIPE SUPPORT */}
-                            {/* ========================================= */}
                             {allPhotos.length > 0 ? (
                                 <div className="mb-6 sm:mb-8 space-y-3">
-                                    {/* Main Carousel - DENGAN SWIPE */}
-                                    <div className="relative group overflow-hidden rounded-2xl shadow-inner bg-gray-50">
+                                    <div className="relative group overflow-hidden rounded-2xl shadow-inner dark:shadow-none bg-gray-50 dark:bg-gray-900/30">
                                         <div
                                             className="relative h-56 sm:h-80 md:h-[400px] select-none cursor-grab active:cursor-grabbing"
                                             onTouchStart={handleTouchStart}
@@ -291,10 +263,8 @@ export default function Show({ kost }) {
                                                 </div>
                                             ))}
 
-                                            {/* Overlay gradient */}
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent pointer-events-none" />
 
-                                            {/* Navigation Buttons */}
                                             {allPhotos.length > 1 && (
                                                 <>
                                                     <button
@@ -344,7 +314,6 @@ export default function Show({ kost }) {
                                                 </>
                                             )}
 
-                                            {/* Photo Counter & Label */}
                                             {allPhotos.length > 1 && (
                                                 <div className="absolute top-4 right-4 flex items-center gap-2 pointer-events-none">
                                                     <span className="bg-black/60 backdrop-blur-sm text-white px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold">
@@ -361,7 +330,6 @@ export default function Show({ kost }) {
                                                 </div>
                                             )}
 
-                                            {/* Swipe Hint (hanya muncul di mobile) */}
                                             {allPhotos.length > 1 && (
                                                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/40 backdrop-blur-sm text-white px-3 py-1 rounded-full text-[10px] sm:hidden pointer-events-none animate-pulse">
                                                     ← Geser untuk ganti foto →
@@ -382,8 +350,8 @@ export default function Show({ kost }) {
                                                     className={`flex-shrink-0 relative w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden border-2 transition-all ${
                                                         index ===
                                                         currentPhotoIndex
-                                                            ? "border-blue-500 ring-2 ring-blue-200 scale-105"
-                                                            : "border-gray-200 hover:border-gray-300 opacity-70 hover:opacity-100"
+                                                            ? "border-blue-500 dark:border-blue-400 ring-2 ring-blue-200 dark:ring-blue-900 scale-105"
+                                                            : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 opacity-70 hover:opacity-100"
                                                     }`}
                                                 >
                                                     <img
@@ -409,9 +377,9 @@ export default function Show({ kost }) {
                                     )}
                                 </div>
                             ) : (
-                                <div className="mb-6 sm:mb-8 rounded-2xl bg-gray-50 border border-dashed border-gray-200 p-8 text-center text-gray-400">
+                                <div className="mb-6 sm:mb-8 rounded-2xl bg-gray-50 dark:bg-gray-900/30 border border-dashed border-gray-200 dark:border-gray-700 p-8 text-center text-gray-400 dark:text-gray-500">
                                     <svg
-                                        className="w-8 h-8 mx-auto mb-2 text-gray-300"
+                                        className="w-8 h-8 mx-auto mb-2 text-gray-300 dark:text-gray-600"
                                         fill="none"
                                         stroke="currentColor"
                                         strokeWidth="2"
@@ -430,9 +398,9 @@ export default function Show({ kost }) {
                             )}
 
                             {/* Grid Informasi Detail Properti */}
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 bg-gray-50/70 p-4 sm:p-6 rounded-2xl border border-gray-100">
-                                <div className="space-y-1 md:col-span-3 border-b border-gray-200/60 pb-3 mb-1">
-                                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 bg-gray-50/70 dark:bg-gray-900/50 p-4 sm:p-6 rounded-2xl border border-gray-100 dark:border-gray-700">
+                                <div className="space-y-1 md:col-span-3 border-b border-gray-200/60 dark:border-gray-700 pb-3 mb-1">
+                                    <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
                                         <svg
                                             className="w-3.5 h-3.5"
                                             fill="none"
@@ -453,12 +421,12 @@ export default function Show({ kost }) {
                                         </svg>
                                         Lokasi Properti
                                     </p>
-                                    <p className="font-semibold text-gray-800 text-base sm:text-lg pl-5">
+                                    <p className="font-semibold text-gray-800 dark:text-gray-100 text-base sm:text-lg pl-5">
                                         {kost.address}
                                     </p>
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                                    <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
                                         <svg
                                             className="w-3.5 h-3.5"
                                             fill="none"
@@ -474,12 +442,12 @@ export default function Show({ kost }) {
                                         </svg>
                                         Nama Pemilik
                                     </p>
-                                    <p className="font-bold text-gray-800 text-base pl-5">
+                                    <p className="font-bold text-gray-800 dark:text-gray-100 text-base pl-5">
                                         {kost.owner_name}
                                     </p>
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                                    <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
                                         <svg
                                             className="w-3.5 h-3.5"
                                             fill="none"
@@ -495,12 +463,12 @@ export default function Show({ kost }) {
                                         </svg>
                                         Kontak Pemilik
                                     </p>
-                                    <p className="font-bold text-gray-800 text-base pl-5">
+                                    <p className="font-bold text-gray-800 dark:text-gray-100 text-base pl-5">
                                         {kost.owner_phone}
                                     </p>
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                                    <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
                                         <svg
                                             className="w-3.5 h-3.5"
                                             fill="none"
@@ -516,7 +484,7 @@ export default function Show({ kost }) {
                                         </svg>
                                         Kapasitas Unit
                                     </p>
-                                    <p className="font-bold text-blue-600 text-base pl-5">
+                                    <p className="font-bold text-blue-600 dark:text-blue-400 text-base pl-5">
                                         {kost.rooms?.length || 0} Kamar
                                         Terdaftar
                                     </p>
@@ -526,14 +494,14 @@ export default function Show({ kost }) {
                     </div>
 
                     {/* Section Daftar Kamar */}
-                    <div className="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100">
-                        <div className="p-5 sm:p-8 text-gray-900">
-                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 border-b border-gray-100 pb-4 mb-5">
+                    <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm dark:shadow-none rounded-2xl border border-gray-100 dark:border-gray-700">
+                        <div className="p-5 sm:p-8 text-gray-900 dark:text-gray-100">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 border-b border-gray-100 dark:border-gray-700 pb-4 mb-5">
                                 <div>
-                                    <h3 className="text-lg sm:text-xl font-bold text-gray-900">
+                                    <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100">
                                         Daftar Manajemen Kamar
                                     </h3>
-                                    <p className="text-xs text-gray-500">
+                                    <p className="text-xs text-gray-500 dark:text-gray-400">
                                         Kelola ketersediaan harga dan status
                                         penyewa unit
                                     </p>
@@ -560,35 +528,35 @@ export default function Show({ kost }) {
                             </div>
 
                             {kost.rooms && kost.rooms.length > 0 ? (
-                                <div className="relative overflow-hidden rounded-xl border border-gray-100 after:absolute after:right-0 after:top-0 after:bottom-0 after:w-6 after:bg-gradient-to-l after:from-black/5 after:to-transparent after:pointer-events-none lg:after:hidden">
+                                <div className="relative overflow-hidden rounded-xl border border-gray-100 dark:border-gray-700 after:absolute after:right-0 after:top-0 after:bottom-0 after:w-6 after:bg-gradient-to-l after:from-black/5 after:to-transparent after:pointer-events-none lg:after:hidden">
                                     <div className="overflow-x-auto">
-                                        <table className="min-w-full divide-y divide-gray-200 text-left">
-                                            <thead className="bg-gray-50/70">
+                                        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-left">
+                                            <thead className="bg-gray-50/70 dark:bg-gray-900/50">
                                                 <tr>
-                                                    <th className="px-5 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                                    <th className="px-5 py-3.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                                         Nomor Unit
                                                     </th>
-                                                    <th className="px-5 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                                    <th className="px-5 py-3.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                                         Harga Sewa / Bulan
                                                     </th>
-                                                    <th className="px-5 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                                    <th className="px-5 py-3.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                                         Status Unit
                                                     </th>
-                                                    <th className="px-5 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                                    <th className="px-5 py-3.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                                         Nama Penghuni
                                                     </th>
                                                 </tr>
                                             </thead>
-                                            <tbody className="bg-white divide-y divide-gray-100">
+                                            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700">
                                                 {kost.rooms.map((room) => (
                                                     <tr
                                                         key={room.id}
-                                                        className="hover:bg-gray-50/80 transition"
+                                                        className="hover:bg-gray-50/80 dark:hover:bg-gray-900/50 transition"
                                                     >
-                                                        <td className="px-5 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
+                                                        <td className="px-5 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-gray-100">
                                                             <div className="flex items-center gap-2">
                                                                 <svg
-                                                                    className="w-4 h-4 text-gray-400"
+                                                                    className="w-4 h-4 text-gray-400 dark:text-gray-500"
                                                                     fill="none"
                                                                     stroke="currentColor"
                                                                     strokeWidth="2"
@@ -608,7 +576,7 @@ export default function Show({ kost }) {
                                                                 </span>
                                                             </div>
                                                         </td>
-                                                        <td className="px-5 py-4 whitespace-nowrap text-sm font-semibold text-gray-700">
+                                                        <td className="px-5 py-4 whitespace-nowrap text-sm font-semibold text-gray-700 dark:text-gray-200">
                                                             Rp{" "}
                                                             {parseInt(
                                                                 room.price,
@@ -621,11 +589,11 @@ export default function Show({ kost }) {
                                                                 className={`inline-flex px-2.5 py-1 rounded-full text-xs font-bold border ${
                                                                     room.status ===
                                                                     "available"
-                                                                        ? "bg-emerald-50 text-emerald-700 border-emerald-100"
+                                                                        ? "bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-100 dark:border-emerald-900"
                                                                         : room.status ===
                                                                             "occupied"
-                                                                          ? "bg-rose-50 text-rose-700 border-rose-100"
-                                                                          : "bg-amber-50 text-amber-700 border-amber-100"
+                                                                          ? "bg-rose-50 dark:bg-rose-900/30 text-rose-700 dark:text-rose-400 border-rose-100 dark:border-rose-900"
+                                                                          : "bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border-amber-100 dark:border-amber-900"
                                                                 }`}
                                                             >
                                                                 {room.status ===
@@ -637,12 +605,12 @@ export default function Show({ kost }) {
                                                                       : "⏳ Perbaikan"}
                                                             </span>
                                                         </td>
-                                                        <td className="px-5 py-4 whitespace-nowrap text-sm text-gray-600">
+                                                        <td className="px-5 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">
                                                             {room.tenants?.[0]
                                                                 ?.name ? (
-                                                                <div className="flex items-center gap-2 font-medium text-gray-800">
+                                                                <div className="flex items-center gap-2 font-medium text-gray-800 dark:text-gray-200">
                                                                     <svg
-                                                                        className="w-4 h-4 text-gray-400"
+                                                                        className="w-4 h-4 text-gray-400 dark:text-gray-500"
                                                                         fill="none"
                                                                         stroke="currentColor"
                                                                         strokeWidth="2"
@@ -663,7 +631,7 @@ export default function Show({ kost }) {
                                                                     </span>
                                                                 </div>
                                                             ) : (
-                                                                <span className="text-gray-400 italic">
+                                                                <span className="text-gray-400 dark:text-gray-500 italic">
                                                                     Kosong
                                                                 </span>
                                                             )}
@@ -675,9 +643,9 @@ export default function Show({ kost }) {
                                     </div>
                                 </div>
                             ) : (
-                                <div className="rounded-xl border border-dashed border-gray-200 p-8 text-center text-gray-400">
+                                <div className="rounded-xl border border-dashed border-gray-200 dark:border-gray-700 p-8 text-center text-gray-400 dark:text-gray-500">
                                     <svg
-                                        className="w-8 h-8 mx-auto mb-1 text-gray-300"
+                                        className="w-8 h-8 mx-auto mb-1 text-gray-300 dark:text-gray-600"
                                         fill="none"
                                         stroke="currentColor"
                                         strokeWidth="2"

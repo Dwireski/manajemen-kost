@@ -51,7 +51,7 @@ export default function Index({ kosts, filters }) {
         <AuthenticatedLayout
             header={
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                    <h2 className="font-semibold text-lg sm:text-xl text-gray-800 leading-tight">
+                    <h2 className="font-semibold text-lg sm:text-xl text-gray-800 dark:text-gray-100 leading-tight">
                         Manajemen Properti Kost
                     </h2>
                     <Link
@@ -81,14 +81,14 @@ export default function Index({ kosts, filters }) {
             <div className="py-4 sm:py-8 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-7xl mx-auto">
                     {/* Search Card */}
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 mb-4 sm:mb-6">
+                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm dark:shadow-none border border-gray-100 dark:border-gray-700 p-4 sm:p-6 mb-4 sm:mb-6">
                         <form
                             onSubmit={handleSearch}
                             className="flex flex-col md:flex-row gap-2 sm:gap-3"
                         >
                             <div className="flex-1 relative">
                                 <svg
-                                    className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
+                                    className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
@@ -105,7 +105,7 @@ export default function Index({ kosts, filters }) {
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
                                     placeholder="Cari berdasarkan nama, pemilik, atau lokasi alamat..."
-                                    className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition text-sm sm:text-base"
+                                    className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder-gray-500 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400 transition text-sm sm:text-base"
                                 />
                             </div>
                             <div className="flex gap-2 sm:gap-3 w-full md:w-auto">
@@ -119,7 +119,7 @@ export default function Index({ kosts, filters }) {
                                     <button
                                         type="button"
                                         onClick={handleReset}
-                                        className="flex-1 md:flex-none bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2.5 sm:py-3 px-5 sm:px-6 rounded-xl transition text-sm sm:text-base text-center"
+                                        className="flex-1 md:flex-none bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-semibold py-2.5 sm:py-3 px-5 sm:px-6 rounded-xl transition text-sm sm:text-base text-center"
                                     >
                                         Reset
                                     </button>
@@ -129,12 +129,12 @@ export default function Index({ kosts, filters }) {
                     </div>
 
                     {/* Table Card */}
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                        <div className="px-5 py-4 border-b border-gray-100">
-                            <h3 className="text-base sm:text-lg font-bold text-gray-900">
+                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm dark:shadow-none border border-gray-100 dark:border-gray-700 overflow-hidden">
+                        <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
+                            <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100">
                                 Daftar Aset Kost
                             </h3>
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
                                 Total pengelolaan: {kosts?.length || 0} lokasi
                                 properti
                             </p>
@@ -142,38 +142,38 @@ export default function Index({ kosts, filters }) {
 
                         <div className="relative overflow-hidden after:absolute after:right-0 after:top-0 after:bottom-0 after:w-6 after:bg-gradient-to-l after:from-black/5 after:to-transparent after:pointer-events-none lg:after:hidden">
                             <div className="overflow-x-auto shadow-inner">
-                                <table className="min-w-full divide-y divide-gray-200 text-left">
-                                    <thead className="bg-gray-50/70">
+                                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-left">
+                                    <thead className="bg-gray-50/70 dark:bg-gray-900/50">
                                         <tr>
-                                            <th className="px-5 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                            <th className="px-5 py-3.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                                 Foto Aset
                                             </th>
-                                            <th className="px-5 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                            <th className="px-5 py-3.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                                 Nama Properti
                                             </th>
-                                            <th className="px-5 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                            <th className="px-5 py-3.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                                 Lokasi Alamat
                                             </th>
-                                            <th className="px-5 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                            <th className="px-5 py-3.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                                 Nama Pemilik
                                             </th>
-                                            <th className="px-5 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                            <th className="px-5 py-3.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                                 Kontak Telepon
                                             </th>
-                                            <th className="px-5 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                            <th className="px-5 py-3.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                                 Total Unit
                                             </th>
-                                            <th className="px-5 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                            <th className="px-5 py-3.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                                 Aksi Kelola
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody className="bg-white divide-y divide-gray-100">
+                                    <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700">
                                         {kosts && kosts.length > 0 ? (
                                             kosts.map((kost) => (
                                                 <tr
                                                     key={kost.id}
-                                                    className="hover:bg-gray-50/80 transition"
+                                                    className="hover:bg-gray-50/80 dark:hover:bg-gray-900/50 transition"
                                                 >
                                                     <td className="px-5 py-4 whitespace-nowrap">
                                                         {kost.photo ? (
@@ -182,7 +182,7 @@ export default function Index({ kosts, filters }) {
                                                                     kost.photo,
                                                                 )}
                                                                 alt={kost.name}
-                                                                className="w-11 h-11 object-cover rounded-xl border border-gray-100 shadow-sm"
+                                                                className="w-11 h-11 object-cover rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm"
                                                                 onError={(
                                                                     e,
                                                                 ) => {
@@ -196,7 +196,7 @@ export default function Index({ kosts, filters }) {
                                                         ) : null}
                                                         {/* Placeholder jika tidak ada foto atau error */}
                                                         <div
-                                                            className="w-11 h-11 bg-gray-50 border border-dashed border-gray-200 rounded-xl flex items-center justify-center text-gray-400"
+                                                            className="w-11 h-11 bg-gray-50 dark:bg-gray-900/50 border border-dashed border-gray-200 dark:border-gray-700 rounded-xl flex items-center justify-center text-gray-400 dark:text-gray-500"
                                                             style={{
                                                                 display:
                                                                     kost.photo
@@ -219,10 +219,10 @@ export default function Index({ kosts, filters }) {
                                                             </svg>
                                                         </div>
                                                     </td>
-                                                    <td className="px-5 py-4 whitespace-nowrap font-bold text-gray-900 text-xs sm:text-sm">
+                                                    <td className="px-5 py-4 whitespace-nowrap font-bold text-gray-900 dark:text-gray-100 text-xs sm:text-sm">
                                                         <div className="flex items-center gap-2">
                                                             <svg
-                                                                className="w-4 h-4 text-gray-400"
+                                                                className="w-4 h-4 text-gray-400 dark:text-gray-500"
                                                                 fill="none"
                                                                 stroke="currentColor"
                                                                 strokeWidth="2"
@@ -240,10 +240,10 @@ export default function Index({ kosts, filters }) {
                                                             </span>
                                                         </div>
                                                     </td>
-                                                    <td className="px-5 py-4 text-xs sm:text-sm text-gray-500 max-w-xs truncate font-medium">
+                                                    <td className="px-5 py-4 text-xs sm:text-sm text-gray-500 dark:text-gray-400 max-w-xs truncate font-medium">
                                                         <div className="flex items-center gap-2">
                                                             <svg
-                                                                className="w-4 h-4 text-gray-400 flex-shrink-0"
+                                                                className="w-4 h-4 text-gray-400 dark:text-gray-500 flex-shrink-0"
                                                                 fill="none"
                                                                 stroke="currentColor"
                                                                 strokeWidth="2"
@@ -266,10 +266,10 @@ export default function Index({ kosts, filters }) {
                                                             </span>
                                                         </div>
                                                     </td>
-                                                    <td className="px-5 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-800 font-semibold">
+                                                    <td className="px-5 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-800 dark:text-gray-200 font-semibold">
                                                         <div className="flex items-center gap-2">
                                                             <svg
-                                                                className="w-4 h-4 text-gray-400"
+                                                                className="w-4 h-4 text-gray-400 dark:text-gray-500"
                                                                 fill="none"
                                                                 stroke="currentColor"
                                                                 strokeWidth="2"
@@ -287,10 +287,10 @@ export default function Index({ kosts, filters }) {
                                                             </span>
                                                         </div>
                                                     </td>
-                                                    <td className="px-5 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500 font-medium">
+                                                    <td className="px-5 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium">
                                                         <div className="flex items-center gap-2">
                                                             <svg
-                                                                className="w-4 h-4 text-gray-400"
+                                                                className="w-4 h-4 text-gray-400 dark:text-gray-500"
                                                                 fill="none"
                                                                 stroke="currentColor"
                                                                 strokeWidth="2"
@@ -309,9 +309,9 @@ export default function Index({ kosts, filters }) {
                                                         </div>
                                                     </td>
                                                     <td className="px-5 py-4 whitespace-nowrap">
-                                                        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-purple-50 text-purple-700 border border-purple-100 gap-1">
+                                                        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 border border-purple-100 dark:border-purple-900 gap-1">
                                                             <svg
-                                                                className="w-3 h-3 text-purple-500"
+                                                                className="w-3 h-3 text-purple-500 dark:text-purple-400"
                                                                 fill="none"
                                                                 stroke="currentColor"
                                                                 strokeWidth="2"
@@ -337,7 +337,7 @@ export default function Index({ kosts, filters }) {
                                                                     "kosts.show",
                                                                     kost.id,
                                                                 )}
-                                                                className="text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-md transition text-xs"
+                                                                className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 px-2.5 py-1 rounded-md transition text-xs"
                                                             >
                                                                 Lihat
                                                             </Link>
@@ -346,7 +346,7 @@ export default function Index({ kosts, filters }) {
                                                                     "kosts.edit",
                                                                     kost.id,
                                                                 )}
-                                                                className="text-yellow-600 hover:text-yellow-800 bg-yellow-50 hover:bg-yellow-100 px-2.5 py-1 rounded-md transition text-xs"
+                                                                className="text-yellow-600 dark:text-yellow-400 hover:text-yellow-800 dark:hover:text-yellow-300 bg-yellow-50 dark:bg-yellow-900/30 hover:bg-yellow-100 dark:hover:bg-yellow-900/50 px-2.5 py-1 rounded-md transition text-xs"
                                                             >
                                                                 Edit
                                                             </Link>
@@ -356,7 +356,7 @@ export default function Index({ kosts, filters }) {
                                                                         kost.id,
                                                                     )
                                                                 }
-                                                                className="text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100 px-2.5 py-1 rounded-md transition text-xs"
+                                                                className="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-900/50 px-2.5 py-1 rounded-md transition text-xs"
                                                             >
                                                                 Hapus
                                                             </button>
@@ -370,7 +370,7 @@ export default function Index({ kosts, filters }) {
                                                     colSpan="7"
                                                     className="px-5 py-10 sm:py-14 text-center"
                                                 >
-                                                    <p className="text-xs sm:text-sm text-gray-400 italic">
+                                                    <p className="text-xs sm:text-sm text-gray-400 dark:text-gray-500 italic">
                                                         {search
                                                             ? "Tidak ada hasil properti kost yang sesuai pencarian."
                                                             : "Belum ada data properti aset kost terdaftar."}
