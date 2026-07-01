@@ -18,7 +18,6 @@ export default function Show({ payment }) {
         });
     };
 
-    // ✅ FUNGSI FORMATCURRENCY YANG DITAMBAHKAN
     const formatCurrency = (amount) => {
         if (!amount) return "Rp 0";
         return `Rp ${parseInt(amount).toLocaleString("id-ID")}`;
@@ -26,9 +25,11 @@ export default function Show({ payment }) {
 
     const getStatusBadge = (status) => {
         const badges = {
-            paid: "bg-emerald-50 text-emerald-700 border-emerald-100",
-            pending: "bg-amber-50 text-amber-700 border-amber-100",
-            overdue: "bg-rose-50 text-rose-700 border-rose-100",
+            paid: "bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-100 dark:border-emerald-900",
+            pending:
+                "bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border-amber-100 dark:border-amber-900",
+            overdue:
+                "bg-rose-50 dark:bg-rose-900/30 text-rose-700 dark:text-rose-400 border-rose-100 dark:border-rose-900",
         };
         const labels = {
             paid: "Lunas",
@@ -48,12 +49,12 @@ export default function Show({ payment }) {
         <AuthenticatedLayout
             header={
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                    <h2 className="font-semibold text-lg sm:text-xl text-gray-800 leading-tight">
+                    <h2 className="font-semibold text-lg sm:text-xl text-gray-800 dark:text-gray-100 leading-tight">
                         Detail Pembayaran
                     </h2>
                     <Link
                         href={route("payments.index")}
-                        className="text-sm font-medium text-blue-600 hover:text-blue-800 transition flex items-center gap-1.5"
+                        className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition flex items-center gap-1.5"
                     >
                         <svg
                             className="w-4 h-4"
@@ -77,17 +78,17 @@ export default function Show({ payment }) {
 
             <div className="py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-4xl mx-auto">
-                    <div className="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100">
-                        <div className="p-5 sm:p-8 text-gray-900">
+                    <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm dark:shadow-none rounded-2xl border border-gray-100 dark:border-gray-700">
+                        <div className="p-5 sm:p-8 text-gray-900 dark:text-gray-100">
                             {/* Header Section */}
-                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 border-b border-gray-100 pb-5 mb-6">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 border-b border-gray-100 dark:border-gray-700 pb-5 mb-6">
                                 <div className="space-y-1">
-                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-100">
+                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border border-blue-100 dark:border-blue-900">
                                         Faktur Finansial
                                     </span>
-                                    <h3 className="text-xl sm:text-2xl font-extrabold tracking-tight text-gray-900 flex items-center gap-2">
+                                    <h3 className="text-xl sm:text-2xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 flex items-center gap-2">
                                         <svg
-                                            className="w-5 h-5 sm:w-6 sm:h-6 text-gray-700"
+                                            className="w-5 h-5 sm:w-6 sm:h-6 text-gray-700 dark:text-gray-300"
                                             fill="none"
                                             stroke="currentColor"
                                             strokeWidth="2"
@@ -127,7 +128,7 @@ export default function Show({ payment }) {
                                     </Link>
                                     <button
                                         onClick={handleDelete}
-                                        className="flex-1 sm:flex-none bg-rose-50 hover:bg-rose-100 text-rose-600 font-semibold py-2.5 px-4 rounded-xl border border-rose-200 transition text-center text-sm flex items-center justify-center gap-1.5"
+                                        className="flex-1 sm:flex-none bg-rose-50 dark:bg-rose-900/30 hover:bg-rose-100 dark:hover:bg-rose-900/50 text-rose-600 dark:text-rose-400 font-semibold py-2.5 px-4 rounded-xl border border-rose-200 dark:border-rose-900 transition text-center text-sm flex items-center justify-center gap-1.5"
                                     >
                                         <svg
                                             className="w-4 h-4"
@@ -148,12 +149,12 @@ export default function Show({ payment }) {
                             </div>
 
                             {/* Grid Informasi Faktur */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 bg-gray-50/70 p-5 sm:p-6 rounded-2xl border border-gray-100">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 bg-gray-50/70 dark:bg-gray-900/50 p-5 sm:p-6 rounded-2xl border border-gray-100 dark:border-gray-700">
                                 {/* Nama Penyewa */}
                                 <div className="space-y-1">
-                                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                                    <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
                                         <svg
-                                            className="w-3.5 h-3.5 text-gray-400"
+                                            className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500"
                                             fill="none"
                                             stroke="currentColor"
                                             strokeWidth="2"
@@ -167,16 +168,16 @@ export default function Show({ payment }) {
                                         </svg>
                                         Nama Penyewa
                                     </p>
-                                    <p className="font-bold text-gray-800 text-sm sm:text-base pl-5 truncate">
+                                    <p className="font-bold text-gray-800 dark:text-gray-100 text-sm sm:text-base pl-5 truncate">
                                         {payment.tenant?.name || "-"}
                                     </p>
                                 </div>
 
                                 {/* Kontak Telepon */}
                                 <div className="space-y-1">
-                                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                                    <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
                                         <svg
-                                            className="w-3.5 h-3.5 text-gray-400"
+                                            className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500"
                                             fill="none"
                                             stroke="currentColor"
                                             strokeWidth="2"
@@ -190,16 +191,16 @@ export default function Show({ payment }) {
                                         </svg>
                                         No. Telepon
                                     </p>
-                                    <p className="font-semibold text-gray-700 text-sm sm:text-base pl-5 truncate">
+                                    <p className="font-semibold text-gray-700 dark:text-gray-200 text-sm sm:text-base pl-5 truncate">
                                         {payment.tenant?.phone || "-"}
                                     </p>
                                 </div>
 
                                 {/* Nama Gedung Kost */}
                                 <div className="space-y-1">
-                                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                                    <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
                                         <svg
-                                            className="w-3.5 h-3.5 text-gray-400"
+                                            className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500"
                                             fill="none"
                                             stroke="currentColor"
                                             strokeWidth="2"
@@ -213,7 +214,7 @@ export default function Show({ payment }) {
                                         </svg>
                                         Gedung Kost
                                     </p>
-                                    <p className="font-semibold text-gray-800 text-sm sm:text-base pl-5 truncate">
+                                    <p className="font-semibold text-gray-800 dark:text-gray-100 text-sm sm:text-base pl-5 truncate">
                                         {payment.tenant?.room?.kost?.name ||
                                             "-"}
                                     </p>
@@ -221,9 +222,9 @@ export default function Show({ payment }) {
 
                                 {/* Nomor Unit Kamar */}
                                 <div className="space-y-1">
-                                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                                    <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
                                         <svg
-                                            className="w-3.5 h-3.5 text-gray-400"
+                                            className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500"
                                             fill="none"
                                             stroke="currentColor"
                                             strokeWidth="2"
@@ -237,7 +238,7 @@ export default function Show({ payment }) {
                                         </svg>
                                         Alokasi Kamar
                                     </p>
-                                    <p className="font-semibold text-gray-800 text-sm sm:text-base pl-5 truncate">
+                                    <p className="font-semibold text-gray-800 dark:text-gray-100 text-sm sm:text-base pl-5 truncate">
                                         Unit Kamar{" "}
                                         {payment.tenant?.room?.room_number ||
                                             "-"}
@@ -245,10 +246,10 @@ export default function Show({ payment }) {
                                 </div>
 
                                 {/* Nominal */}
-                                <div className="space-y-1 border-t border-gray-200/60 pt-4 sm:col-span-2">
-                                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                                <div className="space-y-1 border-t border-gray-200/60 dark:border-gray-700 pt-4 sm:col-span-2">
+                                    <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
                                         <svg
-                                            className="w-3.5 h-3.5 text-gray-400"
+                                            className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500"
                                             fill="none"
                                             stroke="currentColor"
                                             strokeWidth="2"
@@ -262,16 +263,16 @@ export default function Show({ payment }) {
                                         </svg>
                                         Jumlah Pembayaran
                                     </p>
-                                    <p className="font-extrabold text-blue-600 text-lg sm:text-xl pl-5">
+                                    <p className="font-extrabold text-blue-600 dark:text-blue-400 text-lg sm:text-xl pl-5">
                                         {formatCurrency(payment.amount)}
                                     </p>
                                 </div>
 
                                 {/* Tanggal Masuk Pembayaran */}
-                                <div className="space-y-1 border-t border-gray-200/60 pt-4">
-                                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                                <div className="space-y-1 border-t border-gray-200/60 dark:border-gray-700 pt-4">
+                                    <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
                                         <svg
-                                            className="w-3.5 h-3.5 text-gray-400"
+                                            className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500"
                                             fill="none"
                                             stroke="currentColor"
                                             strokeWidth="2"
@@ -285,16 +286,16 @@ export default function Show({ payment }) {
                                         </svg>
                                         Tanggal Pembayaran
                                     </p>
-                                    <p className="font-semibold text-gray-800 text-sm sm:text-base pl-5">
+                                    <p className="font-semibold text-gray-800 dark:text-gray-100 text-sm sm:text-base pl-5">
                                         {formatDate(payment.payment_date)}
                                     </p>
                                 </div>
 
                                 {/* Status Jurnal */}
-                                <div className="space-y-1 border-t border-gray-200/60 pt-4">
-                                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5 mb-1">
+                                <div className="space-y-1 border-t border-gray-200/60 dark:border-gray-700 pt-4">
+                                    <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider flex items-center gap-1.5 mb-1">
                                         <svg
-                                            className="w-3.5 h-3.5 text-gray-400"
+                                            className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500"
                                             fill="none"
                                             stroke="currentColor"
                                             strokeWidth="2"
@@ -314,10 +315,10 @@ export default function Show({ payment }) {
                                 </div>
 
                                 {/* Keterangan Tambahan */}
-                                <div className="space-y-1 border-t border-gray-200/60 pt-4 sm:col-span-2">
-                                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                                <div className="space-y-1 border-t border-gray-200/60 dark:border-gray-700 pt-4 sm:col-span-2">
+                                    <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
                                         <svg
-                                            className="w-3.5 h-3.5 text-gray-400"
+                                            className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500"
                                             fill="none"
                                             stroke="currentColor"
                                             strokeWidth="2"
@@ -331,7 +332,7 @@ export default function Show({ payment }) {
                                         </svg>
                                         Keterangan Catatan Audit
                                     </p>
-                                    <p className="font-medium text-gray-700 text-sm sm:text-base pl-5 leading-relaxed">
+                                    <p className="font-medium text-gray-700 dark:text-gray-200 text-sm sm:text-base pl-5 leading-relaxed">
                                         {payment.description || "-"}
                                     </p>
                                 </div>

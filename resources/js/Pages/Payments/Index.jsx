@@ -27,9 +27,11 @@ export default function Index({ payments, filters }) {
 
     const getStatusBadge = (status) => {
         const badges = {
-            paid: "bg-emerald-50 text-emerald-700 border-emerald-100",
-            pending: "bg-amber-50 text-amber-700 border-amber-100",
-            overdue: "bg-rose-50 text-rose-700 border-rose-100",
+            paid: "bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-100 dark:border-emerald-900",
+            pending:
+                "bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border-amber-100 dark:border-amber-900",
+            overdue:
+                "bg-rose-50 dark:bg-rose-900/30 text-rose-700 dark:text-rose-400 border-rose-100 dark:border-rose-900",
         };
         const labels = {
             paid: "✓ Lunas",
@@ -63,7 +65,7 @@ export default function Index({ payments, filters }) {
         <AuthenticatedLayout
             header={
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                    <h2 className="font-semibold text-lg sm:text-xl text-gray-800 leading-tight">
+                    <h2 className="font-semibold text-lg sm:text-xl text-gray-800 dark:text-gray-100 leading-tight">
                         Manajemen Pembayaran
                     </h2>
                     <div className="flex flex-col sm:flex-row gap-2.5 w-full sm:w-auto">
@@ -71,7 +73,6 @@ export default function Index({ payments, filters }) {
                             href={route("payments.export-pdf")}
                             className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 px-4 rounded-xl shadow-sm transition flex items-center justify-center gap-2 text-sm"
                         >
-                            {/* Line Icon: Document Download */}
                             <svg
                                 className="w-4 h-4"
                                 fill="none"
@@ -91,7 +92,6 @@ export default function Index({ payments, filters }) {
                             href={route("payments.create")}
                             className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-4 rounded-xl shadow-sm transition flex items-center justify-center gap-2 text-sm"
                         >
-                            {/* Line Icon: Plus Circle */}
                             <svg
                                 className="w-4 h-4"
                                 fill="none"
@@ -116,15 +116,14 @@ export default function Index({ payments, filters }) {
             <div className="py-4 sm:py-8 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-7xl mx-auto">
                     {/* Search Card */}
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 mb-4 sm:mb-6">
+                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm dark:shadow-none border border-gray-100 dark:border-gray-700 p-4 sm:p-6 mb-4 sm:mb-6">
                         <form
                             onSubmit={handleSearch}
                             className="flex flex-col md:flex-row gap-2 sm:gap-3"
                         >
                             <div className="flex-1 relative">
-                                {/* Line Icon: Search */}
                                 <svg
-                                    className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
+                                    className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500"
                                     fill="none"
                                     stroke="currentColor"
                                     strokeWidth="2"
@@ -141,7 +140,7 @@ export default function Index({ payments, filters }) {
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
                                     placeholder="Cari berdasarkan nama penyewa atau nomor telepon..."
-                                    className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition text-sm sm:text-base"
+                                    className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder-gray-500 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400 transition text-sm sm:text-base"
                                 />
                             </div>
                             <div className="flex gap-2 sm:gap-3 w-full md:w-auto">
@@ -155,7 +154,7 @@ export default function Index({ payments, filters }) {
                                     <button
                                         type="button"
                                         onClick={handleReset}
-                                        className="flex-1 md:flex-none bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2.5 sm:py-3 px-5 sm:px-6 rounded-xl transition text-sm sm:text-base text-center"
+                                        className="flex-1 md:flex-none bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-semibold py-2.5 sm:py-3 px-5 sm:px-6 rounded-xl transition text-sm sm:text-base text-center"
                                     >
                                         Reset
                                     </button>
@@ -165,71 +164,69 @@ export default function Index({ payments, filters }) {
                     </div>
 
                     {/* Table Card */}
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                        <div className="px-5 py-4 border-b border-gray-100">
-                            <h3 className="text-base sm:text-lg font-bold text-gray-900">
+                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm dark:shadow-none border border-gray-100 dark:border-gray-700 overflow-hidden">
+                        <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
+                            <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100">
                                 Riwayat Transaksi Masuk
                             </h3>
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
                                 Total log sistem: {payments?.length || 0}{" "}
                                 transaksi tercatat
                             </p>
                         </div>
 
-                        {/* Pembungkus relatif dengan efek gradasi indikator geser di ponsel */}
                         <div className="relative overflow-hidden after:absolute after:right-0 after:top-0 after:bottom-0 after:w-6 after:bg-gradient-to-l after:from-black/5 after:to-transparent after:pointer-events-none lg:after:hidden">
                             <div className="overflow-x-auto shadow-inner">
-                                <table className="min-w-full divide-y divide-gray-200 text-left">
-                                    <thead className="bg-gray-50/70">
+                                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-left">
+                                    <thead className="bg-gray-50/70 dark:bg-gray-900/50">
                                         <tr>
-                                            <th className="px-5 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                            <th className="px-5 py-3.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                                 Penyewa
                                             </th>
-                                            <th className="px-5 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                            <th className="px-5 py-3.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                                 Alokasi Unit
                                             </th>
-                                            <th className="px-5 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                            <th className="px-5 py-3.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                                 Jumlah Pembayaran
                                             </th>
-                                            <th className="px-5 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                            <th className="px-5 py-3.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                                 Tanggal Buku
                                             </th>
-                                            <th className="px-5 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                            <th className="px-5 py-3.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                                 Status
                                             </th>
-                                            <th className="px-5 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                            <th className="px-5 py-3.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                                 Keterangan Audit
                                             </th>
-                                            <th className="px-5 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                            <th className="px-5 py-3.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                                 Aksi
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody className="bg-white divide-y divide-gray-100">
+                                    <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700">
                                         {payments && payments.length > 0 ? (
                                             payments.map((payment) => (
                                                 <tr
                                                     key={payment.id}
-                                                    className="hover:bg-gray-50/80 transition"
+                                                    className="hover:bg-gray-50/80 dark:hover:bg-gray-900/50 transition"
                                                 >
                                                     <td className="px-5 py-4 whitespace-nowrap">
                                                         <div className="flex items-center gap-3">
-                                                            <div className="w-9 h-9 bg-blue-50 border border-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-xs flex-shrink-0">
+                                                            <div className="w-9 h-9 bg-blue-50 dark:bg-blue-900/30 border border-blue-100 dark:border-blue-900 rounded-full flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold text-xs flex-shrink-0">
                                                                 {payment.tenant?.name?.charAt(
                                                                     0,
                                                                 ) || "?"}
                                                             </div>
                                                             <div>
-                                                                <div className="font-bold text-gray-900 text-xs sm:text-sm">
+                                                                <div className="font-bold text-gray-900 dark:text-gray-100 text-xs sm:text-sm">
                                                                     {payment
                                                                         .tenant
                                                                         ?.name ||
                                                                         "-"}
                                                                 </div>
-                                                                <div className="text-[11px] text-gray-400 font-medium flex items-center gap-1 mt-0.5">
-                                                                    {/* Line Icon: Phone */}
+                                                                <div className="text-[11px] text-gray-400 dark:text-gray-500 font-medium flex items-center gap-1 mt-0.5">
                                                                     <svg
-                                                                        className="w-3 h-3 text-gray-400"
+                                                                        className="w-3 h-3 text-gray-400 dark:text-gray-500"
                                                                         fill="none"
                                                                         stroke="currentColor"
                                                                         strokeWidth="2"
@@ -253,10 +250,9 @@ export default function Index({ payments, filters }) {
                                                     </td>
                                                     <td className="px-5 py-4 whitespace-nowrap">
                                                         <div>
-                                                            <div className="text-xs sm:text-sm font-semibold text-gray-800 flex items-center gap-1.5">
-                                                                {/* Line Icon: Office Building */}
+                                                            <div className="text-xs sm:text-sm font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-1.5">
                                                                 <svg
-                                                                    className="w-3.5 h-3.5 text-gray-400"
+                                                                    className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500"
                                                                     fill="none"
                                                                     stroke="currentColor"
                                                                     strokeWidth="2"
@@ -277,7 +273,7 @@ export default function Index({ payments, filters }) {
                                                                         "-"}
                                                                 </span>
                                                             </div>
-                                                            <div className="text-[11px] text-gray-400 font-medium flex items-center gap-1.5 mt-0.5 pl-5">
+                                                            <div className="text-[11px] text-gray-400 dark:text-gray-500 font-medium flex items-center gap-1.5 mt-0.5 pl-5">
                                                                 <span>
                                                                     Unit Kamar{" "}
                                                                     {payment
@@ -289,16 +285,15 @@ export default function Index({ payments, filters }) {
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td className="px-5 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
+                                                    <td className="px-5 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-gray-100">
                                                         {formatCurrency(
                                                             payment.amount,
                                                         )}
                                                     </td>
-                                                    <td className="px-5 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-600 font-medium">
+                                                    <td className="px-5 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-600 dark:text-gray-300 font-medium">
                                                         <div className="flex items-center gap-1.5">
-                                                            {/* Line Icon: Calendar */}
                                                             <svg
-                                                                className="w-3.5 h-3.5 text-gray-400"
+                                                                className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500"
                                                                 fill="none"
                                                                 stroke="currentColor"
                                                                 strokeWidth="2"
@@ -322,7 +317,7 @@ export default function Index({ payments, filters }) {
                                                             payment.status,
                                                         )}
                                                     </td>
-                                                    <td className="px-5 py-4 text-xs font-medium text-gray-500 max-w-xs truncate">
+                                                    <td className="px-5 py-4 text-xs font-medium text-gray-500 dark:text-gray-400 max-w-xs truncate">
                                                         {payment.description ||
                                                             "-"}
                                                     </td>
@@ -333,7 +328,7 @@ export default function Index({ payments, filters }) {
                                                                     "payments.show",
                                                                     payment.id,
                                                                 )}
-                                                                className="text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-md transition text-xs"
+                                                                className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 px-2.5 py-1 rounded-md transition text-xs"
                                                             >
                                                                 Lihat
                                                             </Link>
@@ -342,7 +337,7 @@ export default function Index({ payments, filters }) {
                                                                     "payments.edit",
                                                                     payment.id,
                                                                 )}
-                                                                className="text-yellow-600 hover:text-yellow-800 bg-yellow-50 hover:bg-yellow-100 px-2.5 py-1 rounded-md transition text-xs"
+                                                                className="text-yellow-600 dark:text-yellow-400 hover:text-yellow-800 dark:hover:text-yellow-300 bg-yellow-50 dark:bg-yellow-900/30 hover:bg-yellow-100 dark:hover:bg-yellow-900/50 px-2.5 py-1 rounded-md transition text-xs"
                                                             >
                                                                 Edit
                                                             </Link>
@@ -352,7 +347,7 @@ export default function Index({ payments, filters }) {
                                                                         payment.id,
                                                                     )
                                                                 }
-                                                                className="text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100 px-2.5 py-1 rounded-md transition text-xs"
+                                                                className="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-900/50 px-2.5 py-1 rounded-md transition text-xs"
                                                             >
                                                                 Hapus
                                                             </button>
@@ -366,9 +361,8 @@ export default function Index({ payments, filters }) {
                                                     colSpan="7"
                                                     className="px-5 py-10 sm:py-14 text-center"
                                                 >
-                                                    {/* Line Icon: Empty Credit Card Placeholder */}
                                                     <svg
-                                                        className="w-8 h-8 mx-auto mb-2 text-gray-300"
+                                                        className="w-8 h-8 mx-auto mb-2 text-gray-300 dark:text-gray-600"
                                                         fill="none"
                                                         stroke="currentColor"
                                                         strokeWidth="2"
@@ -380,7 +374,7 @@ export default function Index({ payments, filters }) {
                                                             d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
                                                         />
                                                     </svg>
-                                                    <p className="text-xs sm:text-sm text-gray-400 italic">
+                                                    <p className="text-xs sm:text-sm text-gray-400 dark:text-gray-500 italic">
                                                         {search
                                                             ? "Tidak ada data pembayaran yang sesuai kriteria pencarian."
                                                             : "Belum ada log data transaksi pembayaran terdaftar."}

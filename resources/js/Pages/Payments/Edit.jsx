@@ -20,14 +20,13 @@ export default function Edit({ payment, tenants }) {
         <AuthenticatedLayout
             header={
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                    <h2 className="font-semibold text-lg sm:text-xl text-gray-800 leading-tight">
+                    <h2 className="font-semibold text-lg sm:text-xl text-gray-800 dark:text-gray-100 leading-tight">
                         Edit Data Pembayaran
                     </h2>
                     <Link
                         href={route("payments.index")}
-                        className="text-xs sm:text-sm font-medium text-blue-600 hover:text-blue-800 transition flex items-center gap-1"
+                        className="text-xs sm:text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition flex items-center gap-1"
                     >
-                        {/* Line Icon: Arrow Left */}
                         <svg
                             className="w-3.5 h-3.5"
                             fill="none"
@@ -50,13 +49,13 @@ export default function Edit({ payment, tenants }) {
 
             <div className="py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-3xl mx-auto">
-                    <div className="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100">
-                        <div className="p-5 sm:p-8 text-gray-900">
-                            <div className="border-b border-gray-100 pb-4 mb-6">
-                                <h3 className="text-lg font-bold text-gray-900">
+                    <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm dark:shadow-none rounded-2xl border border-gray-100 dark:border-gray-700">
+                        <div className="p-5 sm:p-8 text-gray-900 dark:text-gray-100">
+                            <div className="border-b border-gray-100 dark:border-gray-700 pb-4 mb-6">
+                                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
                                     Modifikasi Jurnal Transaksi
                                 </h3>
-                                <p className="text-xs text-gray-500">
+                                <p className="text-xs text-gray-500 dark:text-gray-400">
                                     Sesuaikan atau perbaiki entri rekaman detail
                                     tagihan sewa bulanan penghuni
                                 </p>
@@ -68,10 +67,9 @@ export default function Edit({ payment, tenants }) {
                             >
                                 {/* Pilihan Penyewa */}
                                 <div className="space-y-1">
-                                    <label className="block text-xs sm:text-sm font-bold text-gray-600 uppercase tracking-wider flex items-center gap-1.5">
-                                        {/* Line Icon: User */}
+                                    <label className="block text-xs sm:text-sm font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
                                         <svg
-                                            className="w-3.5 h-3.5 text-gray-400"
+                                            className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500"
                                             fill="none"
                                             stroke="currentColor"
                                             strokeWidth="2"
@@ -90,7 +88,7 @@ export default function Edit({ payment, tenants }) {
                                         onChange={(e) =>
                                             setData("tenant_id", e.target.value)
                                         }
-                                        className="mt-1 block w-full rounded-xl border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500/20 p-3 text-sm sm:text-base transition bg-white"
+                                        className="mt-1 block w-full rounded-xl border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 shadow-sm focus:border-blue-500 dark:focus:border-blue-400 focus:ring-blue-500/20 p-3 text-sm sm:text-base transition bg-white"
                                         required
                                     >
                                         <option value="">
@@ -118,10 +116,9 @@ export default function Edit({ payment, tenants }) {
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                     {/* Jumlah Pembayaran */}
                                     <div className="space-y-1">
-                                        <label className="block text-xs sm:text-sm font-bold text-gray-600 uppercase tracking-wider flex items-center gap-1.5">
-                                            {/* Line Icon: Cash / Currency */}
+                                        <label className="block text-xs sm:text-sm font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
                                             <svg
-                                                className="w-3.5 h-3.5 text-gray-400"
+                                                className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500"
                                                 fill="none"
                                                 stroke="currentColor"
                                                 strokeWidth="2"
@@ -145,7 +142,7 @@ export default function Edit({ payment, tenants }) {
                                                 )
                                             }
                                             placeholder="Masukkan nominal angka audit"
-                                            className="mt-1 block w-full rounded-xl border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500/20 p-3 text-sm sm:text-base transition"
+                                            className="mt-1 block w-full rounded-xl border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder-gray-500 shadow-sm focus:border-blue-500 dark:focus:border-blue-400 focus:ring-blue-500/20 p-3 text-sm sm:text-base transition"
                                             min="0"
                                             required
                                         />
@@ -158,10 +155,9 @@ export default function Edit({ payment, tenants }) {
 
                                     {/* Tanggal Pembayaran */}
                                     <div className="space-y-1">
-                                        <label className="block text-xs sm:text-sm font-bold text-gray-600 uppercase tracking-wider flex items-center gap-1.5">
-                                            {/* Line Icon: Calendar */}
+                                        <label className="block text-xs sm:text-sm font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
                                             <svg
-                                                className="w-3.5 h-3.5 text-gray-400"
+                                                className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500"
                                                 fill="none"
                                                 stroke="currentColor"
                                                 strokeWidth="2"
@@ -184,7 +180,7 @@ export default function Edit({ payment, tenants }) {
                                                     e.target.value,
                                                 )
                                             }
-                                            className="mt-1 block w-full rounded-xl border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500/20 p-3 text-sm sm:text-base transition bg-white"
+                                            className="mt-1 block w-full rounded-xl border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 shadow-sm focus:border-blue-500 dark:focus:border-blue-400 focus:ring-blue-500/20 p-3 text-sm sm:text-base transition bg-white"
                                             required
                                         />
                                         {errors.payment_date && (
@@ -197,10 +193,9 @@ export default function Edit({ payment, tenants }) {
 
                                 {/* Status Pembayaran */}
                                 <div className="space-y-1">
-                                    <label className="block text-xs sm:text-sm font-bold text-gray-600 uppercase tracking-wider flex items-center gap-1.5">
-                                        {/* Line Icon: Shield Check */}
+                                    <label className="block text-xs sm:text-sm font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
                                         <svg
-                                            className="w-3.5 h-3.5 text-gray-400"
+                                            className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500"
                                             fill="none"
                                             stroke="currentColor"
                                             strokeWidth="2"
@@ -219,25 +214,16 @@ export default function Edit({ payment, tenants }) {
                                         onChange={(e) =>
                                             setData("status", e.target.value)
                                         }
-                                        className="mt-1 block w-full rounded-xl border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500/20 p-3 text-sm sm:text-base transition bg-white font-medium"
+                                        className="mt-1 block w-full rounded-xl border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 shadow-sm focus:border-blue-500 dark:focus:border-blue-400 focus:ring-blue-500/20 p-3 text-sm sm:text-base transition bg-white font-medium"
                                         required
                                     >
-                                        <option
-                                            value="paid"
-                                            className="text-emerald-600 font-semibold"
-                                        >
+                                        <option value="paid">
                                             Lunas (Paid)
                                         </option>
-                                        <option
-                                            value="pending"
-                                            className="text-amber-600 font-semibold"
-                                        >
+                                        <option value="pending">
                                             Pending (Menunggu Verifikasi)
                                         </option>
-                                        <option
-                                            value="overdue"
-                                            className="text-rose-600 font-semibold"
-                                        >
+                                        <option value="overdue">
                                             Terlambat (Overdue)
                                         </option>
                                     </select>
@@ -250,10 +236,9 @@ export default function Edit({ payment, tenants }) {
 
                                 {/* Keterangan */}
                                 <div className="space-y-1">
-                                    <label className="block text-xs sm:text-sm font-bold text-gray-600 uppercase tracking-wider flex items-center gap-1.5">
-                                        {/* Line Icon: Document Text */}
+                                    <label className="block text-xs sm:text-sm font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
                                         <svg
-                                            className="w-3.5 h-3.5 text-gray-400"
+                                            className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500"
                                             fill="none"
                                             stroke="currentColor"
                                             strokeWidth="2"
@@ -277,7 +262,7 @@ export default function Edit({ payment, tenants }) {
                                         }
                                         placeholder="Tulis alasan atau catatan audit koreksi di sini..."
                                         rows="3"
-                                        className="mt-1 block w-full rounded-xl border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500/20 p-3 text-sm sm:text-base transition resize-none"
+                                        className="mt-1 block w-full rounded-xl border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder-gray-500 shadow-sm focus:border-blue-500 dark:focus:border-blue-400 focus:ring-blue-500/20 p-3 text-sm sm:text-base transition resize-none"
                                     />
                                     {errors.description && (
                                         <p className="text-rose-500 text-xs font-medium mt-1">
@@ -287,10 +272,10 @@ export default function Edit({ payment, tenants }) {
                                 </div>
 
                                 {/* Tombol Aksi Batal / Update */}
-                                <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-4 border-t border-gray-100">
+                                <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
                                     <Link
                                         href={route("payments.index")}
-                                        className="w-full sm:w-auto text-center bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2.5 px-5 rounded-xl transition text-sm sm:text-base"
+                                        className="w-full sm:w-auto text-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-semibold py-2.5 px-5 rounded-xl transition text-sm sm:text-base"
                                     >
                                         Batal
                                     </Link>
