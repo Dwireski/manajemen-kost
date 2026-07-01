@@ -11,9 +11,12 @@ export default function Show({ room }) {
 
     const getStatusBadge = (status) => {
         const badges = {
-            available: "bg-emerald-50 text-emerald-700 border-emerald-100",
-            occupied: "bg-rose-50 text-rose-700 border-rose-100",
-            maintenance: "bg-amber-50 text-amber-700 border-amber-100",
+            available:
+                "bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-100 dark:border-emerald-900",
+            occupied:
+                "bg-rose-50 dark:bg-rose-900/30 text-rose-700 dark:text-rose-400 border-rose-100 dark:border-rose-900",
+            maintenance:
+                "bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border-amber-100 dark:border-amber-900",
         };
         const labels = {
             available: "✓ Tersedia",
@@ -33,14 +36,13 @@ export default function Show({ room }) {
         <AuthenticatedLayout
             header={
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                    <h2 className="font-semibold text-lg sm:text-xl text-gray-800 leading-tight">
+                    <h2 className="font-semibold text-lg sm:text-xl text-gray-800 dark:text-gray-100 leading-tight">
                         Detail Kamar
                     </h2>
                     <Link
                         href={route("rooms.index")}
-                        className="text-sm font-medium text-blue-600 hover:text-blue-800 transition flex items-center gap-1.5"
+                        className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition flex items-center gap-1.5"
                     >
-                        {/* Line Icon: Arrow Back */}
                         <svg
                             className="w-4 h-4"
                             fill="none"
@@ -64,18 +66,17 @@ export default function Show({ room }) {
             <div className="py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8">
                     {/* Info Kamar */}
-                    <div className="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100 transition">
-                        <div className="p-5 sm:p-8 text-gray-900">
+                    <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm dark:shadow-none rounded-2xl border border-gray-100 dark:border-gray-700 transition">
+                        <div className="p-5 sm:p-8 text-gray-900 dark:text-gray-100">
                             {/* Header Nama & Tombol Aksi */}
-                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 border-b border-gray-100 pb-5 mb-6">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 border-b border-gray-100 dark:border-gray-700 pb-5 mb-6">
                                 <div className="space-y-1">
-                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-100">
+                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 border border-purple-100 dark:border-purple-900">
                                         Manajemen Unit
                                     </span>
-                                    <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-gray-900 flex items-center gap-2">
-                                        {/* Line Icon: Door / Room */}
+                                    <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 flex items-center gap-2">
                                         <svg
-                                            className="w-7 h-7 text-gray-700"
+                                            className="w-7 h-7 text-gray-700 dark:text-gray-300"
                                             fill="none"
                                             stroke="currentColor"
                                             strokeWidth="2"
@@ -95,7 +96,6 @@ export default function Show({ room }) {
                                         href={route("rooms.edit", room.id)}
                                         className="flex-1 sm:flex-none bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2.5 px-4 rounded-xl shadow-sm hover:shadow transition text-center text-sm flex items-center justify-center gap-1.5"
                                     >
-                                        {/* Line Icon: Pencil/Edit */}
                                         <svg
                                             className="w-4 h-4"
                                             fill="none"
@@ -113,9 +113,8 @@ export default function Show({ room }) {
                                     </Link>
                                     <button
                                         onClick={handleDelete}
-                                        className="flex-1 sm:flex-none bg-rose-50 hover:bg-rose-100 text-rose-600 font-semibold py-2.5 px-4 rounded-xl border border-rose-200 transition text-center text-sm flex items-center justify-center gap-1.5"
+                                        className="flex-1 sm:flex-none bg-rose-50 dark:bg-rose-900/30 hover:bg-rose-100 dark:hover:bg-rose-900/50 text-rose-600 dark:text-rose-400 font-semibold py-2.5 px-4 rounded-xl border border-rose-200 dark:border-rose-900 transition text-center text-sm flex items-center justify-center gap-1.5"
                                     >
-                                        {/* Line Icon: Trash */}
                                         <svg
                                             className="w-4 h-4"
                                             fill="none"
@@ -135,12 +134,11 @@ export default function Show({ room }) {
                             </div>
 
                             {/* Grid Informasi Detail Kamar */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5 sm:gap-6 bg-gray-50/70 p-5 sm:p-6 rounded-2xl border border-gray-100">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5 sm:gap-6 bg-gray-50/70 dark:bg-gray-900/50 p-5 sm:p-6 rounded-2xl border border-gray-100 dark:border-gray-700">
                                 <div className="space-y-1">
-                                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
-                                        {/* Line Icon: Office Building */}
+                                    <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
                                         <svg
-                                            className="w-3.5 h-3.5 text-gray-400"
+                                            className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500"
                                             fill="none"
                                             stroke="currentColor"
                                             strokeWidth="2"
@@ -154,15 +152,14 @@ export default function Show({ room }) {
                                         </svg>
                                         Gedung Kost
                                     </p>
-                                    <p className="font-bold text-gray-800 text-base">
+                                    <p className="font-bold text-gray-800 dark:text-gray-100 text-base">
                                         {room.kost?.name || "-"}
                                     </p>
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
-                                        {/* Line Icon: Cash / Currency tag */}
+                                    <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
                                         <svg
-                                            className="w-3.5 h-3.5 text-gray-400"
+                                            className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500"
                                             fill="none"
                                             stroke="currentColor"
                                             strokeWidth="2"
@@ -176,7 +173,7 @@ export default function Show({ room }) {
                                         </svg>
                                         Harga per Bulan
                                     </p>
-                                    <p className="font-bold text-gray-800 text-base">
+                                    <p className="font-bold text-gray-800 dark:text-gray-100 text-base">
                                         Rp{" "}
                                         {parseInt(room.price).toLocaleString(
                                             "id-ID",
@@ -184,10 +181,9 @@ export default function Show({ room }) {
                                     </p>
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5 mb-1.5">
-                                        {/* Line Icon: Shield Check */}
+                                    <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider flex items-center gap-1.5 mb-1.5">
                                         <svg
-                                            className="w-3.5 h-3.5 text-gray-400"
+                                            className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500"
                                             fill="none"
                                             stroke="currentColor"
                                             strokeWidth="2"
@@ -204,10 +200,9 @@ export default function Show({ room }) {
                                     <div>{getStatusBadge(room.status)}</div>
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
-                                        {/* Line Icon: User */}
+                                    <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
                                         <svg
-                                            className="w-3.5 h-3.5 text-gray-400"
+                                            className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500"
                                             fill="none"
                                             stroke="currentColor"
                                             strokeWidth="2"
@@ -221,13 +216,13 @@ export default function Show({ room }) {
                                         </svg>
                                         Penyewa Saat Ini
                                     </p>
-                                    <p className="font-bold text-gray-800 text-base">
+                                    <p className="font-bold text-gray-800 dark:text-gray-100 text-base">
                                         {room.tenants?.[0]?.name ? (
-                                            <span className="text-blue-600">
+                                            <span className="text-blue-600 dark:text-blue-400">
                                                 {room.tenants[0].name}
                                             </span>
                                         ) : (
-                                            <span className="text-gray-400 italic font-medium">
+                                            <span className="text-gray-400 dark:text-gray-500 italic font-medium">
                                                 Belum Ada
                                             </span>
                                         )}
@@ -239,12 +234,11 @@ export default function Show({ room }) {
 
                     {/* Riwayat Penyewa */}
                     {room.tenants && room.tenants.length > 0 && (
-                        <div className="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100">
-                            <div className="p-5 sm:p-8 text-gray-900">
-                                <div className="flex items-center gap-2 border-b border-gray-100 pb-4 mb-5">
-                                    {/* Line Icon: Clipboard List */}
+                        <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm dark:shadow-none rounded-2xl border border-gray-100 dark:border-gray-700">
+                            <div className="p-5 sm:p-8 text-gray-900 dark:text-gray-100">
+                                <div className="flex items-center gap-2 border-b border-gray-100 dark:border-gray-700 pb-4 mb-5">
                                     <svg
-                                        className="w-5 h-5 text-gray-500"
+                                        className="w-5 h-5 text-gray-500 dark:text-gray-400"
                                         fill="none"
                                         stroke="currentColor"
                                         strokeWidth="2"
@@ -256,44 +250,44 @@ export default function Show({ room }) {
                                             d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
                                         />
                                     </svg>
-                                    <h3 className="text-base sm:text-lg font-bold text-gray-900">
+                                    <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100">
                                         Riwayat Penyewa Unit
                                     </h3>
                                 </div>
 
-                                <div className="relative overflow-hidden rounded-xl border border-gray-100 after:absolute after:right-0 after:top-0 after:bottom-0 after:w-6 after:bg-gradient-to-l after:from-black/5 after:to-transparent after:pointer-events-none lg:after:hidden">
+                                <div className="relative overflow-hidden rounded-xl border border-gray-100 dark:border-gray-700 after:absolute after:right-0 after:top-0 after:bottom-0 after:w-6 after:bg-gradient-to-l after:from-black/5 after:to-transparent after:pointer-events-none lg:after:hidden">
                                     <div className="overflow-x-auto shadow-inner">
-                                        <table className="min-w-full divide-y divide-gray-200 text-left">
-                                            <thead className="bg-gray-50/70">
+                                        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-left">
+                                            <thead className="bg-gray-50/70 dark:bg-gray-900/50">
                                                 <tr>
-                                                    <th className="px-5 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                                    <th className="px-5 py-3.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                                         Nama Lengkap
                                                     </th>
-                                                    <th className="px-5 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                                    <th className="px-5 py-3.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                                         Kontak Telepon
                                                     </th>
-                                                    <th className="px-5 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                                    <th className="px-5 py-3.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                                         Tanggal Masuk
                                                     </th>
-                                                    <th className="px-5 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                                    <th className="px-5 py-3.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                                         Tanggal Keluar
                                                     </th>
                                                 </tr>
                                             </thead>
-                                            <tbody className="bg-white divide-y divide-gray-100">
+                                            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700">
                                                 {room.tenants.map((tenant) => (
                                                     <tr
                                                         key={tenant.id}
-                                                        className="hover:bg-gray-50/80 transition"
+                                                        className="hover:bg-gray-50/80 dark:hover:bg-gray-900/50 transition"
                                                     >
-                                                        <td className="px-5 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+                                                        <td className="px-5 py-4 whitespace-nowrap text-sm font-semibold text-gray-900 dark:text-gray-100">
                                                             {tenant.name}
                                                         </td>
-                                                        <td className="px-5 py-4 whitespace-nowrap text-sm text-gray-500 font-medium">
+                                                        <td className="px-5 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 font-medium">
                                                             {tenant.phone ||
                                                                 "-"}
                                                         </td>
-                                                        <td className="px-5 py-4 whitespace-nowrap text-sm text-gray-600 font-medium">
+                                                        <td className="px-5 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300 font-medium">
                                                             {new Date(
                                                                 tenant.move_in_date,
                                                             ).toLocaleDateString(
@@ -305,7 +299,7 @@ export default function Show({ room }) {
                                                                 },
                                                             )}
                                                         </td>
-                                                        <td className="px-5 py-4 whitespace-nowrap text-sm text-gray-600 font-medium">
+                                                        <td className="px-5 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300 font-medium">
                                                             {tenant.move_out_date ? (
                                                                 new Date(
                                                                     tenant.move_out_date,
@@ -318,7 +312,7 @@ export default function Show({ room }) {
                                                                     },
                                                                 )
                                                             ) : (
-                                                                <span className="text-emerald-600 font-bold bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-md text-xs">
+                                                                <span className="text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-100 dark:border-emerald-900 px-2 py-0.5 rounded-md text-xs">
                                                                     Aktif
                                                                 </span>
                                                             )}

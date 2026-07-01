@@ -19,12 +19,12 @@ export default function Edit({ room, kosts }) {
         <AuthenticatedLayout
             header={
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                    <h2 className="font-semibold text-lg sm:text-xl text-gray-800 leading-tight">
+                    <h2 className="font-semibold text-lg sm:text-xl text-gray-800 dark:text-gray-100 leading-tight">
                         Edit Unit Kamar
                     </h2>
                     <Link
                         href={route("rooms.index")}
-                        className="text-xs sm:text-sm font-medium text-blue-600 hover:text-blue-800 transition"
+                        className="text-xs sm:text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition"
                     >
                         ← Kembali ke Manajemen Unit
                     </Link>
@@ -35,14 +35,14 @@ export default function Edit({ room, kosts }) {
 
             <div className="py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-3xl mx-auto">
-                    <div className="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100">
-                        <div className="p-5 sm:p-8 text-gray-900">
+                    <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm dark:shadow-none rounded-2xl border border-gray-100 dark:border-gray-700">
+                        <div className="p-5 sm:p-8 text-gray-900 dark:text-gray-100">
                             {/* Header Section */}
-                            <div className="border-b border-gray-100 pb-4 mb-6">
-                                <h3 className="text-lg font-bold text-gray-900">
+                            <div className="border-b border-gray-100 dark:border-gray-700 pb-4 mb-6">
+                                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
                                     Informasi Unit Kamar
                                 </h3>
-                                <p className="text-xs text-gray-500">
+                                <p className="text-xs text-gray-500 dark:text-gray-400">
                                     Perbarui relasi properti, harga sewa
                                     bulanan, dan status operasional unit
                                 </p>
@@ -54,7 +54,7 @@ export default function Edit({ room, kosts }) {
                             >
                                 {/* Pilihan Properti Kost */}
                                 <div className="space-y-1">
-                                    <label className="block text-xs sm:text-sm font-bold text-gray-600 uppercase tracking-wider">
+                                    <label className="block text-xs sm:text-sm font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                                         Pilih Properti Kost
                                     </label>
                                     <select
@@ -62,7 +62,7 @@ export default function Edit({ room, kosts }) {
                                         onChange={(e) =>
                                             setData("kost_id", e.target.value)
                                         }
-                                        className="mt-1 block w-full rounded-xl border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500/20 p-3 text-sm sm:text-base transition bg-white"
+                                        className="mt-1 block w-full rounded-xl border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 shadow-sm focus:border-blue-500 dark:focus:border-blue-400 focus:ring-blue-500/20 p-3 text-sm sm:text-base transition bg-white"
                                         required
                                     >
                                         <option value="">
@@ -73,7 +73,7 @@ export default function Edit({ room, kosts }) {
                                                 key={kost.id}
                                                 value={kost.id}
                                             >
-                                                🏢 {kost.name}
+                                                {kost.name}
                                             </option>
                                         ))}
                                     </select>
@@ -88,7 +88,7 @@ export default function Edit({ room, kosts }) {
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                     {/* Nomor Kamar */}
                                     <div className="space-y-1">
-                                        <label className="block text-xs sm:text-sm font-bold text-gray-600 uppercase tracking-wider">
+                                        <label className="block text-xs sm:text-sm font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                                             Nomor / Kode Unit Kamar
                                         </label>
                                         <input
@@ -101,7 +101,7 @@ export default function Edit({ room, kosts }) {
                                                 )
                                             }
                                             placeholder="Contoh: A-01, 102, dll"
-                                            className="mt-1 block w-full rounded-xl border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500/20 p-3 text-sm sm:text-base transition"
+                                            className="mt-1 block w-full rounded-xl border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder-gray-500 shadow-sm focus:border-blue-500 dark:focus:border-blue-400 focus:ring-blue-500/20 p-3 text-sm sm:text-base transition"
                                             required
                                         />
                                         {errors.room_number && (
@@ -113,7 +113,7 @@ export default function Edit({ room, kosts }) {
 
                                     {/* Harga per Bulan */}
                                     <div className="space-y-1">
-                                        <label className="block text-xs sm:text-sm font-bold text-gray-600 uppercase tracking-wider">
+                                        <label className="block text-xs sm:text-sm font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                                             Harga per Bulan (Rp)
                                         </label>
                                         <input
@@ -123,13 +123,13 @@ export default function Edit({ room, kosts }) {
                                                 setData("price", e.target.value)
                                             }
                                             placeholder="Masukkan nominal angka saja"
-                                            className="mt-1 block w-full rounded-xl border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500/20 p-3 text-sm sm:text-base transition"
+                                            className="mt-1 block w-full rounded-xl border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder-gray-500 shadow-sm focus:border-blue-500 dark:focus:border-blue-400 focus:ring-blue-500/20 p-3 text-sm sm:text-base transition"
                                             min="0"
                                             required
                                         />
                                         {errors.price && (
                                             <p className="text-rose-500 text-xs font-medium mt-1">
-                                                ⚠️ {errors.price}
+                                                ️ {errors.price}
                                             </p>
                                         )}
                                     </div>
@@ -137,7 +137,7 @@ export default function Edit({ room, kosts }) {
 
                                 {/* Status Kamar */}
                                 <div className="space-y-1">
-                                    <label className="block text-xs sm:text-sm font-bold text-gray-600 uppercase tracking-wider">
+                                    <label className="block text-xs sm:text-sm font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                                         Status Operasional Unit
                                     </label>
                                     <select
@@ -145,25 +145,16 @@ export default function Edit({ room, kosts }) {
                                         onChange={(e) =>
                                             setData("status", e.target.value)
                                         }
-                                        className="mt-1 block w-full rounded-xl border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500/20 p-3 text-sm sm:text-base transition bg-white font-medium"
+                                        className="mt-1 block w-full rounded-xl border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 shadow-sm focus:border-blue-500 dark:focus:border-blue-400 focus:ring-blue-500/20 p-3 text-sm sm:text-base transition bg-white font-medium"
                                         required
                                     >
-                                        <option
-                                            value="available"
-                                            className="text-emerald-600 font-semibold"
-                                        >
+                                        <option value="available">
                                             ✓ Tersedia (Kosong)
                                         </option>
-                                        <option
-                                            value="occupied"
-                                            className="text-rose-600 font-semibold"
-                                        >
+                                        <option value="occupied">
                                             • Terisi (Ada Penghuni)
                                         </option>
-                                        <option
-                                            value="maintenance"
-                                            className="text-amber-600 font-semibold"
-                                        >
+                                        <option value="maintenance">
                                             ⏳ Perbaikan (Maintenance)
                                         </option>
                                     </select>
@@ -175,10 +166,10 @@ export default function Edit({ room, kosts }) {
                                 </div>
 
                                 {/* Tombol Batal & Simpan */}
-                                <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-4 border-t border-gray-100">
+                                <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
                                     <Link
                                         href={route("rooms.index")}
-                                        className="w-full sm:w-auto text-center bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2.5 px-5 rounded-xl transition text-sm sm:text-base"
+                                        className="w-full sm:w-auto text-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-semibold py-2.5 px-5 rounded-xl transition text-sm sm:text-base"
                                     >
                                         Batal
                                     </Link>
